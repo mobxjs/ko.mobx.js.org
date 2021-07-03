@@ -1,0 +1,16 @@
+.DS_Store
+.tscache
+.settings
+node_modules
+npm-debug.log
+coverage
+test/babel-tests.js
+test/typescript/typescript-tests.js
+dist/
+.wp-build*/
+*.iml
+*.ipr
+*.iws
+yarn-error.log
+build/
+.idea
