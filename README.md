@@ -4,6 +4,7 @@
 
 _Simple, scalable state management._
 
+[![GitHub deployments](https://img.shields.io/github/deployments/mobxjs/zh.mobx.js.org/production?label=vercel&logo=vercel)](https://vercel.com/mobxjs/zh-mobx-js-org)
 [![npm version](https://badge.fury.io/js/mobx.svg)](https://badge.fury.io/js/mobx)
 [![OpenCollective](https://opencollective.com/mobx/backers/badge.svg)](docs/backers-sponsors.md#backers)
 [![OpenCollective](https://opencollective.com/mobx/sponsors/badge.svg)](docs/backers-sponsors.md#sponsors)
