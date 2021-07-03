@@ -67,6 +67,7 @@ class Footer extends React.Component {
                         >
                             Star
                         </a>
+                        <a href="https://vercel.com/?utm_source=mobxjs&utm_campaign=oss" target="_blank"><img src="/img/powered-by-vercel.svg" /></a>
                         {this.props.config.twitterUsername && (
                             <div className="social">
                                 <a
