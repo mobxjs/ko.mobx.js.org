@@ -52,7 +52,7 @@ const siteConfig = {
     // For no header links in the top nav bar -> headerLinks: [],
     headerLinks: [
         { doc: "api", label: "API Reference" },
-        { href: "https://zh.mobx.js.org", label: "中文" },
+        { href: "https://mobx.js.org", label: "English Doc" },
         { doc: "backers-sponsors", label: "Sponsors" },
         { href: "https://github.com/mobxjs/mobx", label: "GitHub" }
     ],
