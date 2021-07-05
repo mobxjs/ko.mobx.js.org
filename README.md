@@ -23,7 +23,7 @@ _Simple, scalable state management._
 
 ### 가이드라인
 - 중복된 작업을 피하기 위해, 슬랙 채널(번역-진행사항)을 통해 작업 시작할 파일 명을 입력합니다. ex) actions.md
-- <a href="https://github.com/kimyoungjae96/ko.mobx.js.org/wiki/%EB%B2%88%EC%97%AD-%EB%AA%A8%EB%B2%94-%EC%82%AC%EB%A1%80">번역 모범 사례</a>를 참고하여 번역을 진행합니다.
+- <a href="https://github.com/mobxjs/ko.mobx.js.org/wiki/%EB%B2%88%EC%97%AD-%EB%AA%A8%EB%B2%94-%EC%82%AC%EB%A1%80">번역 모범 사례</a>를 참고하여 번역을 진행합니다.
 - <a href="https://docs.google.com/spreadsheets/d/1fYaEI8vz26N3R2VaxrlNnk9fMQ8zIy4RpvjRp4jZd0Q/edit#gid=843106813">합의된 번역어</a>로 번역합니다. 공동작업에선 번역어 통일이 매우 중요합니다.
 - 경어체를 사용합니다.
 - PR 전 <a href="http://speller.cs.pusan.ac.kr/">맞춤법 검사기</a>를 사용해 틀린 부분을 교정합니다. 검사기를 돌리지 않았다고 판단되는 커밋은 PR 받지 않겠습니다. 리뷰자 역시 맞춤법 검사기를 사용해, 번역자가 맞춤법을 지켜 번역했는지 확인합니다.
