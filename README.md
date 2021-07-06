@@ -14,12 +14,34 @@ _Simple, scalable state management._
 
 ---
 
-해당 저장소는 <a href="https://mobx.js.org/">https://mobx.js.org</a>의 내용을 영-한 번역을 통해 모국어가 한국어인 개발자가 mobx를 쉽게 접할 수 있도록 하는데 목표를 두고 있습니다.
+해당 저장소는 <a href="https://mobx.js.org/">https://mobx.js.org</a>의 내용을 영-한 번역을 통해 모국어가 한국어인 개발자가 MobX를 쉽게 접할 수 있도록 하는데 목표를 두고 있습니다.
+
+## 소개
+
+애플리케이션 상태에서 파생되는 모든 것은 자동으로 되어야 합니다.
+MobX는 Functional reactive programming을 투명하게 적용함으로써 상태 관리를 쉽고 확장성 있게 만들어주는 검증된 라이브러리입니다.
+
+### MobX의 철학은 간단합니다.
+
+#### 쉽다.
+- 자유롭게 쓸 수 있는 짧고 단순한 형식을 제공합니다.
+- 데이터를 업데이트할 때 자바스크립트 할당문을 사용합니다.
+- 비동기 과정에서 데이터를 업데이트할 때 새로운 도구는 필요 없으며 MobX 시스템이 변경사항을 찾아내고 사용 중인 곳에 전달합니다.
+
+#### 렌더링 최적화를 쉽게 할 수 있다.
+- 데이터의 모든 변경과 사용은 런타임에 추적대고 상태와 출력 사이의 모든 관계를 나타내는 종속된 트리(dependency tree)를 만듭니다. 따라서 필요한 경우에만 연산이 진행되므로 memoization, selectors 등을 사용하여 컴포넌트 최적화 작업을 할 필요가 없습니다.
+
+
+#### 구조가 자유롭다.
+- UI 프레임워크 밖에서 애플리케이션 상태를 관리 할 수 있습니다. 따라서 코드 분리가 쉽고 다른 곳에서 사용하기 유용하며 무엇보다 쉽게 테스트 할 수 있습니다.
+
+
+
 
 ## 기여방법
 
 ### 의사소통
-- <a href="https://join.slack.com/t/ko-mobx/shared_invite/zt-skky1w3m-UD2_sY9880STvmnyJzdt9Q">슬랙</a>을 통해 번역 관련 궁금한 점 또는 mobx 관련 다양한 이야기를 나눕니다.
+- <a href="https://join.slack.com/t/ko-mobx/shared_invite/zt-skky1w3m-UD2_sY9880STvmnyJzdt9Q">슬랙</a>을 통해 번역 관련 궁금한 점 또는 MobX 관련 다양한 이야기를 나눕니다.
 
 ### 가이드라인
 - 중복된 작업을 피하기 위해, 슬랙 채널(번역-진행사항)을 통해 작업 시작할 파일 명을 입력합니다. ex) actions.md
