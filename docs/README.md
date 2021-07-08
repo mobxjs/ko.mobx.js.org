@@ -1,6 +1,6 @@
 ---
-title: About MobX
-sidebar_label: About MobX
+title: MobX에 대하여
+sidebar_label: MobX에 대하여
 hide_title: true
 ---
 
@@ -8,7 +8,7 @@ hide_title: true
 
 # MobX
 
-_Simple, scalable state management._
+_간단하고 확장 가능한 상태 관리._
 
 [![Discuss on Github](https://img.shields.io/badge/discuss%20on-GitHub-orange)](https://github.com/mobxjs/mobx/discussions)
 [![npm version](https://badge.fury.io/js/mobx.svg)](https://badge.fury.io/js/mobx)
@@ -17,7 +17,7 @@ _Simple, scalable state management._
 
 ---
 
-MobX is made possible by the generosity of the sponsors below, and many other [individual backers](backers-sponsors.md#backers). Sponsoring directly impacts the longevity of this project.
+MobX는 아래의 후원자들과 [다른 많은 후원자](backers-sponsors.md#backers)들의 아량이 있었기에 가능합니다. 후원은 이 프로젝트의 수명에 직접적인 영향을 미칩니다.
 
 **🥇 Gold sponsors (\$3000+ total contribution):** <br/>
 <a href="https://mendix.com/"><img src="https://mobx.js.org/assets/mendix-logo.png" align="center" width="100" title="Mendix" alt="Mendix" /></a>
@@ -45,50 +45,48 @@ MobX is made possible by the generosity of the sponsors below, and many other [i
 
 ---
 
-## Introduction
+## 소개
 
-_Anything that can be derived from the application state, should be. Automatically._
+애플리케이션 상태에서 파생되는 모든 것은 자동으로 되어야 합니다.
 
-MobX is a battle tested library that makes state management simple and scalable by transparently applying functional reactive programming (TFRP).
-The philosophy behind MobX is simple:
+MobX는 functional reactive programming을 투명하게 적용함으로써 상태 관리를 쉽고 확장성 있게 만들어주는 검증된 라이브러리입니다. (TFRP, Transparent Functional Reactive Programming).
+MobX의 철학은 간단합니다.
 
 <div class="benefits">
     <div>
         <div class="pic">😙</div>
         <div>
-            <h5>Straightforward</h5>
-            <p>Write minimalistic, boilerplate free code that captures your intent.
-            Trying to update a record field? Use the good old JavaScript assignment.
-            Updating data in an asynchronous process? No special tools are required, the reactivity system will detect all your changes and propagate them out to where they are being used.
+            <h5>쉽다</h5>
+            <p>당신의 의도를 알아차릴 수 있는 자유롭고 짧은 단순한 형식을 제공합니다.
+            데이터를 변경하고 싶습니까? 자바스크립트 할당문을 사용하면 됩니다.
+            비동기 과정에서 데이터를 변경하고 싶습니까? 새로운 도구는 필요 없으며 MobX 시스템이 변경사항을 찾아내고 사용 중인 곳에 전달합니다.
             </p>
         </div>
     </div>
     <div>
         <div class="pic">🚅</div>
         <div>
-            <h5>Effortless optimal rendering</h5>
+            <h5>렌더링 최적화를 쉽게 할 수 있다</h5>
             <p>
-                All changes to and uses of your data are tracked at runtime, building a dependency tree that captures all relations between state and output.
-                This guarantees that computations depending on your state, like React components, run only when strictly needed.
-                There is no need to manually optimize components with error-prone and sub-optimal techniques like memoization and selectors.
+                데이터의 모든 변경과 사용은 런타임에 추적대고 상태와 출력 사이의 모든 관계를 나타내는 종속된 트리(dependency tree)를 만듭니다. 
+                따라서 리액트 컴포넌트들처럼 상태에 따라 필요한 경우에만 연산이 실행됩니다. 그래서 memoization, selectors 등을 사용하여 컴포넌트 최적화 작업을 할 필요가 없습니다.
             </p>
         </div>
     </div>
     <div>
         <div class="pic">🤹🏻‍♂️</div>
         <div>
-            <h5>Architectural freedom</h5>
+            <h5>구조가 자유롭다.</h5>
             <p>
-                MobX is unopinionated and allows you to manage your application state outside of any UI framework.
-                This makes your code decoupled, portable, and above all, easily testable.
+                UI 프레임워크 밖에서 애플리케이션 상태를 관리 할 수 있습니다. 따라서 코드 분리가 쉽고 다른 곳에서 사용하기 유용하며 무엇보다 쉽게 테스트 할 수 있습니다.
             </p>
         </div>
     </div>
 </div>
 
-## A quick example
+## 간단한 예제
 
-So what does code that uses MobX look like?
+MobX의 코드는 어떻게 생겼을까?
 
 ```javascript
 import React from "react"
@@ -96,7 +94,7 @@ import ReactDOM from "react-dom"
 import { makeAutoObservable } from "mobx"
 import { observer } from "mobx-react"
 
-// Model the application state.
+// 애플리케이션 상태를 모델링합니다.
 class Timer {
     secondsPassed = 0
 
@@ -115,59 +113,56 @@ class Timer {
 
 const myTimer = new Timer()
 
-// Build a "user interface" that uses the observable state.
+// observable state를 사용하는 사용자 인터페이스를 구축합니다.
 const TimerView = observer(({ timer }) => (
     <button onClick={() => timer.reset()}>Seconds passed: {timer.secondsPassed}</button>
 ))
 
 ReactDOM.render(<TimerView timer={myTimer} />, document.body)
 
-// Update the 'Seconds passed: X' text every second.
+// 매초마다 Seconds passed: X를 업데이트 합니다.
 setInterval(() => {
     myTimer.increase()
 }, 1000)
 ```
 
-The `observer` wrapper around the `TimerView` React component, will automatically detect that rendering
-depends on the `timer.secondsPassed` observable, even though this relationship is not explicitly defined. The reactivity system will take care of re-rendering the component when _precisely that_ field is updated in the future.
+리액트 컴포넌트인 `TimerView`를 감싸고 있는 `observer`는 observable인 `timer.secondsPassed`에 의존하여 자동으로 렌더링 됩니다. reactivity 시스템은 나중에 해당 필드가 _정확하게_ 수정될 때 컴포넌트를 다시 렌더링 합니다.
 
-Every event (`onClick` / `setInterval`) invokes an _action_ (`myTimer.increase` / `myTimer.reset`) that updates _observable state_ (`myTimer.secondsPassed`).
-Changes in the observable state are propagated precisely to all _computations_ and _side effects_ (`TimerView`) that depend on the changes being made.
+(`onClick`, `setInterval`)은 (`myTimer.secondsPassed`)를 변경시키는 _action_(`myTimer.increase`, `myTimer.reset`)을 호출합니다.
+observable state의 변경 사항은 모든 연산과 변경사항에 따라 달라지는 부수 효과(`TimerView`)에 전파됩니다.
 
 <img alt="MobX unidirectional flow" src="https://mobx.js.org/assets/flow2.png" align="center" />
 
-This conceptual picture can be applied to the above example, or any other application using MobX.
+위 그림은 위의 예시 또는 MobX를 사용하는 다른 애플리케이션에 적용할 수 있습니다.
 
-To learn about the core concepts of MobX using a larger example, check out [The gist of MobX](https://mobx.js.org/the-gist-of-mobx.html) section, or take the [10 minute interactive introduction to MobX and React](https://mobx.js.org/getting-started).
-The philosophy and benefits of the mental model provided by MobX are also described in great detail in the blog posts [UI as an afterthought](https://michel.codes/blogs/ui-as-an-afterthought) and [How to decouple state and UI (a.k.a. you don’t need componentWillMount)](https://hackernoon.com/how-to-decouple-state-and-ui-a-k-a-you-dont-need-componentwillmount-cc90b787aa37).
+더 복잡한 예시를 이용한 [The gist of MobX](https://mobx.js.org/the-gist-of-mobx.html), [10 minute interactive introduction to MobX and React](https://mobx.js.org/getting-started)를 통해 MobX의 핵심 개념에 대해 알아볼 수 있습니다.
+MobX 모델의 철학과 장점은 [UI as an afterthought](https://michel.codes/blogs/ui-as-an-afterthought) 와 [How to decouple state and UI (a.k.a. you don’t need componentWillMount)](https://hackernoon.com/how-to-decouple-state-and-ui-a-k-a-you-dont-need-componentwillmount-cc90b787aa37) 에서 자세하게 확인할 수 있습니다.
 
 <div class="cheat"><a href="https://gum.co/fSocU"><button title="Download the MobX 6 cheat sheet and sponsor the project">Download the MobX 6 cheat sheet</button></a></div>
 
-## What others are saying...
+## 다른 사람들이 말하기를...
 
-> Guise, #mobx isn't pubsub, or your grandpa's observer pattern. Nay, it is a carefully orchestrated observable dimensional portal fueled by the power cosmic. It doesn't do change detection, it's actually a level 20 psionic with soul knife, slashing your viewmodel into submission.
+> 몇 주 동안 MobX를 개인 프로젝트에 사용한 후 팀에 소개하게 되어 매우 기쁩니다. 시간은 절반이 걸리고 재미는 두 배였습니다.
 
-> After using #mobx for lone projects for a few weeks, it feels awesome to introduce it to the team. Time: 1/2, Fun: 2X
+> MobX를 사용하면서 "이건 너무 간단해서 절대 작동하지 않을 것 같아"라고 계속 생각이 드는 것은 잘못된 것으로 증명되었습니다.
 
-> Working with #mobx is basically a continuous loop of me going “this is way too simple, it definitely won’t work” only to be proven wrong
+> MobX를 사용하여 규모가 큰 애플리케이션을 구축했습니다. Redux를 사용하던 앱과 비교했을 때 읽기 쉽고 추론하기도 훨씬 쉬웠습니다.
 
-> I have built big apps with MobX already and comparing to the one before that which was using Redux, it is simpler to read and much easier to reason about.
+> MobX는 내가 항상 원하는 것이다! 정말 놀랍고 간단하고 빠르다! 정말 멋지다! 놓치지 마라!
 
-> The #mobx is the way I always want things to be! It's really surprising simple and fast! Totally awesome! Don't miss it!
-
-## Further resources and documentation
+## 추가 자료
 
 -   [MobX cheat sheet (also sponsors the project)](https://gum.co/fSocU)
 -   [10 minute interactive introduction to MobX and React](https://mobx.js.org/getting-started)
 -   [Egghead.io course, based on MobX 3](https://egghead.io/courses/manage-complex-state-in-react-apps-with-mobx)
 
-### The MobX book
+### MobX 책
 
 [<img src="https://mobx.js.org/assets/book.jpg" height="80px"/> ](https://books.google.nl/books?id=ALFmDwAAQBAJ&pg=PP1&lpg=PP1&dq=michel+weststrate+mobx+quick+start+guide:+supercharge+the+client+state+in+your+react+apps+with+mobx&source=bl&ots=D460fxti0F&sig=ivDGTxsPNwlOjLHrpKF1nweZFl8&hl=nl&sa=X&ved=2ahUKEwiwl8XO--ncAhWPmbQKHWOYBqIQ6AEwAnoECAkQAQ#v=onepage&q=michel%20weststrate%20mobx%20quick%20start%20guide%3A%20supercharge%20the%20client%20state%20in%20your%20react%20apps%20with%20mobx&f=false)
 
 Created by [Pavan Podila](https://twitter.com/pavanpodila) and [Michel Weststrate](https://twitter.com/mweststrate).
 
-### Videos
+### 영상
 
 -   [Introduction to MobX & React in 2020](https://www.youtube.com/watch?v=pnhIJA64ByY) by Leigh Halliday, _17min_.
 -   [ReactNext 2016: Real World MobX](https://www.youtube.com/watch?v=Aws40KOx90U) by Michel Weststrate, _40min_, [slides](https://docs.google.com/presentation/d/1DrI6Hc2xIPTLBkfNH8YczOcPXQTOaCIcDESdyVfG_bE/edit?usp=sharing).
@@ -179,8 +174,8 @@ Created by [Pavan Podila](https://twitter.com/pavanpodila) and [Michel Weststrat
 
 And an all around [MobX awesome list](https://github.com/mobxjs/awesome-mobx#awesome-mobx).
 
-## Credits
+## 공(Credits)
 
-MobX is inspired by reactive programming principles as found in the spreadsheets. It is inspired by MVVM frameworks like MeteorJS tracker, knockout and Vue.js, but MobX brings _Transparent Functional Reactive Programming_ to the next level and provides a standalone implementation. It implements TFRP in a glitch-free, synchronous, predictable and efficient manner.
+MobX는 spreadsheets에서 볼 수 있는 reactive programming 원칙에서 영감을 받았습니다. 또 MVVM 프레임워크인 MeteorJS tracker, knockout, Vue.js 에서 영감을 받았습니다. MobX는 한 단계 더 나아가 독립 실행형을 제공한 _Transparent Functional Reactive Programming_ 입니다. MobX는 결함이 없고 동기적이며 예측 가능하고 효율적인 방식으로 TFRP를 구현했습니다.
 
-A ton of credits goes to [Mendix](https://github.com/mendix), for providing the flexibility and support to maintain MobX and the chance to proof the philosophy of MobX in a real, complex, performance critical applications.
+[Mendix](https://github.com/mendix)는 MobX를 유지할 수 있는 유연성과 지원과 실제 복잡한 성능이 중요한 애플리케이션에서 MobX의 철학을 입증할 수 있는 기회를 제공하는 데 많은 공을 들였습니다.
