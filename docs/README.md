@@ -17,7 +17,7 @@ _간단하고 확장 가능한 상태 관리._
 
 ---
 
-MobX는 아래의 후원자들과 [다른 많은 후원자](backers-sponsors.md#backers)들의 아량이 있었기에 가능합니다. 후원은 이 프로젝트의 수명에 직접적인 영향을 미칩니다.
+MobX는 아래의 후원자들과 [다른 많은 후원자](backers-sponsors.md#backers)들의 도움이 있었기에 가능합니다. 후원은 프로젝트 지속에 직접적인 영향을 미칩니다.
 
 **🥇 Gold sponsors (\$3000+ total contribution):** <br/>
 <a href="https://mendix.com/"><img src="https://mobx.js.org/assets/mendix-logo.png" align="center" width="100" title="Mendix" alt="Mendix" /></a>
@@ -56,8 +56,8 @@ MobX의 철학은 간단합니다.
     <div>
         <div class="pic">😙</div>
         <div>
-            <h5>쉽다</h5>
-            <p>당신의 의도를 알아차릴 수 있는 자유롭고 짧은 단순한 형식을 제공합니다.
+            <h5>쉽다.</h5>
+            <p>미니멀하고 보일러 플레이트로부터 자유로운 코드를 통해 당신의 의도를 잘 담아내 보세요.
             데이터를 변경하고 싶습니까? 자바스크립트 할당문을 사용하면 됩니다.
             비동기 과정에서 데이터를 변경하고 싶습니까? 새로운 도구는 필요 없으며 MobX 시스템이 변경사항을 찾아내고 사용 중인 곳에 전달합니다.
             </p>
@@ -66,9 +66,9 @@ MobX의 철학은 간단합니다.
     <div>
         <div class="pic">🚅</div>
         <div>
-            <h5>렌더링 최적화를 쉽게 할 수 있다</h5>
+            <h5>렌더링 최적화를 쉽게 할 수 있다.</h5>
             <p>
-                데이터의 모든 변경과 사용은 런타임에 추적대고 상태와 출력 사이의 모든 관계를 나타내는 종속된 트리(dependency tree)를 만듭니다. 
+                데이터의 모든 변경과 사용은 런타임에 추적되고 상태와 출력 사이의 모든 관계를 나타내는 의존 트리(dependency tree)를 만듭니다. 
                 따라서 리액트 컴포넌트들처럼 상태에 따라 필요한 경우에만 연산이 실행됩니다. 그래서 memoization, selectors 등을 사용하여 컴포넌트 최적화 작업을 할 필요가 없습니다.
             </p>
         </div>
@@ -76,7 +76,7 @@ MobX의 철학은 간단합니다.
     <div>
         <div class="pic">🤹🏻‍♂️</div>
         <div>
-            <h5>구조가 자유롭다.</h5>
+            <h5>구조가 자유롭다</h5>
             <p>
                 UI 프레임워크 밖에서 애플리케이션 상태를 관리 할 수 있습니다. 따라서 코드 분리가 쉽고 다른 곳에서 사용하기 유용하며 무엇보다 쉽게 테스트 할 수 있습니다.
             </p>
@@ -86,7 +86,7 @@ MobX의 철학은 간단합니다.
 
 ## 간단한 예제
 
-MobX의 코드는 어떻게 생겼을까?
+MobX를 사용하는 코드
 
 ```javascript
 import React from "react"
@@ -128,7 +128,7 @@ setInterval(() => {
 
 리액트 컴포넌트인 `TimerView`를 감싸고 있는 `observer`는 observable인 `timer.secondsPassed`에 의존하여 자동으로 렌더링 됩니다. reactivity 시스템은 나중에 해당 필드가 _정확하게_ 수정될 때 컴포넌트를 다시 렌더링 합니다.
 
-(`onClick`, `setInterval`)은 (`myTimer.secondsPassed`)를 변경시키는 _action_(`myTimer.increase`, `myTimer.reset`)을 호출합니다.
+모든 이벤트(`onClick`, `setInterval`)는 observable state(`myTimer.secondsPassed`)를 변경시키는 _action_(`myTimer.increase`, `myTimer.reset`)을 호출합니다.
 observable state의 변경 사항은 모든 연산과 변경사항에 따라 달라지는 부수 효과(`TimerView`)에 전파됩니다.
 
 <img alt="MobX unidirectional flow" src="https://mobx.js.org/assets/flow2.png" align="center" />
