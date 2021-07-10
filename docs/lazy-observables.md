@@ -17,11 +17,11 @@ hide_title: true
 추가하는 데 
 사용할 수 
 있습니다. 
-이 함수들은 MobX의 관찰 시스템에 후킹되어 있고 관찰 대상들이 관찰되기 _시작_ 하거나 _중단_ 될 때 알림을 받습니다.
-두 함수는 _리스너(listener)_ 분리하는 _처리(disposer)_ 함수를 리턴합니다. 
+이 함수들은 MobX의 관찰 시스템에 연결되어 있고 관찰 대상들(observables)이 관찰되기 _시작_ 하거나 _중단_ 될 때 알림을 받습니다.
+두 함수는 _리스너(listener)_를 분리하는 _처리(disposer)_ 함수를 리턴합니다. 
 
 
-아래의 예시에서 관찰된 값(observed value)이 실제로 사용 중일 때만 네트워크 fetch를 수행하는 데 두 함수를 사용합니다.
+아래의 예시에서는 관찰된 값(observed value)이 실제로 사용 중일 때만 네트워크 fetch를 수행하는 데 두 함수를 사용합니다.
 
 ```javascript
 export class City {
