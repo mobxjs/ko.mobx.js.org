@@ -10,12 +10,12 @@ hide_title: true
 
 # `trace`를 사용한 디버깅
 
-`trace`는 computed 값, reaction, 컴포넌트 등이 왜 재계산되었는지 알려주는 조그만 유틸입니다.
+`trace`는 computed 값, reaction, 컴포넌트 등이 왜 재계산되었는지 알려주는 조그만 유틸리티입니다.
 
 사용법은 간단합니다. `import { trace } from "mobx"`로 임포트한 다음 reaction 이나 computed 값 안에 넣으면 됩니다.
 이렇게 하면 해당 값이 왜 재계산되었는지 바로 출력이 됩니다.
 
-인자로 `true`를 넘겨주면 자동으로 디버깅 모드에 진입할 수도 있습니다.
+마지막 인자로 `true`를 넘겨주면 자동으로 디버깅 모드에 진입할 수도 있습니다.
 디버깅 모드에서는 해당 reaction 을 재실행하게 만든 변경사항을 스택 프레임을 통해 확인할 수 있습니다. 아래 이미지를 참고해주세요.
 
 디버깅 모드에서는 reaction 과 computation 에 영향을 준 전체 파생 트리(derivation tree)도 볼 수 있습니다.
@@ -95,7 +95,7 @@ observable 을 사용하고 있는 모든 reaction 과 computation 을 트리 �
 
 -   `getAtom(thing, property?)`.
 
-observable 객체나 프로퍼티, reaction 등의 _atom_ 을 반환합니다.
+observable 객체나 프로퍼티, reaction 등의 _Atom_ 을 반환합니다.
 
 # Spy
 
@@ -132,7 +132,7 @@ spy 리스너는 항상 하나의 객체를 받습니다. 이 객체엔 항상 `
 이 이벤트가 묶음 이벤트의 마지막이란 것을 표시해줌으로써 서브 이벤트들을 포함하는 하나의 묶음 이벤트가 생성됩니다.
 이 이벤트를 통해 전체 실행 시간을 보고 받을 수도 있습니다.
 
-observable 값들에 대한 스파이 이벤트들은 `observe`에 넘겨진 이벤트와 동일하게 취급됩니다.
+observable 값들에 대한 spy 이벤트들은 `observe`에 넘겨진 이벤트와 동일하게 취급됩니다.
 프로덕션 빌드에서 `spy` API 는 무시되어 실행되지 않습니다.
 
 [가로채기 & 관찰 {🚀}](intercept-and-observe.md#event-overview) 섹션에서 더 자세한 내용을 알아보세요.
