@@ -8,4 +8,4 @@ hide_title: true
 
 # MobX-utils {🚀}
 
-[MobX-utils](https://github.com/mobxjs/mobx-utils) provides an extensive series of additional utility functions, observables and common patterns for MobX.
+[MobX-utils](https://github.com/mobxjs/mobx-utils)는 MobX에 관한 광범위한 추가 유틸리티 함수, observables 패턴과 일반적인 MobX 패턴을 제공합니다.
