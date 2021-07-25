@@ -31,10 +31,10 @@ const siteConfig = {
     // For github.io type URLs, you would set the url and baseUrl like:
     //   url: 'https://facebook.github.io',
     //   baseUrl: '/test-site/',
-    url: "https://mobx.js.org", // Your website URL
+    url: "https://ko.mobx.js.org", // Your website URL
     baseUrl: "/", // Base URL for your project */
     docsUrl: "", // trim 'docs/ prefix
-    cname: "mobx.js.org", // needed for github pages to work under a domain
+    cname: "ko.mobx.js.org", // needed for github pages to work under a domain
     // Used for publishing and more
 
     projectName: "mobx",
@@ -43,7 +43,7 @@ const siteConfig = {
     // URL for editing docs, usage example: editUrl + 'en/doc1.md'.
     // If this field is omitted, there will be no "Edit this Doc" button
     // for each document.
-    editUrl: "https://github.com/mobxjs/mobx/edit/main/docs/",
+    editUrl: "https://github.com/mobxjs/ko.mobx.js.org/edit/main/docs/",
 
     // For top-level user or org sites, the organization is still the same.
     // e.g., for the https://JoelMarcey.github.io site, it would be set like...
@@ -51,9 +51,9 @@ const siteConfig = {
 
     // For no header links in the top nav bar -> headerLinks: [],
     headerLinks: [
-        { doc: "api", label: "API Reference" },
-        { href: "https://mobx.js.org", label: "English Doc" },
-        { doc: "backers-sponsors", label: "Sponsors" },
+        { doc: "api", label: "API 참고서" },
+        { href: "https://mobx.js.org", label: "영어 문서" },
+        { doc: "backers-sponsors", label: "후원자" },
         { href: "https://github.com/mobxjs/mobx", label: "GitHub" }
     ],
 
@@ -120,7 +120,7 @@ myOtherFont: [
 
     // You may provide arbitrary config keys to be used as needed by your
     // template. For example, if you need your repo's URL...
-    repoUrl: "https://github.com/mobxjs/mobx"
+    repoUrl: "https://github.com/mobxjs/ko.mobx.js.org"
 }
 
 module.exports = siteConfig

@@ -9,6 +9,12 @@ function openTarget() {
         }, 150)
     }
 }
+
+function changeTheEditButtonName() {
+  var els = document.getElementsByClassName('edit-page-link');
+  els[0].innerHTML = '수정하러 가기️';
+}
+
 function addTooltipToRockets() {
     var classNames = ['navGroups', 'onPageNav', 'post', 'docs-prevnext'];
     var rocketRegex = /🚀/g;
@@ -24,4 +30,5 @@ window.addEventListener('hashchange', openTarget);
 window.addEventListener('DOMContentLoaded', function() {
     addTooltipToRockets();
     openTarget();
+    changeTheEditButtonName();
 });
