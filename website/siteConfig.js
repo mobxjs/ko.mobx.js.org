@@ -54,7 +54,7 @@ const siteConfig = {
         { doc: "api", label: "API 참고서" },
         { href: "https://mobx.js.org", label: "영어 문서" },
         { doc: "backers-sponsors", label: "후원자" },
-        { href: "https://github.com/mobxjs/ko.mobx.js.org", label: "GitHub" }
+        { href: "https://github.com/mobxjs/mobx", label: "GitHub" }
     ],
 
     // docsSideNavCollapsible: true,
