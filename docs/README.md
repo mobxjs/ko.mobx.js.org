@@ -135,7 +135,7 @@ observable state의 변경 사항은 모든 연산과 변경사항에 따라 달
 
 위 그림은 위의 예시 또는 MobX를 사용하는 다른 애플리케이션에 적용할 수 있습니다.
 
-더 복잡한 예시를 이용한 [The gist of MobX](https://mobx.js.org/the-gist-of-mobx.html), [10 minute interactive introduction to MobX and React](https://mobx.js.org/getting-started)를 통해 MobX의 핵심 개념에 대해 알아볼 수 있습니다.
+더 복잡한 예시를 이용한 [MobX의 요지](https://ko.mobx.js.org/the-gist-of-mobx.html), [10분만에 알아보는 MobX와 React](https://ko.mobx.js.org/getting-started.html)를 통해 MobX의 핵심 개념에 대해 알아볼 수 있습니다.
 MobX 모델의 철학과 장점은 [UI as an afterthought](https://michel.codes/blogs/ui-as-an-afterthought) 와 [How to decouple state and UI (a.k.a. you don’t need componentWillMount)](https://hackernoon.com/how-to-decouple-state-and-ui-a-k-a-you-dont-need-componentwillmount-cc90b787aa37) 에서 자세하게 확인할 수 있습니다.
 
 <div class="cheat"><a href="https://gum.co/fSocU"><button title="Download the MobX 6 cheat sheet and sponsor the project">Download the MobX 6 cheat sheet</button></a></div>
@@ -153,7 +153,7 @@ MobX 모델의 철학과 장점은 [UI as an afterthought](https://michel.codes/
 ## 추가 자료
 
 -   [MobX cheat sheet (also sponsors the project)](https://gum.co/fSocU)
--   [10 minute interactive introduction to MobX and React](https://mobx.js.org/getting-started)
+-   [10분만에 알아보는 MobX와 React](https://ko.mobx.js.org/getting-started.html)
 -   [Egghead.io course, based on MobX 3](https://egghead.io/courses/manage-complex-state-in-react-apps-with-mobx)
 
 ### MobX 책
