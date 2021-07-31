@@ -28,7 +28,7 @@ React와 함께 MobX를 사용하는 방법이 궁금하시다면, _Introduction
 
 추가 확인 항목:
 
--   [Mobx 및 React에 대한 10분 소개](https://mobx.js.org/getting-started)를 확인해보세요.
+-   [10분만에 알아보는 MobX와 React](https://ko.mobx.js.org/getting-started.html)를 확인해보세요.
 
 -   [React 통합](react-integration.md)
 
