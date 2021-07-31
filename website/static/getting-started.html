@@ -11,13 +11,13 @@
 
     <link rel="shortcut icon" type="image/png" href="assets/getting-started-assets/images/favicon.png" />
 
-    <title>MobX: Ten minute introduction to MobX and React</title>
+    <title>10분만에 알아보는 MobX와 React</title>
 </head>
 
 <body>
     <div class="github-fork-ribbon-wrapper right-bottom fixed">
         <div class="github-fork-ribbon">
-            <a href="https://github.com/mobxjs/mobx">Fork me on GitHub</a>
+            <a href="https://github.com/mobxjs/mobx">GitHub 포크하기</a>
         </div>
     </div>
     <table class="root">
@@ -29,64 +29,57 @@
                         <a href="index.html" style="float:left">
 						<img style="width: 120px; padding-right: 20px;" src="assets/getting-started-assets/images/mobservable.png" id="logo" /></a>
                         <h1 id="project_title">MobX</h1>
-                        <h2 id="project_tagline" style="font-size: 18pt">Ten minute introduction to MobX and React</h2>
+                        <h2 id="project_tagline" style="font-size: 18pt">10분만에 알아보는 MobX와 React</h2>
                         <hr/>
                     </header>
 
                     <section id="main_content">
                         <p>
-                            <a href="https://github.com/mobxjs/mobx"><code>MobX</code></a> is a simple, scalable and battle tested state management solution.
-							This tutorial will teach you all the important concepts of MobX in ten minutes.
-                            MobX is a standalone library, but most people are using it with React and this tutorial focuses on that combination.
+                            <a href="https://github.com/mobxjs/mobx"><code>MobX</code></a>는 간단하면서도 뛰어난 확장성을 가진 상태 관리 솔루션입니다. 본 튜토리얼은 MobX의 가장 중요한 개념들을 10분 안에 이해할 수 있도록 작성되었습니다.
+                            MobX는 독립적인 라이브러리지만 대부분 React와 함께 사용되고 있으므로, 본 튜토리얼도 해당 조합에 초점을 맞추어 진행합니다.
                         </p>
-                        <h3>The core idea</h3>
+                        <h3>핵심개념</h3>
 						<p>
-							State is the heart of each application and there is no quicker way to create buggy, unmanageable applications than by
-							producing an inconsistent state or state that is out-of-sync with local variables that linger around.
-							Hence many state management solutions try to restrict the ways in which you can modify state, for example by making state immutable.
-							But this introduces new problems; data needs to be normalized, referential integrity can no longer be guaranteed and it becomes next to impossible to use powerful concepts like classes in case you fancy those.
+              state(상태)는 모든 애플리케이션의 핵심이며, 애플리케이션을 관리하기 어렵게 만드는 지름길은 '일관되지 않는' 또는 '산재된 지역 변수들과 어울리지 않는' state를 생성하는 것입니다.
+              때문에 많은 상태 관리 솔루션들은 state를 변경 불가하게 만드는 등, 수정하지 못하도록 제한하는 방법을 시도했습니다.
+              하지만 그러한 방법은 또다시 새로운 문제를 발생시킵니다. 데이터는 정규화되어야 하며 참조 무결성(referential integrity) 또한 보장할 수 없고, 데이터가 필요한 경우에 클래스와 같은 효과적인 개념을 사용하는 것이 불가능해집니다.
 						</p><p>
-							MobX makes state management simple again by addressing the root issue: it makes it impossible to produce an inconsistent state.
-							The strategy to achieve that is simple:
-							<em>Make sure that everything that can be derived from the application state, will be derived. Automatically.</em>
+              MobX는 쉬운 state 관리를 위해 근본적인 문제를 해결했습니다. 바로 일관되지 않는 state가 애초에 생성되지 않도록 하는 것입니다.
+              전략은 간단합니다. 
+              
+							<em>애플리케이션 내의 state에서 파생 가능한 모든 것이 파생되도록 합니다. 그것도 자동으로.</em>
 						</p>
 						<p>
-							Conceptually MobX treats your application like a spreadsheet.
+              개념적으로 MobX는 애플리케이션을 스프레드시트처럼 다룹니다.
                         <p>
 							<img src="assets/getting-started-assets/overview.png" width="100%" />
 						<ol>
 							<li>
-							First of all, there is the <em>application state</em>.
-							Graphs of objects, arrays, primitives, references that forms the model of your application.
-							These values are the &ldquo;data cells&rdquo; of your application.
+                우선적으로 <em>애플리케이션 state</em>가 있습니다. 애플리케이션의 모델을 구성하는 객체, 배열, 기본적인 동작(primitive), 참조(reference)의 그래프죠.
+                이 값들이 애플리케이션의 데이터 셀입니다.
 							</li>
-                            <li>Secondly there are <em>derivations</em>.
-								Basically, any value that can be computed automatically from the state of your application.
-            					These derivations, or computed values, can range from
-                                simple values, like the number of unfinished todos, to complex stuff like a visual HTML
-                                representation of your todos. In spreadsheet terms: these are the formulas and charts of
-                                your application.
+                            <li>두 번째로 <em>derivation</em>이 있습니다.
+                              기본적으로 애플리케이션 내의 state로부터 자동 산출될 수 있는 모든 값입니다.
+                              이러한 derivation, 또는 computed는 '완료되지 않은 todo 개수'와 같이 간단한 값부터 'todo에 관한 시각적 HTML 표현'과 같이 복잡한 것까지 모든 범위에 해당할 수 있습니다.
+                              스프레드시트로 묘사하자면 이것들이 바로 애플리케이션의 수식과 차트입니다.
                             </li>
-                            <li><em>Reactions</em> are very similar to derivations. The main difference is these functions don't produce a
-                                value. Instead, they run automatically to perform some task.
-                                Usually this is I/O related.
-                                They make sure that the DOM is updated or
-                                that network requests are made automatically at the right time.
+                            <li><em>reaction</em>은 derivation과 굉장히 유사합니다. 가장 큰 차이점을 말하자면, reaction 함수는 값을 생성하지 않습니다.
+                                대신 자동으로 특정 테스크를 수행합니다.
+                                일반적으로 이것은 I/O와 관련이 있습니다.
+                                reaction은 DOM이 업데이트되었는지, 또는 네트워크 요청이 제때 자동적으로 이루어졌는지 확인합니다.
                             </li>
-                            <li>Finally there are <em>actions</em>. Actions are all the things that alter the <em>state</em>.
-                            MobX will make sure that all changes to the application
-                                state caused by your actions are automatically processed by all derivations and reactions.
-                                Synchronously and glitch-free.
+                            <li>마지막으로 <em>action</em>입니다. action은 <em>state</em>에서 변화할 수 있는 모든 값입니다.
+                              MobX는 action으로 인해 발생하는 모든 애플리케이션 state 변화가 derivation과 reaction에 기반해 자동적으로 이루어졌는지 확인해 줄 것입니다.
+                              동기식으로, 결함 없이 말이죠.
                             </li>
                         </ol>
-                        <h3>A simple todo store...</h3>
+                        <h3>간단한 TodoStore</h3>
                         <p>
-                            Enough theory, seeing it in action probably explains more than carefully reading the above stuff. For originality's sake
-                            let's start with a very simple ToDo store.
-                            Note that all the code blocks below are editable,
-                            So use the <em>run code</em> buttons to execute them.
-                            Below is a very straightforward <code>TodoStore</code> that maintains a collection of todos.
-                            No MobX involved yet.
+                          이론은 충분했고, 상단의 글을 유심히 읽어보는 것보다는 직접 실행되는 모습을 보는 게 더 이해가 빠를 것입니다.
+                          독창성을 위해 아주 간단한 TodoStore부터 시작해봅시다.
+                          하단의 모든 코드들은 수정 가능하며 <em>실행</em> 버튼을 눌러서 결과를 확인할 수 있습니다.
+                          아래는 todo 리스트를 포함하고 있는 간단한 <code>TodoStore</code>입니다.
+                          아직 MobX가 적용되지는 않았습니다.
                         </p>
 
                         <textarea spellcheck="false" class="prettyprint" id="code1" rows="25">
@@ -118,11 +111,10 @@ class TodoStore {
 
 const todoStore = new TodoStore();
                         </textarea>
-                        <p>We just created a <code>todoStore</code> instance with a <code>todos</code> collection.
-                            Time to fill the todoStore with some objects.
-                            To make sure we see the effects of our changes we invoke <code>todoStore.report</code> after each change and log it.
-                            Note that the report intentionally always prints the <em>first</em> task only.
-                            It makes this example a bit artificial, but as we will see later on it nicely demonstrates that MobX's dependency tracking is dynamic.
+                        <p>이렇게 todo 리스트를 포함한 <code>TodoStore</code>를 만들었습니다.
+                          이제 이 TodoStore에 객체를 채울 차례입니다.
+                          변화에 따른 결과를 확인하기 위해, 각각의 변화가 일어난 직후 <code>todoStore.report</code>를 적용(invoke)하고 로그했습니다.
+                          리포트에서는 의도적으로 <em>첫 번째</em> 테스크만 출력됩니다. 때문에 본 예제가 약간 인위적으로 느껴질 수 있지만 나중에는 MobX의 의존성 추적(dependency tracking)이 그만큼 뛰어나다는 사실을 잘 보여줄 것입니다.
                         </p>
 
                         <textarea spellcheck="false" class="prettyprint" id="code2" rows="15">
@@ -141,27 +133,22 @@ console.log(todoStore.report());
 todoStore.todos[0].task = "grok MobX tutorial";
 console.log(todoStore.report());
                         </textarea>
-                        <button onClick="runCode(['#code1', '#code2'])" class="btn-run">Run code</button>
+                        <button onClick="runCode(['#code1', '#code2'])" class="btn-run">실행</button>
 
-                        <h3>Becoming reactive</h3>
-                        <p>So far, there is nothing special about this code.
-                            But what if we didn't have to call <code>report</code> explicitly,
-                            but that we could declare instead that it should be invoked upon each <em>relevant</em> state change?
-                            That would free us from the responsibility of calling <code>report</code> from any place in our code
-                            base that <em>might</em> affect the report. We do want to be sure the latest report is printed.
-                            But we don't wanna be bothered by organizing that.
+                        <h3>반응적으로 만들기</h3>
+                        <p>지금까지는 특별할 게 없는 코드입니다. 하지만 <code>report</code>를 일일이 호출할 필요 없이 '각각의 <em>관련(relevant)</em> state가 변경되는 경우에 report를 호출한다'라고 선언할 수 있다면 어떨까요? 그렇게 되면 결과에 영향을 <em>미칠 수도 있는</em> 모든 부분에서 <code>report</code>를 호출해야 할 필요가 없어집니다.
+                          우리는 가장 최신의 결과가 출력되기를 원합니다. 하지만 그렇게 구성하는 데 시간을 뺏기고 싶지는 않죠.
                         </p>
                         <p>
-                            Luckily that is exactly what MobX can do for us. Automatically execute code that solely depends on state.
-                            So that our <code>report</code> function updates automatically, just like a chart in a spreadsheet.
-                            To achieve that, the <code>TodoStore</code> has to become observable so that MobX can track all the changes that are being made.
-                            Let's alter the class just enough to achieve that.
+                          운 좋게도 그게 바로 MobX가 해줄 수 있는 일입니다. state에 기반한 코드를 자동으로 실행합니다.
+                          스프레드시트의 차트처럼 <code>report</code> 함수가 자동으로 업데이트 되도록 말이죠.
+                          그러기 위해 <code>TodoStore</code>는 발생한 모든 변화를 MobX가 감지할 수 있도록 observable 상태가 되어야 합니다.
+                          이를 적용해보기 위해 클래스를 수정합시다.
                         </p>
-                        <p>Also, the <code>completedTodosCount</code> property could be derived automatically from the todo
-                            list. By using the <code>observable</code> and <code>computed</code> annotations we can introduce observable properties on an
-                            object.
-                            In the example below we use <code>makeObservable</code> to show the annotations explicitly,
-                            but we could have used <code>makeAutoObservable(this)</code> instead to simplify this process.
+                        <p>
+                          또한 <code>completedTodosCount</code>는 todo 리스트에서 자동으로 파생될 수 있을 것입니다.
+                          <code>observable</code>과 <code>computed</code> 주석을 사용함으로써 객체에 observable 프로퍼티를 소개(introduce/선언?)할 수 있습니다.
+                          하단의 예제에서는 주석을 명확하게 보여주기 위해 <code>makeObservable</code>을 사용하지만 더 단순한 절차를 위해 <code>makeAutoObservable(this)</code>를 사용할 수도 있습니다.
                         </p>
                         <textarea spellcheck="false" class="prettyprint" id="code3" rows="8">
 class ObservableTodoStore {
@@ -205,19 +192,15 @@ class ObservableTodoStore {
 const observableTodoStore = new ObservableTodoStore();
                         </textarea>
 
-                        <p>That's it! We marked some properties as being <code>observable</code> to signal MobX that these values can change over time.
-                            The computations are decorated with <code>computed</code> to identify that these can be derived from the state and caches as long as no underlying state changed.
+                        <p>
+                          바로 이겁니다! 특정 프로퍼티를 <code>observable</code> 상태로 만들어서 MobX에게 '앞으로 이 값들이 변경될 수 있음'을 알렸습니다.
+                          계산(computations)은 근원적인 state 변화가 일어나지 않는 한 해당 값들이 state 및 캐시에서 파생될 수 있음을 식별하기 위해 <code>computed</code>로 꾸며집니다.
                         </p>
                         <p>
-                            The <code>pendingRequests</code> and <code>assignee</code> attributes are not used so far,
-                            but will be used later in this tutorial.
+                          <code>pendingRequests</code>와 <code>assignee</code> 속성은 아직까지 사용되지 않았지만, 본 튜토리얼 후반부에서 사용됩니다.
                         </p>
                         <p>
-                            In the constructor we created a small function that prints the <code>report</code> and
-                            wrapped it in <code>autorun</code>. Autorun creates a <em>reaction</em> that runs once, and after
-                            that automatically re-runs whenever any observable data that was used inside the function changes.
-                            Because <code>report</code> uses the observable <code>todos</code> property, it will print the
-                            report whenever appropriate. This is demonstrated in the next listing. Just press the <em>run</em> button:
+                          생성자에서 <code>report</code>를 출력하는 작은 함수를 만들었고 그 함수를 <code>autorun</code>으로 감쌌습니다. autorun은 한 번 실행되는 <em>reaction</em>을 만들고 이후에 함수 안에서 사용된 observable 데이터가 변경될 때마다 자동으로 재실행합니다. <code>report</code>가 observable한 <code>todos</code> 프로퍼티를 사용하기 때문에 필요할 때마다 report를 출력할 것입니다.  이는 하단에 설명되어 있습니다. <em>실행</em> 버튼을 눌러보세요.
                         </p>
 
                         <textarea spellcheck="false" class="prettyprint" id="code4" rows="6">
@@ -227,39 +210,32 @@ observableTodoStore.todos[0].completed = true;
 observableTodoStore.todos[1].task = "try MobX in own project";
 observableTodoStore.todos[0].task = "grok MobX tutorial";
                         </textarea>
-                        <button onClick="runCode(['#code1', '#code3', '#code4'])" class="btn-run">Run code</button>
+                        <button onClick="runCode(['#code1', '#code3', '#code4'])" class="btn-run">실행</button>
 
-                        <p>Pure fun, right? The <code>report</code> did print automatically, synchronously and without leaking
-                            intermediate values. If you investigate the log carefully, you will see that the fifth line
-                            didn't result in a new log-line. Because the report did not <em>actually</em> change as a result
-                            of the rename, although the backing data did. On the other hand, changing the name of the first
-                            todo did update the report, since that name is actively used in the report.
-                            This demonstrates nicely that
-                            not just the <code>todos</code> array is being observed by the <code>autorun</code>, but also
-                            the individual properties inside the todo items.
+                        <p>
+                          흥미롭지 않나요? <code>report</code>는 자동으로, 동기적으로 그리고 중간값 유출 없이 인쇄되었습니다.
+                          로그를 유심히 분석해보면 다섯 번째 줄은 로그 되지 않았음을 알 수 있습니다. 
+                          테스크의 이름을 변경함으로써 백업 데이터가 변경되었지만 <em>실질적으로</em> report가 변경되지는 않았기 때문입니다.
+                          반면 인덱스 1번 todo의 이름은 report에서 활성화되어있었기 때문에 해당 이름을 변경하면 report가 업데이트됩니다.
+                          이는 <code>autorun</code>이 <code>todos</code> 배열뿐만 아니라 todo 항목 내의 개별 프로퍼티까지 감지하고 있었음을 잘 설명해 줍니다.
                         </p>
-                        <h3 id="reactive-reactjs-components">Making React reactive</h3>
-                        <p>Ok, so far we made a silly report reactive. Time to build a reactive user interface around this very
-                            same store. React components are (despite their name) not reactive out of the box.
-                            The <code>observer</code> HoC wrapper from the <code>mobx-react-lite</code> package fixes that by
-                            basically wrapping the React component in <code>autorun</code>. To automatically
-                            keep components in sync with the state. This is conceptually not different from what we did
-                            with the <code>report</code> before.
+                        <h3 id="reactive-reactjs-components">반응적인 React 만들기</h3>
+                        <p>좋습니다. 지금까지는 조금 우스운 반응적 report를 만들었습니다. 이제부터 똑같은 TodoStore에 반응적인 유저 인터페이스를 입혀봅시다.
+                          React 컴포넌트들은 그 이름에도 불구하고 즉시 반응적이지는 않습니다. 
+                          <code>mobx-react-lite</code> 패키지의 <code>observer</code> HoC 래퍼는 기본적으로 React 컴포넌트를 <code>autorun</code>으로 감쌈으로써 이를 해결합니다.
+                          자동으로 컴포넌트가 state와 일치하도록 유지하는 겁니다. 개념적으로 위에서 <code>report</code>로 했던 것과 다르지 않습니다.
                         </p>
                         <p>
-                            The next listing defines a few React components.
-                            The only MobX specific code in there is the <code>observer</code> wrapping.
-                            That is enough to make sure that each component individually re-renders when relevant data changes.
-                            We don't have to call state <code>useState</code> setters anymore,
-                            nor do we have to figure out how to subscribe to the proper parts
-                            of the application state using selectors or higher order components that need configuration.
-                            Basically, all components have become smart. Yet they are defined in a dumb, declarative manner.
+                          하단의 코드에서는 몇 개의 React 컴포넌트를 정의합니다.
+                          유일한 MobX 특유의 코드는 <code>observer</code> 래핑입니다.
+                          이것만으로도 각각의 컴포넌트들은 관련 데이터가 변경될 때 각자 재렌더링합니다.
+                          <code>useState</code> setter를 호출할 필요도 없고 셀렉터 혹은 구성이 필요한 오래된 컴포넌트들을 사용해서 어떻게 애플리케이션 state의 적절한 파트를 subscribe할지 고민할 필요도 없습니다.
+                          바보(dumb)같고 선언적인(declarative) 방식으로 정의되었지만 기본적으로 모든 컴포넌트들이 똑똑해졌습니다.
                         </p>
                         <p>
-                            Press the <em>Run code</em> button to see the code below in action. The listing is editable so
-                            feel free to play with it. Try for example to remove all the <code>observer</code> calls, or
-                            just the one decorating the <code>TodoView</code>. The numbers in the preview on the right highlight
-                            how often a component is rendered.
+                          <em>실행</em> 버튼을 눌러서 하단의 코드가 어떻게 작동하는지 확인하세요. 코드는 편집 가능하므로 자유롭게 바꿔보실 수 있습니다.
+                          예를 들면 모든 <code>observer</code> 호출 또는 <code>TodoView</code>를 꾸미고 있는 <code>observer</code> 하나를 지워보세요.
+                          프리뷰에서 오른쪽에 하이라이트 되는 숫자는 컴포넌트가 렌더링 된 횟수를 가리킵니다.
                         </p>
                         <textarea spellcheck="false" class="" id="react1" rows="44">
 const TodoList = observer(({store}) => {
@@ -314,11 +290,11 @@ ReactDOM.render(
   document.getElementById('reactjs-app')
 );
                         </textarea>
-                        <button onClick="runCode(['#code1', '#code3', '#code4', '#react1'])" class="btn-run">Run code</button>
+                        <button onClick="runCode(['#code1', '#code3', '#code4', '#react1'])" class="btn-run">실행</button>
 
                         <p>
-                            The next listing nicely demonstrates that we only have to alter the data, without doing any further bookkeeping.
-                            MobX will automatically derive and update the relevant parts of the user interface again from the state in the store.
+                          하단은 어떠한 bookkeeping 없이 데이터만 바꾸면 된다는 점을 설명해 줍니다. 
+                          MobX는 store에 있는 state를 기반으로 유저 인터페이스의 관련 부분들을 자동으로 파생시키고 업데이트합니다. 
                         </p>
 
                         <textarea spellcheck="false" class="" id="play1" rows="8">
@@ -329,17 +305,17 @@ store.todos.push({ task: "Find a fine cheese", completed: true });
 // etc etc.. add your own statements here...
                         </textarea>
                         <button onClick="if (typeof observableTodoStore === 'undefined') { runCode(['#code1', '#code3', '#code4', '#react1']) } runCode(['#play1'])"
-                        class="btn-run">Run code</button>
-                        <button id="runline-btn" onClick="runCodePerLine()" class="btn-run">Run line-by-line</button>
+                        class="btn-run">실행</button>
+                        <button id="runline-btn" onClick="runCodePerLine()" class="btn-run">한 줄씩 실행</button>
                         <p>&nbsp;</p>
 
-                        <h3>Working with references</h3>
+                        <h3>레퍼런스 작업</h3>
                         <p>
-                            So far we have created observable objects (both prototyped and plain objects), arrays and primitives. You might be wondering,
-                            how are references handled in MobX? Is my state allowed to form a graph? In the previous listings
-                            you might have noticed that there is an <code>assignee</code> property
-                            on the todos. Let's give them some values by introducing another &ldquo;store&rdquo; (ok, it's just
-                            a glorified array) containing people, and assign tasks to them.
+                            지금까지는 observable 객체(프로토타입 객체와 순수 객체 모두), 배열과 기본적인 동작(promitive)을 만들었습니다.
+                            아마 MobX에서 레퍼런스가 어떻게 다뤄지는지 궁금할 것입니다.
+                            내 state가 그래프를 형성할 수 있을까요?
+                            이전 코드들에서 todo 프로퍼티에 있는 <code>assignee</code>를 발견했을 겁니다.
+                            거기에 사람을 포함하고 있는 또 다른 'store'(쉽게 말하자면 배열)를 적용하여 값을 부여하고, 테스크를 할당해봅시다. 
                         </p>
                         <textarea spellcheck="false" class="" id="store2" rows="8">
 const peopleStore = observable([
@@ -350,40 +326,43 @@ observableTodoStore.todos[0].assignee = peopleStore[0];
 observableTodoStore.todos[1].assignee = peopleStore[1];
 peopleStore[0].name = "Michel Weststrate";
                         </textarea>
-                        <button onClick="runCode(['#code1', '#code3', '#code4', '#react1', '#store2'])" class="btn-run">Run code</button>
-                        <p>We now have two independent stores. One with people and one with todos. To assign an <code>assignee</code>
-                            to a person from the people store, we just assigned a reference. These changes will be picked
-                            up automatically by the <code>TodoView</code>. With MobX there is no need to normalize data first
-                            and to write selectors to make sure our components will be updated. In fact, it doesn't even
-                            matter where the data is stored. As long as objects are made <em>observable</em>, MobX will be
-                            able to track them. Real JavaScript references will just work. MobX will track them automatically
-                            if they are relevant for a derivation. To test that, just try changing your name in the next
-                            input box (make sure you have pressed the above <em>Run code</em> button first!).
+                        <button onClick="runCode(['#code1', '#code3', '#code4', '#react1', '#store2'])" class="btn-run">실행</button>
+                        <p>이제 '사람'과 'todo'로 이루어진 두 개의 개별 store가 있습니다.
+                          사람 store의 특정 인물에게 <code>assignee</code>를 할당하기 위해 레퍼런스를 배치했습니다.
+                          이 변화들은 <code>TodoView</code>에 의해 자동으로 감지됩니다.
+                          MobX를 이용하면 일단 데이터를 정규화할 필요가 없고, 컴포넌트가 업데이트 되도록 하기 위해 셀렉터를 작성할 필요도 없습니다.
+                          사실 데이터가 어디에 저장되어 있든 문제없습니다.
+                          객체들이 <em>observable</em>이기만 하면 MobX가 감지할 수 있습니다.
+                          실제 JavaScript 레퍼런스만 가능합니다.
+                          파생 값과 관련이 있다면 MobX는 자동으로 트래킹 할 것입니다.
+                          이것을 확인해보기 위해 하단 input 박스에서 당신의 이름을 바꿔보세요.
+                          (먼저 상단의 <em>실행</em> 버튼을 누르고 진행하세요!)
                         </p>
                         <hr/>
-                        <p style="text-align:center">Your name:
+                        <p style="text-align:center">이름:
                             <input onkeyup="peopleStore[1].name = event.target.value" />
                         </p>
                         <hr/>
-                        <p>By the way, the HTML of the above input box is simply: <pre>&lt;input onkeyup="peopleStore[1].name = event.target.value" /&gt;</pre></p>
+                        <p>위 input 박스의 HTML은 단순합니다.
+                          <pre>&lt;input onkeyup="peopleStore[1].name = event.target.value" /&gt;</pre></p>
 
-                        <h3>Asynchronous actions</h3>
-                        <p>Since everything in our small Todo application is derived from the state, it really doesn't matter <em>when</em> state is changed.
-                            That makes creating asynchronous actions really straightforward.
-                            Just press the the following button (multiple times) to emulate asynchronously loading new todo items:
+                        <h3>비동기식 action</h3>
+                        <p>todo 애플리케이션의 모든 것은 state로부터 파생되었기 때문에 state가 <em>언제</em> 변경되든 상관없습니다.
+                          따라서 비동기식 action을 만들기도 쉽습니다.
+                          하단의 버튼을 여러 번 눌러서 새 todo 항목을 비동기식으로 로드해보세요.
                         </p>
                         <hr/>
                         <p style="text-align:center">
-                            <button onclick="observableTodoStore.pendingRequests++; setTimeout(function() { observableTodoStore.addTodo('Random Todo ' + Math.random()); observableTodoStore.pendingRequests--;  }, 2000);">Load todo</button>
+                            <button onclick="observableTodoStore.pendingRequests++; setTimeout(function() { observableTodoStore.addTodo('Random Todo ' + Math.random()); observableTodoStore.pendingRequests--;  }, 2000);">todo 불러오기</button>
                         </p>
                         <hr/>
-                        <p>The code behind that is really straightforward.
-                            We start with updating the store property <code>pendingRequests</code> to have the UI reflect the current loading status.
-                            Once loading is finished, we update the todos of the store and decrease the <code>pendingRequests</code> counter again.
-                            Just compare this snippet with the earlier <code>TodoList</code> definition to see how the pendingRequests property is used.
+                        <p> 코드는 굉장히 단순합니다.
+                          UI가 현재 로딩 상태를 반영하도록 하기 위해 store의 <code>pendingRequests</code> 프로퍼티를 업데이트하는 것으로 시작합니다.
+                          로딩이 끝나면 store의 todo를 업데이트하고 다시 <code>pendingRequests</code> 카운터를 감소시킵니다.
+                          이 코드와 이전의 <code>TodoList</code> 정의를 비교해서 pendingRequests가 어떻게 사용되었는지를 확인해보세요.
                         </p><p>
-                            Note that the timeout function is wrapped in <code>action</code>. This isn't strictly necessary,
-                            but it makes sure that both mutations are processed in a single transaction, making sure any observers are only notified after both updates have completed.
+                          <code>action</code>으로 timeout 함수를 감쌌다는 점을 유의하세요.
+                          절대적으로 필요한 일은 아니지만, 두 개의 변화가 한 번의 처리 과정에서 진행되도록 하기 때문에 observer들은 모든 업데이트가 끝난 후에만 식별(nofity)됩니다.
 <pre>observableTodoStore.pendingRequests++;
 setTimeout(action(() => {
   observableTodoStore.addTodo('Random Todo ' + Math.random());
@@ -391,47 +370,42 @@ setTimeout(action(() => {
 }), 2000);</pre>
                         </p>
 
-                        <h3>Conclusion</h3>
-                        <p>
-                            That's all! No boilerplate. Just some simple, declarative components that form our complete UI. And which are derived completely,
-                            reactively from our state. You are now ready to start using the <code>mobx</code> and <code>mobx-react-lite</code> packages in your own applications.
-                            A short summary of the things you learned so far:
+                        <h3>결론</h3>
+                        <p>이게 전부입니다! 보일러 플레이트로부터 자유롭습니다.
+                          완전한 UI를 구성하는 몇 가지 단순하고 선언적인 컴포넌트일 뿐입니다. 그리고 state에서 완벽하게, 반응적으로 파생된 것입니다.
+                          이제 직접 애플리케이션에서 <code>mobx</code>와 <code>mobx-react-lite</code> 패키지를 사용해볼 준비가 되었습니다.
+                          지금까지의 내용을 간단하게 요약해봅시다.
                         </p>
                         <ol>
                             <li>
-                                Use the <code>observable</code> decorator or <code>observable(object or array)</code> functions to make objects trackable for MobX.
+                              <code>observable</code> 데코레이터 또는 <code>observable(객체 또는 배열)</code> 함수를 사용하여 MobX가 객체를 트래킹 할 수 있도록 만드세요.
                             </li>
                             <li>
-                                The <code>computed</code> decorator can be used to create functions that can automatically derive value from the state and cache them.
+                              <code>computed</code> 데코레이터는 state로부터 자동으로 값을 가져와 캐시 할 수 있는 함수를 만드는 데 사용할 수 있습니다.
                             </li>
                             <li>
-                                Use <code>autorun</code> to automatically run functions that depend on some observable state.
-                                This is useful for logging, making network requests, etc.
+                              observable한 state 기반의 함수들을 자동으로 실행하기 위해서는 <code>autorun</code>을 사용하세요.
+                              로깅, 네트워크 요청 등에 유용합니다.
                             </li>
                             <li>
-                                Use the <code>observer</code> wrapper from the <code>mobx-react-lite</code> package to make your React components truly reactive.
-                                They will update automatically and
-                                efficiently. Even when used in large complex applications with large amounts of data.
+                              <code>mobx-react-lite</code> 패키지의 <code>observer</code>를 사용하여 React 컴포넌트가 진정으로 reactive 하도록 만드세요.
+                              거대한 양의 데이터를 사용하는 복잡한 애플리케이션에 사용되더라도 자동적으로, 효율적으로 업데이트할 것입니다.
                             </li>
                         </ol>
                         <p>
-                            Feel free to play around a bit longer with the editable code blocks above to get a basic feeling how MobX reacts to all your
-                            changes. You could for example add a log statement to the <code>report</code> function to see when it is called.
-                            Or don't show the <code>report</code> at all and see how that
-                            influences the rendering of the <code>TodoList</code>. Or show it only under specific circumstances...
+                          상단의 편집 가능한 코드 블록들을 수정해보면서 MobX가 모든 변화에 어떻게 반응하는지에 대해 기본적인 감각을 익혀보실 수 있습니다.
+                          예를 들면 <code>report</code>에 로그 명령어를 추가해서 언제 호출되는지를 살펴보세요.
+                          또는 <code>report</code>를 한 번도 show 하지 않았을 때 <code>TodoList</code> 렌더링에 어떤 영향이 미치는지, 또는 특정한 상황에서만 show 한다면 등등...
                         </p>
 
-                        <h3>MobX doesn't dictate architecture</h3>
-                        <p>
-                          Please note that the above examples are contrived and it is recommended to use proper engineering practices like
-                            encapsulating logic in methods, organize them in stores or controllers, view-models etc.
-                            Many different architectural patterns can be applied, and some are further discussed inside the official docs.
-                            The above examples, and the examples in the official documentation show how MobX <em>could</em> be used, not how it <em>must</em> be used.
-                            Or, as somebody on HackerNews put it:
+                        <h3>MobX는 아키텍처를 제한(dictate, 억압?)하지 않습니다</h3>
+                        <p> 상단의 예제는 작위적인 예시이며 로직을 메서드로 압축하거나 저장소, 컨트롤러, 뷰 모델 등에서 구성하는 것과 같이 적절한 엔지니어링 관행을 사용하는 것이 좋습니다.
+                          다양한 아키텍처 패턴이 적용될 수 있고 몇 가지는 공식 문서에서 더 구체적으로 논의되었습니다.
+                          상단의 예제와 공식 문서의 예제는 MobX가 어떻게 사용되어야 <em>하는지</em>가 아닌 어떻게 사용될 수 <em>있는지</em>를 보여줍니다.
+                          HackerNews의 누군가는 이렇게 말합니다.
                             <blockquote><em>
-&ldquo;MobX, it's been mentioned elsewhere but I can't help but sing its praises.
-Writing in MobX means that using controllers/ dispatchers/ actions/ supervisors or another form of managing dataflow returns to being an architectural concern you can pattern to your application's needs,
-rather than being something that's required by default for anything more than a Todo app.&rdquo;
+                              &ldquo;MobX가 다른 데서도 많이 언급되었지만 역시 칭찬을 안 할 수 없네요.
+                              MobX로 작성한다는 것은 컨트롤러∙디스패쳐(dispatcher)∙작업(action)∙감독관(supervisor) 또는 데이터플로우를 관리하는 다른 폼들이 Todo 앱 이상의 애플리케이션에서 기본적으로 필요한 것이 아니라 애플리케이션의 필요에 따라 패턴을 만들 수 있는 아키텍처 문제로 돌아간다는 것을 의미합니다.&rdquo;
                             </em></blockquote>
                         </p>
 
@@ -445,16 +419,16 @@ rather than being something that's required by default for anything more than a 
                     </section>
 
                     <footer>
-                        <p class="copyright">MobX is maintained by <a href="https://twitter.com/mweststrate">mweststrate</a></p>
+                        <p class="copyright">MobX는 <a href="https://twitter.com/mweststrate">mweststrate</a>에서 관리하고 있습니다.</p>
                     </footer>
                 </div>
               </div>
             </td>
             <td class="right">
                 <div class="right-content">
-                    <h3>React preview</h3>
+                    <h3>React 프리뷰</h3>
                     <div id="reactjs-app">
-						<p style="text-align: center">Read on and press any <em>run</em> buttons you encounter!</p>
+						<p style="text-align: center">문서에 있는 <em>실행</em> 버튼을 눌러보세요!</p>
 					</div>
                     <hr/>
                     <h3>Console log
