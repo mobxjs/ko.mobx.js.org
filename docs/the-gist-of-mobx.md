@@ -16,7 +16,7 @@ MobX는 어플리케이션에서 다음 세 가지 개념을 구분합니다.
 2. 동작(Action)
 3. 파생(Derivation)
 
-세 가지 개념에 대해 아래의 내용을 자세히 살펴보거나, [MobX 및 React에 대한 10분 소개](https://mobx.js.org/getting-started)에서 단계별로 심층적으로 살펴보고 간단한 Todo list 앱을 만들어보세요.
+세 가지 개념에 대해 아래의 내용을 자세히 살펴보거나, [10분만에 알아보는 MobX와 React](https://mobx.js.org/getting-started)에서 단계별로 심층적으로 살펴보고 간단한 Todo list 앱을 만들어보세요.
 
 ### 1. 상태(state)를 정의하고 관찰 가능하게(observable) 만들기
 
@@ -52,7 +52,7 @@ class Todo {
 }
 ```
 
-**Hint**: 이 예제는 [`makeAutoObservable`](observable-state.md)을 사용하여 코드를 짧게 만들 수 있지만, 위의 코드처럼 명시적으로 표시함으로써 다른 개념을 더 자세히 보여줄 수 있습니다.
+**Hint**: 이 예제는 [`makeAutoObservable`](observable-state.md)을 사용하여 코드를 짧게 만들 수 있지만, 위의 코드처럼 명시적으로 표시함으로써 다른 개념을 더 자세히 보여드리고 있습니다.
 
 `observable`을 사용하는 것은 객체의 속성을 스프레드시트 셀로 바꾸는 것과 같습니다.
 하지만 스프레드시트와 달리 들어갈 수 있는 값은 원시적인 값(primitive values)뿐만 아니라 참조(reference), 객체 및 배열일 수도 있습니다.
