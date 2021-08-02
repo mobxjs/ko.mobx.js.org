@@ -1,30 +1,30 @@
 ---
-title: Updating state using actions
+title: action을 이용한 state 업데이트
 sidebar_label: Actions
 hide_title: true
 ---
 
 <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEBD4KQ7&placement=mobxjsorg" id="_carbonads_js"></script>
 
-# Updating state using actions
+# action을 이용한 state 업데이트
 
-Usage:
+사용 방법:
 
--   `action` _(annotation)_
+-   `action` _주석(annotation)_
 -   `action(fn)`
 -   `action(name, fn)`
 
-All applications have actions. An action is any piece of code that modifies the state. In principle, actions always happen in response to an event. For example, a button was clicked, some input changed, a websocket message arrived, etc.
+모든 애플리케이션에는 action이 있습니다. action은 state를 수정하는 코드 조각입니다. 원칙적으로 action은 항상 이벤트에 대한 응답으로 발생합니다. 예를 들어 버튼 클릭, 일부 입력 변경, 웹 소켓 메시지 도착 등이 있습니다.
 
-MobX requires that you declare your actions, although [`makeAutoObservable`](observable-state.md#makeautoobservable) can automate much of this job. Actions help you structure your code better and offer the following performance benefits:
+[`makeAutoObservable`](observable-state.md#makeautoobservable)를 통해 대부분의 action을 자동화 할 수 있지만, action을 따로 선언해야 합니다. 왜냐하면 이를 통해 코드 구조를 개선할 수 있고 아래와 같은 성능 이점을 제공하기 때문입니다.
 
-1. They are run inside [transactions](api.md#transaction). No observers will be updated until the outer-most action has finished, guaranteeing that intermediate or incomplete values produced during an action are not visible to the rest of the application until the action has completed.
+1. [트랜잭션(transaction)](api.md#transaction) 내부에서 실행됩니다. 가장 바깥쪽 action이 완료될 때까지 reaction은 실행되지 않기 때문에, action 실행 중에 생성된 중간값 또는 불완전한 값은 action이 완료될 때까지 애플리케이션에서 볼 수 없습니다.
 
-2. By default, it is not allowed to change the state outside of actions. This helps to clearly identify in your code base where the state updates happen.
+2. 기본적으로 action 외부에서 state를 변경할 수 없습니다. 이를 통해 코드에서 state 업데이트가 발생하는 위치를 명확히 확인할 수 있습니다.
 
-The `action` annotation should only be used on functions that intend to _modify_ the state. Functions that derive information (performing lookups or filtering data) should _not_ be marked as actions, to allow MobX to track their invocations. `action` annotated members will be non-enumerable.
+`action` 주석은 state를 _수정하려는_ 함수에서만 사용해야 합니다. 정보(조회 또는 데이터 필터링)를 유도하는 함수는 MobX가 추적할 수 있도록 action으로 표시하면 안 됩니다. `action` 주석이 달린 멤버는 non-enumerable이 됩니다.
 
-## Examples
+## 예시
 
 <!--DOCUSAURUS_CODE_TABS-->
 <!--makeObservable-->
@@ -43,7 +43,7 @@ class Doubler {
     }
 
     increment() {
-        // Intermediate states will not become visible to observers.
+        // 중간 state는 observer에게 표시되지 않습니다.
         this.value++
         this.value++
     }
@@ -92,7 +92,7 @@ class Doubler {
 
 const doubler = new Doubler()
 
-// Calling increment this way is safe as it is already bound.
+// 해당 방법으로 increment를 호출하는 것은 이미 바인딩되어 있으므로 안전합니다.
 setInterval(doubler.increment, 1000)
 ```
 
@@ -126,13 +126,13 @@ runInAction(() => {
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-## Wrapping functions using `action`
+## `action` 함수를 이용한 함수 래핑
 
-To leverage the transactional nature of MobX as much as possible, actions should be passed as far outward as possible. It is good to mark a class method as an action if it modifies the state. It is even better to mark event handlers as actions, as it is the outer-most transaction that counts. A single unmarked event handler that calls two actions subsequently would still generate two transactions.
+MobX의 트랜잭션 특성을 최대한 활용하려면 action을 최대한 외부로 전달해야 합니다. state를 수정하려는 경우 클래스 메서드를 action으로 표시하는 것이 좋습니다. 이벤트 핸들러는 가장 바깥쪽 트랜잭션이기 때문에 action으로 표시하는 것이 더 좋습니다. 그리고 두 개의 action을 호출하는 action 주석이 표시되지 않은 단일 이벤트 핸들러는 두 개의 트랜잭션을 생성합니다.
 
-To help create action based event handlers, `action` is not only an annotation, but also a higher order function. It can be called with a function as an argument, and in that case it will return an `action` wrapped function with the same signature.
+action 기반 이벤트 핸들러를 쉽게 만드는 데 도움이 되는 `action`은 주석 기능뿐만 아니라 고차 함수도 될 수 있습니다. 함수를 인수로 사용하여 호출할 수 있으며, 이러한 경우 동일한 특징을 가진 action 래핑 함수를 반환합니다.
 
-For example in React, an `onClick` handler can be wrapped as below.
+예를 들어 React에서 `onClick` 핸들러는 아래와 같이 래핑 될 수 있습니다.
 
 ```javascript
 const ResetButton = ({ formState }) => (
@@ -148,26 +148,26 @@ const ResetButton = ({ formState }) => (
 )
 ```
 
-For debugging purposes, we recommend to either name the wrapped function, or pass a name as the first argument to `action`.
+디버깅 목적으로 래핑 된 함수의 이름을 지정하거나 `action`에 대한 첫 번째 인수로 이름을 전달하는 것이 좋습니다.
 
-<details id="actions-are-untracked"><summary>**Note:** actions are untracked<a href="#actions-are-untracked" class="tip-anchor"></a></summary>
+<details id="actions-are-untracked"><summary>**메모:** 추적되지 않는 action<a href="#actions-are-untracked" class="tip-anchor"></a></summary>
 
-Another feature of actions is that they are [untracked](api.md#untracked). When an action is called from inside a side effect or a computed value (very rare!), observables read by the action won't be counted towards the dependencies of the derivation
+action의 또 다른 특징은 [추적되지 않는다](api.md#untracked)는 것입니다. action이 부수효과 내부 또는 computed 값 내부에서 호출되면 action에서 읽은 observable 항목은 derivation의 종속성으로 계산되지 않습니다.
 
-`makeAutoObservable`, `extendObservable` and `observable` use a special flavour of `action` called `autoAction`,
-that will determine at runtime if the function is a derivation or action.
+`makeAutoObservable`, `extendObservable` 및 `observable`은 `autoAction`이라는 특별한 `action`을 사용합니다. 
+이 동작은 함수가 derivation인지 action인지를 런타임에 결정합니다.
 
 </details>
 
 ## `action.bound`
 
-Usage:
+사용 방법:
 
--   `action.bound` _(annotation)_
+-   `action.bound` _주석(annotation)_
 
-The `action.bound` annotation can be used to automatically bind a method to the correct instance, so that `this` is always correctly bound inside the function.
+`action.bound` 주석을 사용하여 메서드를 적절한 인스턴스에 바인딩할 수 있음으로 `this`는 항상 함수 내에서 적절하게 바인딩 됩니다.
 
-<details id="auto-bind"><summary>**Tip:** use `makeAutoObservable(o, {}, { autoBind: true })` to bind all actions and flows automatically<a href="#avoid-bound" class="tip-anchor"></a></summary>
+<details id="auto-bind"><summary>**Tip:** 모든 action과 flow를 자동으로 바인딩하려면 `makeAutoObservable(o, {}, { autoBind: true })`을 사용하세요.<a href="#avoid-bound" class="tip-anchor"></a></summary>
 
 ```javascript
 import { makeAutoObservable } from "mobx"
@@ -195,16 +195,16 @@ class Doubler {
 
 ## `runInAction`
 
-Usage:
+사용 방법:
 
 -   `runInAction(fn)`
 
-Use this utility to create a temporarily action that is immediately invoked. Can be useful in asynchronous processes.
-Check out the [above code block](#examples) for an example.
+해당 유틸리티를 사용하여 즉시 호출되는 임시 action을 생성할 수 있습니다. 비동기 프로세스에서 유용하게 사용하실 수 있습니다. 
+예를 들어 [위의 코드 블록](#examples)을 확인하세요.
 
-## Actions and inheritance
+## action 및 상속
 
-Only actions defined **on prototype** can be **overriden** by subclass:
+**프로토타입에서** 정의된 action만 하위 클래스에서 **재정의(override)**할 수 있습니다.
 
 ```javascript
 class Parent {
@@ -217,7 +217,7 @@ class Parent {
 
     constructor() {
         makeObservable(this, {
-            arrowAction: action
+            arrowAction: action,
             action: action,
             boundAction: action.bound,
         })
@@ -242,22 +242,22 @@ class Child extends Parent {
 }
 ```
 
-To **bind** a single _action_ to `this`, `action.bound` can be used instead of _arrow functions_.<br>
-See [**subclassing**](subclassing.md) for more information.
+단일 _action_에 **바인딩**하기 위해 _화살표 함수_ 대신에 `this`와 `action.bound`를 사용할 수 있습니다.<br>
+자세한 내용은 [**subclassing**](subclassing.md)을 확인하세요.
 
-## Asynchronous actions
+## 비동기 action
 
-In essence, asynchronous processes don't need any special treatment in MobX, as all reactions will update automatically regardless of the moment in time they are caused.
-And since observable objects are mutable, it is generally safe to keep references to them for the duration of an action.
-However, every step (tick) that updates observables in an asynchronous process should be marked as `action`.
-This can be achieved in multiple ways by leveraging the above APIs, as shown below.
+기본적으로 비동기 프로세스는 발생 시점과 상관없이 모든 reaction이 업데이트되기 때문에 MobX에서 특별한 처리가 필요하지 않습니다.
+그리고 observable 객체는 mutable 하므로 action이 실행되는 동안 observable 객체에 대한 참조를 유지하는 것이 안전합니다.
+하지만 비동기 프로세스에서 observable을 업데이트하는 모든 단계는 `action`으로 표시되어야 합니다.
+아래에서 소개해 드리는 여러 가지 방법을 사용하여 `action`을 표시해보세요.
 
-For example, when handling promises, the handlers that update state should be wrapped using `action` or be actions, as shown below.
+예를 들어 promise를 처리할 때 state를 업데이트하는 핸들러는 아래와 같이 `action`을 사용하여 래핑하거나 action이 되어야 합니다.
 
 <!--DOCUSAURUS_CODE_TABS-->
-<!--Wrap handlers in `action`-->
+<!--핸들러 `action`으로 감싸기-->
 
-Promise resolution handlers are handled in-line, but run after the original action finished, so they need to be wrapped by `action`:
+promise 해결 핸들러는 인라인으로 처리되지만 원래 작업이 완료된 후에 실행되므로 `action`으로 래핑해야 합니다.
 
 ```javascript
 import { action, makeAutoObservable } from "mobx"
@@ -287,9 +287,9 @@ class Store {
 }
 ```
 
-<!--Handle updates in separate actions-->
+<!--별도의 action을 통한 업데이트 처리-->
 
-If the promise handlers are class fields, they will automatically be wrapped in `action` by `makeAutoObservable`:
+promise 핸들러가 클래스 필드라면 `makeAutoObservable`에 의해 action이 자동으로 래핑 됩니다.
 
 ```javascript
 import { makeAutoObservable } from "mobx"
@@ -322,8 +322,8 @@ class Store {
 
 <!--async/await + runInAction-->
 
-Any steps after `await` aren't in the same tick, so they require action wrapping.
-Here, we can leverage `runInAction`:
+`await` 이후 단계가 동일하지 않기 때문에 action 래핑이 필요합니다. 
+여기에서 `runInAction`을 활용할 수 있습니다.
 
 ```javascript
 import { runInAction, makeAutoObservable } from "mobx"
@@ -370,12 +370,12 @@ class Store {
         })
     }
 
-    // Note the star, this a generator function!
+    // 별 모양은 제너레이터(generator) 함수입니다!
     *fetchProjects() {
         this.githubProjects = []
         this.state = "pending"
         try {
-            // Yield instead of await.
+            // await 대신 yield를 사용합니다.
             const projects = yield fetchGithubProjectsSomehow()
             const filteredProjects = somePreprocessing(projects)
             this.state = "done"
@@ -392,35 +392,34 @@ const projects = await flowResult(store.fetchProjects())
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-## Using flow instead of async / await {🚀}
+## async·await 대신에 flow 사용하기 {🚀}
 
-Usage:
+사용 방법:
 
--   `flow` _(annotation)_
+-   `flow` _주석(annotation)_
 -   `flow(function* (args) { })`
 
-The `flow` wrapper is an optional alternative to `async` / `await` that makes it easier to
-work with MobX actions.
-`flow` takes a [generator function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator) as its only input.
-Inside the generator, you can chain promises by yielding them (instead of `await somePromise` you write `yield somePromise`).
-The flow mechanism will then make sure the generator either continues or throws when a yielded promise resolves.
+`flow` 래퍼는 MobX action을 더 쉽게 작업할 수 있게 `async`·`await` 대신 사용할 수 있는 옵션입니다.
+`flow`는 [generator function](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Generator)을 유일한 입력으로 사용합니다.
+generator 안에서 yield를 사용하여(`await somePromise` 대신 `yield somePromise`) promise를 연결할 수 있습니다.
+flow 매커니즘은 promise가 해결될 때 generator가 계속 진행되거나 throw되는지 확인합니다.
 
-So `flow` is an alternative to `async` / `await` that doesn't need any further `action` wrapping. It can be applied as follows:
+따라서 `flow`는 `async`·`await`과 달리 `action` 래핑이 필요하지 않습니다. 이는 다음과 같이 적용될 수 있습니다.
 
-1. Wrap `flow` around your asynchronous function.
-2. Instead of `async` use `function *`.
-3. Instead of `await` use `yield`.
+1. 비동기 함수를 `flow`로 감쌉니다.
+2. `async` 대신  `function *`을 사용합니다.
+3. `await` 대신 `yield`를 사용합니다.
 
-The [`flow` + generator function](#asynchronous-actions) example above shows what this looks like in practice.
+[`flow` + generator function](#asynchronous-actions) 예제에서 실제로 어떻게 사용하는지 확인해보세요.
 
-Note that the `flowResult` function is only needed when using TypeScript.
-Since decorating a method with `flow`, it will wrap the returned generator in a promise.
-However, TypeScript isn't aware of that transformation, so `flowResult` will make sure that TypeScript is aware of that type change.
+`flowResult` 함수는 TypeScript를 사용할 때만 필요합니다.
+메서드를 `flow`로 데코레이팅하기 때문에 반환된 generator는 promise로 래핑 됩니다.
+그러나 TypeScript는 이러한 변환을 인식하지 못하기 때문에 `flowResult`를 사용하여 해당 변경을 인식할 수 있도록 해야 합니다.
 
-`makeAutoObservable` and friends will automatically infer generators to be `flow`s. `flow` annotated members will be non-enumerable.
+`makeAutoObservable`은 자동으로 generator를 flow로 유추합니다. `flow` 주석이 달린 멤버는 non-enumerable이 됩니다.
 
-<details id="flow-wrap"><summary>{🚀} **Note:** using flow on object fields<a href="#flow-wrap" class="tip-anchor"></a></summary>
-`flow`, like `action`, can be used to wrap functions directly. The above example could also have been written as follows:
+<details id="flow-wrap"><summary>{🚀} **Note:** 객체 필드에 flow 사용하기<a href="#flow-wrap" class="tip-anchor"></a></summary>
+`flow`는 `action`과 마찬가지로 함수를 직접 래핑할 수 있습니다. 위의 예시는 아래와 같이 작성될 수 있습니다.
 
 ```typescript
 import { flow } from "mobx"
@@ -433,7 +432,7 @@ class Store {
         this.githubProjects = []
         this.state = "pending"
         try {
-            // yield instead of await.
+            // await 대신에 yield를 사용합니다.
             const projects = yield fetchGithubProjectsSomehow()
             const filteredProjects = somePreprocessing(projects)
             this.state = "done"
@@ -448,28 +447,28 @@ const store = new Store()
 const projects = await store.fetchProjects()
 ```
 
-The upside is that we don't need `flowResult` anymore, the downside is that `this` needs to be typed to make sure its type is inferred correctly.
+`flowResult`가 더 이상 필요하지 않다는 장점이 있고, 타입을 올바르게 추론하기 위해 `this`가 필요하다는 단점이 있습니다.
 
 </details>
 
 ## `flow.bound`
 
-Usage:
+사용 방법:
 
--   `flow.bound` _(annotation)_
+-   `flow.bound` _주석(annotation)_
 
-The `flow.bound` annotation can be used to automatically bind a method to the correct instance, so that `this` is always correctly bound inside the function.
-Similary to actions, flows can be bound by default using [`autoBind` option](#auto-bind).
+`flow.bound` 주석을 사용하여 메서드를 적절한 인스턴스에 자동으로 바인딩할 수 있음으로 `this`는 항상 함수 내에서 적절하게 바인딩 됩니다.
+action과 유사하게 flow는 [`autoBind` 옵션](#auto-bind)을 사용하여 기본적으로 바인딩 할 수 있습니다.
 
-## Cancelling flows {🚀}
+## flow 취소 {🚀}
 
-Another neat benefit of flows is that they are cancellable.
-The return value of `flow` is a promise that resolves with the value that is returned from the generator function in the end.
-The returned promise has an additional `cancel()` method that will interrupt the running generator and cancel it.
-Any `try` / `finally` clauses will still be run.
+flow의 또 다른 장점은 취소할 수 있다는 것입니다.
+`flow`의 반환 값은 generator 함수에서 반환된 값을 해결(resolve)하는 promise입니다.
+반환된 promise는 실행 중인 generator를 취소할 수 있는 `cancel()` 메서드가 있습니다.
+모든 `try`·`finally` 절은 계속 실행됩니다.
 
-## Disabling mandatory actions {🚀}
+## 필수 action 비활성화 {🚀}
 
-By default, MobX 6 and later require that you use actions to make changes to the state.
-However, you can configure MobX to disable this behavior. Check out the [`enforceActions`](configuration.md#enforceactions) section.
-For example, this can be quite useful in unit test setup, where the warnings don't always have much value.
+기본적으로 MobX 6 버전 이상에서는 action을 사용하여 state를 변경해야 합니다.
+이러한 동작을 비활성화시키고 싶다면, [`enforceActions`](configuration.md#enforceactions) 섹션을 확인해주세요.
+이러한 옵션은 경고의 가치가 덜 중요할 수도 있는 단위 테스트에서 유용할 수 있습니다.
