@@ -18,14 +18,14 @@ computed 값을 사용하여 다른 observable 정보를 얻을 수 있습니다
 computed 값은 느리게 평가하여 출력을 캐싱하고 observables 중 하나가 변경된 경우에만 다시 계산합니다.
 아무것도 관찰되지 않으면 완전히 작동을 멈춥니다.
 
-개념적으로 스프레드시트의 수식과 매우 유사하며 과소평가할 수 없습니다. 저장해야 하는 상태를 줄이는 데 도움이 되며 매우 최적화되어 있습니다. 가능한 모든 곳에 사용하세요.
+개념적으로 스프레드시트의 수식과 매우 유사하며 과소평가할 수 없습니다. 저장해야 하는 state를 줄이는 데 도움이 되며 매우 최적화되어 있습니다. 가능한 모든 곳에 사용하세요.
 
 ## 예시
 
-computed 값은 Javascript [getters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) 와 함께 `computed`를 사용하여 생성할 수 있습니다.
+computed 값은 Javascript [getters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get)에 `computed` 주석을 달아 생성할 수 있습니다.
 `makeObservable`을 사용하여 getter를 computed로 선언합니다. 모든 getter를 `computed`로 선언되도록 하려면 `makeAutoObservable`, `observable` 또는 `extendObservable`를 사용하시면 됩니다.
 
-computed 값의 요점을 설명하기 위해 아래 예제는 [Reactions {🚀}](reactions.md) 섹션의 [`autorun`](reactions.md#autorun)을 사용합니다.
+아래 예제에서는 computed 값의 요점을 설명하기 위해 [Reactions {🚀}](reactions.md) 섹션의 [`autorun`](reactions.md#autorun)을 사용합니다.
 
 ```javascript
 import { makeObservable, observable, computed, autorun } from "mobx"
@@ -90,14 +90,14 @@ order.price = 3
 
 computed 사용 시 주의사항:
 
-1. 부수효과(side effects)나 다른 observable 항목을 업데이트하면 안 됩니다.
+1. 부수효과(side effects)를 가지거나 다른 observable 항목을 업데이트하면 안 됩니다.
 2. 새로운 observable 항목을 만들고 반환하면 안 됩니다.
 
 ## 팁
 
 <details id="computed-suspend"><summary>**Tip:** computed 값이 관찰되지 않으면 computed 기능이 일시 중단됩니다.<a href="#computed-suspend" class="tip-anchor"></a></summary>
 
-MobX에 대해 처음 접하는 사람 중 [Reselect](https://github.com/reduxjs/reselect)와 같은 라이브러리에 익숙한 사람들은 혼란스러울 수도 있습니다. computed 속성을 생성했지만, reaction의 어느 곳에서도 사용되지 않으면 메모되지 않고 필요한 것보다 더 자주 계산되는 것처럼 보입니다.
+MobX에 대해 처음 접하는 사람 중 [Reselect](https://github.com/reduxjs/reselect)와 같은 라이브러리에 익숙한 사람들은 혼란스러울 수도 있습니다. 생성한 computed 속성이 reaction의 어느 곳에서도 사용되지 않으면 해당 속성이 기억되지도 않으며 필요한 것보다 자주 계산되는 것 처럼 보일 수 있습니다.
 예를 들어 위의 예시에서  `stop()`을 호출한 후 `console.log(order.total)`를 두 번 호출했다면 값은 두 번 계산됩니다.
 
 따라서 MobX는 접근하지 않는 computed 값에 대해 불필요한 업데이트를 방지하기 위해
@@ -117,7 +117,7 @@ setInterval(() => {
 }, 60)
 ```
 
-`keepAlive` 옵션을 사용하여 주석(annotation)을 설정하거나([직접 시도해보세요.](https://codesandbox.io/s/computed-3cjo9?file=/src/index.tsx)) 필요에 따라 나중에 깔끔하게 정리할 수 있는 `autorun(() => { someObject.someComputed })`을 만들어 이를 해결할 수 있습니다.
+`keepAlive` 옵션을 사용하여 주석(annotation)을 설정하거나([직접 시도해보세요.](https://codesandbox.io/s/computed-3cjo9?file=/src/index.tsx)) 필요에 따라 나중에 깔끔하게 정리할 수 있는 `autorun(() => { someObject.someComputed })`을 만들어 오버라이딩함으로써 이를 해결할 수 있습니다.
 두 가지 해결방법 다 메모리 누수가 발생할 위험이 있습니다. 여기서 기본 동작을 변경하는 것은 안티 패턴(anti-pattern) 입니다.
 
 또한 MobX는 [`computedRequiresReaction`](configuration.md#computedrequiresreaction-boolean) 옵션을 사용하여 computed 값이 reaction 컨텍스트 외부에서 액세스 될 때 오류를 보고할 수 있습니다.
@@ -193,7 +193,7 @@ computed 값은 일반적으로 백업 값이 변경되는 경우에만 재평�
 
 <details id="computed-with-args"><summary>{🚀} **Tip:** 인수를 사용한 computed 값<a href="#computed-with-args" class="tip-anchor"></a></summary>
 
-getter는 인수를 사용하지 않지만, 인수가 필요한 파생 값으로 작업하기 위한 몇 가지 전략은 [여기](computeds-with-args.md)에서 확인해보세요.
+getter는 인수를 사용하지 않지만, 인수를 필요로하는 파생 값으로 작업하기 위한 몇 가지 전략은 [여기](computeds-with-args.md)에서 확인해보세요.
 
 </details>
 
@@ -207,7 +207,7 @@ getter는 인수를 사용하지 않지만, 인수가 필요한 파생 값으로
 
 ## Options {🚀}
 
-`computed`는 일반적으로 원하는 대로 즉시 사용할 수 있는 방식으로 동작하지만, `options` 인수를 전달하여 동작을 사용자 정의 할 수 있습니다.
+일반적으로 `computed`는 원하는 대로 즉시 사용할 수 있는 방식으로 동작하지만, `options` 인수를 전달하여 동작을 사용자 정의 할 수 있습니다.
 
 ### `name`
 
@@ -223,14 +223,14 @@ getter는 인수를 사용하지 않지만, 인수가 필요한 파생 값으로
 
 #### 내장형 comparers
 
-MobX는 `computed`의 `equals` 옵션 대부분을 충족해주는 네 가지 `comparer` 방법을 기본으로 제공합니다.
+MobX는 `computed`의 `equals` 옵션 대부분을 충족해주는 네 가지 `comparer` 메서드를 기본으로 제공합니다.
 
 -   `comparer.identity`는 두 값이 동일한지 확인하기 위해 항등 (`===`) 연산자를 사용합니다.
 -   `comparer.default`는 `comparer.identity`와 같지만, `NaN`은 `NaN`과 같은 것으로 간주합니다.
--   `comparer.structural`는 두 값이 동일한지 확인하기 위해 심층 구조를 비교합니다.
--   `comparer.shallow`는 두 값이 동일한지 확인하기 위해 얕은 구조를 비교합니다.
+-   `comparer.structural`는 두 값이 동일한지 확인하기 위해 심층 구조 비교를 수행합니다.
+-   `comparer.shallow`는 두 값이 동일한지 확인하기 위해 얕은 구조 비교를 수행합니다.
 
-이러한 메서드에 접근하기 위해 `mobx`에서 `comparer`을 import 할 수 있습니다. 또한 reaction에 대해서도 사용할 수 있습니다.
+`mobx`에서 `comparer`을 import 하여 위와 같은 메서드에 접근할 수 있습니다. 또한 reaction에 대해서도 사용할 수 있습니다.
 
 ### `requiresReaction`
 
