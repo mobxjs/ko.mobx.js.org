@@ -193,7 +193,7 @@ computed 값은 일반적으로 백업 값이 변경되는 경우에만 재평�
 
 <details id="computed-with-args"><summary>{🚀} **Tip:** 인수를 사용한 computed 값<a href="#computed-with-args" class="tip-anchor"></a></summary>
 
-getter는 인수를 사용하지 않지만, 인수를 필요로하는 파생 값으로 작업하기 위한 몇 가지 전략은 [여기](computeds-with-args.md)에서 확인해보세요.
+getter는 인수를 사용하지 않습니다. 인수를 필요로하는 파생 값으로 작업하기 위한 몇 가지 전략은 [여기](computeds-with-args.md)에서 확인해보세요.
 
 </details>
 
