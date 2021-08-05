@@ -31,7 +31,7 @@ hide_title: true
 정보를 파생시키고 인수를 취하는 메서드(예 : `findUsersOlderThan(age: number): User[]`)에는 주석이 필요하지 않습니다.
 이러한 읽기 작업은 reaction에서 호출될 때 계속 추적되지만 메모리 누수를 방지하기 위해 결괏값은 메모리에 저장되지 않습니다. [MobX-utils computedFn {🚀}](https://github.com/mobxjs/mobx-utils#computedfn)에서도 확인해보세요.
 
-[subclassing은 몇 가지 제한점과 함께](subclassing.md) `override` 주석을 통해 지원됩니다.
+[서브클래싱은 몇 가지 제한점과 함께](subclassing.md) `override` 주석을 통해 지원됩니다.
 
 <!--DOCUSAURUS_CODE_TABS-->
 <!--class + makeObservable-->
@@ -126,7 +126,7 @@ tags.push("prio: for fun")
 특히 `overrides`를 `false`로 설정하여 속성이나 메서드가 처리되지 않도록 완전히 제외할 수 있습니다.
 예시를 위해 상단의 코드 탭을 확인해보세요.
 새로운 구성원에 대해 명시적으로 언급할 필요가 없기 때문에 `makeAutoObservable` 함수가 `makeObservable` 보다 유지 관리가 더 쉽습니다.
-하지만 super 클래스나 [subclass](subclassing.md)에는 `makeAutoObservable`을 사용할 수 없습니다.
+하지만 super 클래스나 [서브클래스](subclassing.md)에는 `makeAutoObservable`을 사용할 수 없습니다.
 
 추론 규칙:
 
@@ -238,19 +238,19 @@ observable로 지정하고자 하는 객체가 모든 구성원을 미리 알고
 ## 제한점
 
 1. `make(Auto)Observable`은 이미 정의되어 있는 속성만 지원합니다. [**컴파일러 구성**이 맞게 되었는지 확인](installation.md#use-spec-compliant-transpilation-for-class-properties)하거나, 차선책으로 `make(Auto)Observable` 사용 이전에 해당 값이 모든 속성에 할당되었는지 확인하세요. 환경 설정이 정확히 되지 않으면, 선언은 되었으나 초기화되지 않은 필드(예 : `class X { y; }`)는 제대로 픽업되지 않습니다.
-1. `makeObservable`는 해당 클래스 정의에 의해 선언된 속성만 처리할 수 있습니다. subclass 혹은 super 클래스에서 observable 필드를 도입하는 경우 해당 속성 자체에서 `makeObservable`을 호출해야 합니다.
-1. `options` 인수는 한 번만 규정됩니다. 통과된 `options`는 _"고정"_되며 이후에 변경될 수 없습니다. ([subclass](subclassing.md) 예시)
-1. **모든 필드는 한 번만 주석 설정되어야 합니다**(`override` 제외). [subclass](subclassing.md)에서는 필드 주석이나 구성을 바꿀 수 없습니다.
+1. `makeObservable`는 해당 클래스 정의에 의해 선언된 속성만 처리할 수 있습니다. 서브클래스 혹은 super 클래스에서 observable 필드를 도입하는 경우 해당 속성 자체에서 `makeObservable`을 호출해야 합니다.
+1. `options` 인수는 한 번만 규정됩니다. 통과된 `options`는 _"고정"_되며 이후에 변경될 수 없습니다. ([서브클래스](subclassing.md) 예시)
+1. **모든 필드는 한 번만 주석 설정되어야 합니다**(`override` 제외). [서브클래스](subclassing.md)에서는 필드 주석이나 구성을 바꿀 수 없습니다.
 1. non-plain 객체(**클래스**)에서 **주석 설정된 모든** 필드는 **설정 불가(non-configurable)** 합니다.<br>
    [`configure({ safeDescriptors: false })` {🚀☣️} 로 비활성화 할 수 있습니다.](configuration.md#safedescriptors-boolean)
 1. **observable로 지정되지 않은**(state가 없는) 모든 필드 (`action`, `flow`) 는 **작성 불가(non-writable)** 합니다.<br>
    [`configure({ safeDescriptors: false })` {🚀☣️} 로 비활성화 할 수 있습니다.](configuration.md#safedescriptors-boolean)
-1. [**프로토타입에서** 정의된 **`action`, `computed`, `flow`, `action.bound`**만이 subclass에서 **override** 될 수 있습니다.](subclassing.md)
+1. [**프로토타입에서** 정의된 **`action`, `computed`, `flow`, `action.bound`**만이 서브클래스에서 **override** 될 수 있습니다.](subclassing.md)
 1. _TypeScript_에서는 기본적으로 **비공개(private)** 필드를 주석 설정할 수 없습니다. 이는 다음과 같이 관련 비공개 필드를 제네릭(generic) 인수로 통과시키면 해결할 수 있습니다. `makeObservable<MyStore, "privateField" | "privateField2">(this, { privateField: observable, privateField2: observable })`
 1. **`make(Auto)Observable`을 호출**하고 주석을 설정하는 작업은 추론 결과를 캐시 하기 위해서 **반드시** 수행되어야 합니다.
 1. **`make(Auto)Observable`** 호출 이후에는 **프로토타입을 수정할 수 없습니다**.
 1. _EcmaScript_ **비공개** 필드(**`#field`**)는 **지원되지 않습니다**. _TypeScript_를 사용할 때는 `private` 수식어를 사용하는 것이 좋습니다.
-1. 단일 상속성 체인(inheritance chain) 내에서 **주석과 데코레이터를 혼용**하는 것은 **지원되지 않습니다**. 예를 들면 super 클래스에서는 데코레이터를, subclass에서는 주석을 사용할 수 없습니다.
+1. 단일 상속성 체인(inheritance chain) 내에서 **주석과 데코레이터를 혼용**하는 것은 **지원되지 않습니다**. 예를 들면 super 클래스에서는 데코레이터를, 서브클래스에서는 주석을 사용할 수 없습니다.
 1. `makeObservable`,`extendObservable`는 또 다른 빌트인 observable 유형(`ObservableMap`, `ObservableSet`, `ObservableArray` 등)에서 사용될 수 없습니다.
 1. `makeObservable(Object.create(prototype))`은 `prototype`에서 생성된 객체로 속성을 복사하고 `observable`로 만듭니다. 이 동작은 잘못된 동작이므로 **더 이상 사용되지 않습니다**. 향후 버전에서 변경될 가능성이 있으며, 해당 기능에 의존하지 마십시오.
 
@@ -267,7 +267,7 @@ observable로 지정하고자 하는 객체가 모든 구성원을 미리 알고
 `options` 인수는 observable 하지 않은 `target`에만 제공됩니다.<br>
 observable 객체가 초기화되면 옵션을 변경할 수 없습니다.<br>
 options는 타겟에 저장되며 이후의 `makeObservable`∙`extendObservable` 호출에 의해 반영됩니다.<br>
-[subclass](subclassing.md)에서는 다른 옵션을 적용할 수 없습니다.
+[서브클래스](subclassing.md)에서는 다른 옵션을 적용할 수 없습니다.
 </details>
 
 ## observable 요소를 vanilla JavaScript 컬렉션으로 전환하기
