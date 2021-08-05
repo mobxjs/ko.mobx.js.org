@@ -165,7 +165,7 @@ action의 또 다른 특징은 [추적되지 않는다](api.md#untracked)는 것
 
 -   `action.bound` _주석(annotation)_
 
-`action.bound` 주석을 사용하여 메서드를 적절한 인스턴스에 바인딩할 수 있음으로 `this`는 항상 함수 내에서 적절하게 바인딩 됩니다.
+`action.bound` 주석을 사용하여 메서드를 적절한 인스턴스에 바인딩할 수 있으므로 `this`는 항상 함수 내에서 적절하게 바인딩 됩니다.
 
 <details id="auto-bind"><summary>**Tip:** 모든 action과 flow를 자동으로 바인딩하려면 `makeAutoObservable(o, {}, { autoBind: true })`을 사용하세요.<a href="#avoid-bound" class="tip-anchor"></a></summary>
 
@@ -416,7 +416,7 @@ flow 매커니즘은 promise가 해결될 때 generator가 계속 진행되거�
 메서드를 `flow`로 데코레이팅하기 때문에 반환된 generator는 promise로 래핑 됩니다.
 그러나 TypeScript는 이러한 변환을 인식하지 못하기 때문에 `flowResult`를 사용하여 해당 변경을 인식할 수 있도록 해야 합니다.
 
-`makeAutoObservable`은 자동으로 generator를 flow로 유추합니다. `flow` 주석이 달린 멤버는 non-enumerable이 됩니다.
+`makeAutoObservable`, `makeObservable`, `extendObservable`, `observable(object)` 등 observable 필드를 생성하는 api는 자동으로 generator를 flow로 유추합니다. `flow` 주석이 달린 멤버는 non-enumerable이 됩니다.
 
 <details id="flow-wrap"><summary>{🚀} **Note:** 객체 필드에 flow 사용하기<a href="#flow-wrap" class="tip-anchor"></a></summary>
 `flow`는 `action`과 마찬가지로 함수를 직접 래핑할 수 있습니다. 위의 예시는 아래와 같이 작성될 수 있습니다.
@@ -457,7 +457,7 @@ const projects = await store.fetchProjects()
 
 -   `flow.bound` _주석(annotation)_
 
-`flow.bound` 주석을 사용하여 메서드를 적절한 인스턴스에 자동으로 바인딩할 수 있음으로 `this`는 항상 함수 내에서 적절하게 바인딩 됩니다.
+`flow.bound` 주석을 사용하여 메서드를 적절한 인스턴스에 자동으로 바인딩할 수 있으므로 `this`는 항상 함수 내에서 적절하게 바인딩 됩니다.
 action과 유사하게 flow는 [`autoBind` 옵션](#auto-bind)을 사용하여 기본적으로 바인딩 할 수 있습니다.
 
 ## flow 취소 {🚀}
