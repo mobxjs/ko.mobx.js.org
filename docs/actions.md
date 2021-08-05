@@ -243,7 +243,7 @@ class Child extends Parent {
 ```
 
 단일 _action_에 **바인딩**하기 위해 _화살표 함수_ 대신에 `this`와 `action.bound`를 사용할 수 있습니다.<br>
-자세한 내용은 [**subclassing**](subclassing.md)을 확인하세요.
+자세한 내용은 [**서브클래싱**](subclassing.md)을 확인하세요.
 
 ## 비동기 action
 
