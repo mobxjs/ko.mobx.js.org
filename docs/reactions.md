@@ -10,10 +10,10 @@ hide_title: true
 
 reaction은 MobX의 모든 것을 포함하고 있기 때문에 꼭 이해하고 넘어가야 할 개념입니다.
 reaction의 목표는 자동으로 발생하는 부수효과를 모델링 하는 것입니다.
-reaction의 중요성은 observable state에 대한 소비자(consumers)를 만들어내거나 무언가 _관련된_ 요소가 바뀔 때 _자동적으로_ 부수효과를 실행하는 데 있습니다.
+reaction의 중요성은 observable state에 대한 소비자(consumer)를 만들어내거나 무언가 _관련된_ 요소가 바뀔 때 _자동적으로_ 부수효과를 실행하는 데 있습니다.
 
 그러나 이러한 점을 염두에 두고, 본 페이지에서 논의되는 API는 되도록 사용하지 않아야 한다는 점을 깨달아야 합니다.
-해당 API들은 mobx-react와 같은 라이브러리 또는 애플리케이션 내의 특정한 추상화(abstraction)에서 abstracted away(⭐️ 추상화...?) 됩니다.
+해당 API들은 mobx-react와 같은 라이브러리 또는 애플리케이션 내의 특정한 추상화에서 추상화됩니다.
 
 하지만 일단 MobX를 이해하기 위해서 reaction이 어떻게 만들어지는지를 살펴봅시다.
 가장 단순한 방법은 [`autorun`](#autorun) 유틸리티를 사용하는 것입니다.
@@ -102,15 +102,13 @@ Energy level: 0
 ```
 
 위 코드의 처음 두 줄에 보이듯이, 두 개의 `autorun` 함수는 초기화될 때 한 번 실행됩니다.
-`for` 루프가 없으면 해당 두 줄만 보일 것입니다.
+`for` 루프가 없어도 해당 두 줄은 보일 것입니다.
 
 `reduceEnergy` action으로 `energyLevel`를 변경하기 위해 `for` 루프를 실행하면, `autorun` 함수가 observable state의 변화를 감지하는 '모든 순간' 새로운 로그를 출력합니다.
 
-1.  함수 _"Energy level"_의 측면에서 '모든 순간'이란 observable `energyLevel`이 변경되는 10회입니다.
+1.  함수 _"Energy level"_의 측면에서 '모든 순간'이란 observable 속성을 가진 `energyLevel`이 변경되는 10회입니다.
 
-2.  함수 _"Now I'm hungry"_의 측면에서  '모든 순간'이란 computed `isHungry`가 변경되는 1회입니다.
-
-(⭐️ 원문 의미대로 전달하려면 '모든 순간'을 강조하는 게 좋을거같아서, 원문에는 없는 작은따옴표를 넣었삼.. 확인부탁!!)
+2.  함수 _"Now I'm hungry"_의 측면에서  '모든 순간'이란 computed 속성을 가진 `isHungry`가 변경되는 1회입니다.
 
 ## Reaction
 
@@ -118,11 +116,11 @@ Energy level: 0
 
 -   `reaction(() => value, (value, previousValue, reaction) => { sideEffect }, options?)`.
 
-`reaction`은 `autorun`과 유사하지만 어떤 observable을 추적할지에 대해서 보다 세밀하게 컨트롤할 수 있습니다.
-`reaction`은 다음과 같이 두 개의 함수를 취합니다. 첫 번째 _data_ 함수는 트래킹 된 후 두 번째 함수인 _effect_ 함수에서 input으로 사용된 데이터를 반환합니다.
-부수효과는 _오직_ data 함수에서 _엑세스 된_ 데이터에만 반응하며, 이는 effect 함수에 실제로 사용되는 데이터보다 작을 수 있다는 점에 유의해야 합니다.
+`reaction`은 `autorun`과 유사하지만 추적할 observable에 대해 보다 세밀하게 제어할 수 있습니다.
+`reaction`은 다음과 같이 두 개의 함수를 취합니다. 첫 번째 _data_ 함수는 트래킹 되어 두 번째 _effect_ 함수에 대한 input으로 사용되는 데이터를 반환합니다.
+부수효과는 _오직_ data 함수에서 _액세스 된_ 데이터에만 반응하며, 이는 effect 함수에 실제로 사용되는 데이터보다 적을 수 있다는 점에 유의해야 합니다.
 
-일반적인 패턴은 _data_ 함수의 부수효과에 필요한 항목을 생성함으로써 effect가 트리거 되는 시기를 보다 정확하게 제어하는 것입니다.
+일반적인 패턴은 _data_ 함수에서 부수 효과에 필요한 항목을 생성하여 effect가 트리거 되는 시점을 보다 정확하게 제어하는 것입니다.
 기본적으로 _effect_ 함수가 트리거 되기 위해서는 _data_ 함수의 결과가 변경되어야 합니다.
 `autorun`과 달리 부수효과는 초기화될 때 실행되지 않으며, 데이터 표현(expression)이 처음으로 새로운 값을 반환할 때에만 실행됩니다.
 
@@ -130,7 +128,7 @@ Energy level: 0
 
 하단의 예제에서 reaction은 `isHungry`가 바뀔 때만 한 번 트리거 됩니다.
 _effect_ 함수에서 사용된 `giraffe.energyLevel`의 변경 사항은 _effect_ 함수를 실행시키지 않습니다.
-이때에도 `reaction`이 반응하기를 원한다면, _data_ 함수에서도 `reaction`에 액세스하여 반환해야 합니다.
+이때에도 `reaction`이 반응하기를 원한다면, _data_ 함수에서도 `giraffe.energyLevel`에 액세스하여 반환해야 합니다.
 
 ```javascript
 import { makeAutoObservable, reaction } from "mobx"
@@ -191,10 +189,10 @@ Energy level: 40
 -   `when(predicate: () => boolean, effect?: () => void, options?)`
 -   `when(predicate: () => boolean, options?): Promise`
 
-`when`은 `true`를 반환할 때까지 주어진 _조건자(predicate)_ 함수를 관찰하고 실행합니다.
-`true`가 반환되면 지정된 _effect_ 함수를 실행하고 autorun을 dispose합니다.(⭐️ dispose는 검색해보니까 메서드가 있길래 이후 계속 dispose라고 적었는데, 적당한 단어 있으면 알려주삼!!)
+`when`은 `true`를 반환할 때까지 주어진 _predicate_ 함수를 관찰하고 실행합니다.
+`true`가 반환되면 지정된 _effect_ 함수를 실행하고 자동 실행기를 삭제(dispose)합니다.
 
-두 번째 `effect` 함수를 전달하지 않으면 `when` 함수는 disposer를 수동으로 취소할 수 있으며, 이 경우 `Promise`를 반환합니다.(⭐️ disposer를 취소할 수 있다는거야,, 아님 autorun을 수동으로 취소 가능한 disposer를 반환한다는거야?)
+`when` 함수는 disposer를 반환하므로 두 번째 `effect` 함수를 전달하지 않는 한 수동으로 취소할 수 있으며, 이 경우 `Promise`가 반환됩니다.
 
 <details id="when-example">
   <summary>**예시:** 반응적으로 dispose 하기<a href="#when-example" class="tip-anchor"></a></summary>
@@ -209,9 +207,9 @@ class MyResource {
     constructor() {
         makeAutoObservable(this, { dispose: false })
         when(
-            // 처음에는...
+            // 만약...
             () => !this.isVisible,
-            // ... 이후에는.
+            // ...그러면
             () => this.dispose()
         )
     }
@@ -232,7 +230,7 @@ class MyResource {
 
 ### `await when(...)`
 
-`effect` 함수가 제공되지 않으면 `when`은 `Promise`를 반환합니다. `async / await`과 함께 사용하면 observable state의 변경 사항을 기다릴 수 있게 해줍니다.
+`effect` 함수가 제공되지 않으면 `when`은 `Promise`를 반환합니다. `async ∙ await`과 함께 사용하면 observable state의 변경 사항을 기다릴 수 있게 해줍니다.
 
 ```javascript
 async function() {
@@ -241,7 +239,7 @@ async function() {
 }
 ```
 
-`when`을 조기에 취소하고 싶다면 자체적으로 반환한 promise에 `.cancel()`을 호출하면 됩니다.
+`when`을 조기에 취소하고 싶다면 자체적으로 반환된 promise에 `.cancel()`을 호출하면 됩니다.
 
 ## 규칙
 
@@ -255,10 +253,11 @@ MobX이 구체적으로 무엇에 반응하고, 반응하지 않는지에 대해
 트래킹 작동 방법에 대한 자세한 기술 정보는 [Becoming fully reactive: an in-depth explanation of MobX](https://hackernoon.com/becoming-fully-reactive-an-in-depth-explanation-of-mobservable-55995262a254) 포스트를 참고하세요.
 
 
-## 항상 reaction dispose 하기 (⭐️이상허다,,)
+## 항상 reaction dispose 하기
 
-`autorun`, `reaction` 그리고 `when`에 전달되는 함수에서 관찰하는 모든 객체가 자체적으로 가비지(garbage)만 수집되어 있는 상태라면, 해당 함수 또한 마찬가지일 것입니다. 일반적으로 이 함수는 사용하는 observable이 새롭게 변경될 때까지 계속 대기합니다.
-이러한 대기 상태를 멈추기 위해, 모든 함수는 '대기 상태를 중단하고 함수에서 사용한 observable의 구독을 취소하는 역할'의 disposer 함수를 반환합니다.(⭐️수식어가 넘 많아서 disposer 함수 꾸미는 것만 따옴표 처리 했는데,, 더 나은 방법이 있을까)
+`autorun`, `reaction` 그리고 `when`에 전달되는 함수는 관찰하는 모든 객체가 자체적으로 가비지 수집을 하는 경우에만 가비지 수집됩니다. 
+일반적으로 이 함수들은 사용하는 observable이 새롭게 변경될 때까지 계속 대기합니다.
+이러한 대기 상태를 멈추기 위해, 모든 함수는 '대기 상태를 중단하고 함수에서 사용한 observable의 구독을 취소하는 역할'의 disposer 함수를 반환합니다.
 
 ```javascript
 const counter = observable({ count: 0 })
@@ -278,7 +277,7 @@ disposer()
 counter.count++
 ```
 
-메서드의 부수 효과가 더 이상 필요하지 않은 경우 즉시 해당 메서드에서 반환되는 disposer 함수를 사용하는 것이 좋습니다.
+메서드의 부수효과가 더 이상 필요하지 않은 경우 즉시 해당 메서드에서 반환되는 disposer 함수를 사용하는 것이 좋습니다.
 그렇지 않으면 메모리 누수가 발생할 수 있습니다.
 
 `reaction`과 `autorun`의 effect 함수에 대해 두 번째 인수로 전달된 `reaction` 인수는 `reaction.dispose()`을 호출하여 reaction을 조기에 정리하는 데에도 활용될 수 있습니다.
@@ -335,14 +334,14 @@ class OrderLine {
 
 reaction을 세팅하기 전에 하단의 원칙을 준수하고 있는지를 먼저 확인해보세요.
 
-1. **원인(cause)과 결과(effect) 사이에 직접적인 관계가 없는 경우에만 reaction을 사용하세요.** 부수 효과가 제한된 일련의 event ∙ action에 대응하여 발생하는 경우, 특정 action에서 effect를 직접적으로 트리거 하는 편이 종종 더 명확합니다. 
-예를 들어 양식 제출 버튼을 누르면 네트워크 요청이 게시될 경우, 간접적으로 reaction을 사용하는 것(⭐️거치는 것?)보다는 해당 effect를 `onClick` 이벤트에 대한 응답으로써 직접적으로 트리거 하는 것이 더 명확합니다.
-반대로 양식 상태(⭐️state?)의 모든 변경사항이 로컬 저장소에 자동으로 전환(⭐️end up?) 되어야 하는 경우, reaction을 사용하면 모든 개별적 `onChange` 이벤트에 해당 effect를 트리거 하지 않아도 되므로 유용할 수 있습니다.
+1. **원인(cause)과 영향(effect) 사이에 직접적인 관계가 없는 경우에만 reaction을 사용하세요.** 부수 효과가 제한된 일련의 event ∙ action에 대응하여 발생하는 경우, 특정 action에서 effect를 직접적으로 트리거 하는 편이 종종 더 명확합니다. 
+예를 들어 폼 제출 버튼을 누르면 네트워크 요청이 게시될 경우, 간접적으로 reaction을 사용하는 것보다는 해당 effect를 `onClick` 이벤트에 대한 응답으로써 직접적으로 트리거 하는 것이 더 명확합니다.
+폼 상태에 대한 변경사항이 자동으로 로컬 저장소에 있어야 하는 경우, reaction을 사용하면 모든 개별 `onChange` 이벤트에서 해당 effect를 트리거 하지 않아도 되므로 유용할 수 있습니다.
 1. **reaction은 다른 observable을 업데이트하면 안 됩니다.** reaction으로 다른 observable을 수정할 건가요? 만약 그렇다면, 일반적으로 업데이트할 observable은 [`computed`](computeds.md) 값으로 주석을 달아야 합니다. 예를 들어 todo 컬렉션이 변경된 경우 `remainingTodos`의 양을 계산하기 위해 reaction을 사용하는 것이 아니라, `remainingTodos`를 computed 값으로 주석 처리해야 합니다.
 그러면 코드를 훨씬 더 명확하고 쉽게 디버깅할 수 있습니다. reaction은 새로운 데이터를 계산하는 것이 아니라, effect를 유발하는 용도로 사용되어야 합니다.
 1. **reaction은 독립적이어야 합니다.** 코드가 먼저 실행되어야 하는 다른 reaction에 의존하나요? 이 경우 첫 번째 규칙을 위반했을 수 있으며, 의존하고 있는 reaction에 새로 생성하려는 reaction을 병합해야 합니다. MobX는 reaction이 실행되는 순서를 보장하지 않습니다.
 
-실제로 작업을 하다 보면 상단에 원칙과 부합하지 않는 경우가 있을 수 있습니다. 위 목록은 _법칙_이 아닌 _원칙_입니다.
+실제로 작업을 하다 보면 상단의 원칙과 부합하지 않는 경우가 있을 수 있습니다. 위 목록은 _법칙_이 아닌 _원칙_입니다.
 하지만 예외는 드물기 때문에 원칙을 위반하는 것은 최후의 수단으로 사용하세요.
 
 ## Options {🚀}
@@ -359,20 +358,20 @@ _data_ 함수의 첫 번째 실행 후 _effect_ 함수가 즉시 트리거 되�
 
 ### `delay` _(autorun, reaction)_
 
-effect 함수를 조정하는 데 사용할 수 있는 시간(밀리초)입니다. 0(기본값)이면 조절이 수행되지 않습니다.
+effect 함수를 조정하는 데 사용할 수 있는 시간(밀리초)입니다. 0(기본값)이면 쓰로틀링(throttling)이 수행되지 않습니다.
 
 ### `timeout` _(when)_
 
-`when`이 대기하는 제한 시간을 설정합니다. 시간 초과 시 `when`은(⭐️을? 에서?) reject 또는 throw합니다.
+`when`이 대기하는 제한 시간을 설정합니다. 시간 초과 시 `when`은 reject 또는 throw합니다.
 
 ### `onError`
 
-기본적으로 reaction 내부에서 throw된 모든 예외는 로그에 찍히지만, 더 이상 throw 되지는 않습니다. 이는 한 reaction의 예외가 다른(관련되지 않은) reaction의 예약된 실행을 방해하지 않도록 하기 위한 것입니다.
-이를 통해 reaction이 예외로부터 회복(recover) 될 수도 있습니다. 예외를 throw 해도 MobX의 트래킹은 중단되지 않으므로 예외의 원인이 제거되면 후속 reaction이 다시 정상적으로 실행될 수 있습니다. 이 옵션을 사용하면 해당 동작을 재정의할 수 있습니다. [configure](configuration.md#disableerrorboundaries-boolean)를 사용하여 전역 오류 처리기(global error handler)를 설정하거나 오류 탐지 기능을 완전히 비활성화할 수 있습니다.
+기본적으로 reaction 내부에서 throw된 모든 예외는 로그에 찍히지만, 더 이상 throw 되지는 않습니다. 이는 한 reaction의 예외가 다른(관련되지 않은) reaction의 예정된 실행을 방해하지 않도록 하기 위한 것입니다.
+이를 통해 reaction이 예외로부터 복구(recover) 될 수도 있습니다. 예외를 throw 해도 MobX의 트래킹은 중단되지 않으므로 예외의 원인이 제거되면 후속 reaction이 다시 정상적으로 실행될 수 있습니다. 이 옵션을 사용하면 해당 동작을 오버라이딩할 수 있습니다. [configure](configuration.md#disableerrorboundaries-boolean)를 사용하여 전역 오류 처리기(global error handler)를 설정하거나 오류 탐지 기능을 완전히 비활성화할 수 있습니다.
 
 ### `scheduler` _(autorun, reaction)_
 
-사용자 지정 스케줄러를 설정하여 autorun 함수 재실행 예약 방법을 결정합니다. `{ scheduler: run => { setTimeout(run, 1000) }}`과 같이 나중에 호출되어야 하는 함수가 필요합니다.
+사용자 지정 스케줄러를 설정하여 autorun 함수 재실행 예약 방법을 결정합니다. `{ scheduler: run => { setTimeout(run, 1000) }}`과 같이 나중에 호출되는 함수가 필요합니다.
 
 ### `equals`: (reaction)
 
