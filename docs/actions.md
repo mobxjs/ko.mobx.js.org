@@ -22,7 +22,7 @@ hide_title: true
 
 2. 기본적으로 action 외부에서 state를 변경할 수 없습니다. 이를 통해 코드에서 state 업데이트가 발생하는 위치를 명확히 확인할 수 있습니다.
 
-`action` 주석은 state를 _수정하려는_ 함수에서만 사용해야 합니다. 정보(조회 또는 데이터 필터링)를 유도하는 함수는 MobX가 추적할 수 있도록 action으로 표시하면 안 됩니다. `action` 주석이 달린 멤버는 non-enumerable이 됩니다.
+`action` 주석은 state를 _수정하려는_ 함수에서만 사용해야 합니다. 정보(조회 또는 데이터 필터링)를 유도하는 함수는 MobX가 추적할 수 있도록 action으로 표시하면 _안 됩니다_. `action` 주석이 달린 멤버는 non-enumerable이 됩니다.
 
 ## 예시
 
@@ -128,9 +128,9 @@ runInAction(() => {
 
 ## `action` 함수를 이용한 함수 래핑
 
-MobX의 트랜잭션 특성을 최대한 활용하려면 action을 최대한 외부로 전달해야 합니다. state를 수정하려는 경우 클래스 메서드를 action으로 표시하는 것이 좋습니다. 이벤트 핸들러는 가장 바깥쪽 트랜잭션이기 때문에 action으로 표시하는 것이 더 좋습니다. 그리고 두 개의 action을 호출하는 action 주석이 표시되지 않은 단일 이벤트 핸들러는 두 개의 트랜잭션을 생성합니다.
+MobX의 트랜잭션 특성을 최대한 활용하려면 action을 최대한 외부로 전달해야 합니다. state를 수정하려는 경우 클래스 메서드를 action으로 표시하는 것이 좋습니다. 이벤트 핸들러는 가장 바깥쪽 트랜잭션이기 때문에 action으로 표시하는 것이 더 좋습니다. 그리고 action 주석이 표시되지 않은 단일 이벤트 핸들러가 이후에 두 개의 action을 호출하는 경우 똑같이 두 개의 트랜잭션을 생성합니다.
 
-action 기반 이벤트 핸들러를 쉽게 만드는 데 도움이 되는 `action`은 주석 기능뿐만 아니라 고차 함수도 될 수 있습니다. 함수를 인수로 사용하여 호출할 수 있으며, 이러한 경우 동일한 특징을 가진 action 래핑 함수를 반환합니다.
+action 기반 이벤트 핸들러를 생성하기 위해 `action`은 주석 기능뿐만 아니라 고차 함수도 될 수 있습니다. 함수를 인수로 사용하여 호출할 수 있으며, 이러한 경우 동일한 특징을 가진 `action` 래핑 함수를 반환합니다.
 
 예를 들어 React에서 `onClick` 핸들러는 아래와 같이 래핑 될 수 있습니다.
 
@@ -150,7 +150,7 @@ const ResetButton = ({ formState }) => (
 
 디버깅 목적으로 래핑 된 함수의 이름을 지정하거나 `action`에 대한 첫 번째 인수로 이름을 전달하는 것이 좋습니다.
 
-<details id="actions-are-untracked"><summary>**메모:** 추적되지 않는 action<a href="#actions-are-untracked" class="tip-anchor"></a></summary>
+<details id="actions-are-untracked"><summary>**메모:** action은 추적되지 않습니다.<a href="#actions-are-untracked" class="tip-anchor"></a></summary>
 
 action의 또 다른 특징은 [추적되지 않는다](api.md#untracked)는 것입니다. action이 부수효과 내부 또는 computed 값 내부에서 호출되면 action에서 읽은 observable 항목은 derivation의 종속성으로 계산되지 않습니다.
 
@@ -165,7 +165,7 @@ action의 또 다른 특징은 [추적되지 않는다](api.md#untracked)는 것
 
 -   `action.bound` _주석(annotation)_
 
-`action.bound` 주석을 사용하여 메서드를 적절한 인스턴스에 바인딩할 수 있으므로 `this`는 항상 함수 내에서 적절하게 바인딩 됩니다.
+`action.bound` 주석은 `this`가 항상 함수 내에서 적절하게 바인딩 될 수 있도록 메서드를 올바른 인스턴스에 바인딩하는 데 사용됩니다.
 
 <details id="auto-bind"><summary>**Tip:** 모든 action과 flow를 자동으로 바인딩하려면 `makeAutoObservable(o, {}, { autoBind: true })`을 사용하세요.<a href="#avoid-bound" class="tip-anchor"></a></summary>
 
@@ -204,7 +204,7 @@ class Doubler {
 
 ## action 및 상속
 
-**프로토타입에서** 정의된 action만 하위 클래스에서 **재정의(override)**할 수 있습니다.
+**프로토타입에서** 정의된 action만 서브클래스에서 **재정의(override)**할 수 있습니다.
 
 ```javascript
 class Parent {
@@ -242,20 +242,20 @@ class Child extends Parent {
 }
 ```
 
-단일 _action_에 **바인딩**하기 위해 _화살표 함수_ 대신에 `this`와 `action.bound`를 사용할 수 있습니다.<br>
+`this`를 단일 _action_에 **바인딩**하기 위해 _화살표 함수_ 대신 `action.bound`를 사용할 수 있습니다.<br>
 자세한 내용은 [**서브클래싱**](subclassing.md)을 확인하세요.
 
 ## 비동기 action
 
-기본적으로 비동기 프로세스는 발생 시점과 상관없이 모든 reaction이 업데이트되기 때문에 MobX에서 특별한 처리가 필요하지 않습니다.
+모든 reaction은 발생 시점과 관계없이 자동으로 업데이트되므로, 본질적으로 MobX에서는 비동기 프로세스에 대해 특별한 처리가 필요하지 않습니다.
 그리고 observable 객체는 mutable 하므로 action이 실행되는 동안 observable 객체에 대한 참조를 유지하는 것이 안전합니다.
 하지만 비동기 프로세스에서 observable을 업데이트하는 모든 단계는 `action`으로 표시되어야 합니다.
-아래에서 소개해 드리는 여러 가지 방법을 사용하여 `action`을 표시해보세요.
+위 API를 활용하면 아래와 같이 다양한 방법으로 action을 표시할 수 있습니다.
 
 예를 들어 promise를 처리할 때 state를 업데이트하는 핸들러는 아래와 같이 `action`을 사용하여 래핑하거나 action이 되어야 합니다.
 
 <!--DOCUSAURUS_CODE_TABS-->
-<!--핸들러 `action`으로 감싸기-->
+<!--`action`으로 핸들러 감싸기-->
 
 promise 해결 핸들러는 인라인으로 처리되지만 원래 작업이 완료된 후에 실행되므로 `action`으로 래핑해야 합니다.
 
@@ -457,7 +457,7 @@ const projects = await store.fetchProjects()
 
 -   `flow.bound` _주석(annotation)_
 
-`flow.bound` 주석을 사용하여 메서드를 적절한 인스턴스에 자동으로 바인딩할 수 있으므로 `this`는 항상 함수 내에서 적절하게 바인딩 됩니다.
+`flow.bound` 주석은 this가 항상 함수 내에서 적절하게 바인딩 될 수 있도록 메서드를 올바른 인스턴스에 바인딩하는 데 사용됩니다.
 action과 유사하게 flow는 [`autoBind` 옵션](#auto-bind)을 사용하여 기본적으로 바인딩 할 수 있습니다.
 
 ## flow 취소 {🚀}
