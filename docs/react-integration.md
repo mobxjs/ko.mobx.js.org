@@ -16,7 +16,7 @@ import { observer } from "mobx-react-lite" // 또는 "mobx-react".
 const MyComponent = observer(props => ReactElement)
 ```
 
-MobX는 React와 독립적으로 작동하지만, 일반적으로 React와 함께 사용합니다. [MobX의 요점](the-gist-of-mobx.md)에서 이미 통합에 가장 중요한 부분인 React component를 감쌀 수 있는 `observer` [HoC](https://reactjs.org/docs/higher-order-components.html)를 보았습니다.
+MobX는 React와 독립적으로 작동하지만, 일반적으로 React와 함께 사용합니다. [MobX의 요점](the-gist-of-mobx.md)에서 이미 통합에 가장 중요한 부분을 확인했습니다. 바로 React 컴포넌트를 감쌀 수 있는 `observer` [HoC](https://reactjs.org/docs/higher-order-components.html)입니다.
 
 `observer`는 [설치 중](installation.md#installation)에 선택한 별도의 React 바인딩 패키지에서 제공됩니다. 아래 예시에서는 더 가벼운 [`mobx-react-lite` 패키지](https://github.com/mobxjs/mobx/tree/main/packages/mobx-react-lite)를 사용할 것입니다.
 
@@ -54,27 +54,27 @@ setInterval(() => {
 **Hint:** 위의 예제는 [CodeSandbox](https://codesandbox.io/s/minimal-observer-p9ti4?file=/src/index.tsx)에서 직접 실행해 볼 수 있습니다.
 
 The `observer` HoC는 _렌더링 중에_ 사용되는 _모든 observable_에 React 컴포넌트들을 자동으로 구독합니다.
-결과적으로 관련 observables가 변경되면 컴포넌트들을 자동으로 다시 렌더링합니다.
+결과적으로 관련 observable이 변경되면 컴포넌트들을 자동으로 다시 렌더링합니다.
 또한 _관련된_ 변경사항이 없을 때는 컴포넌트가 다시 렌더링 되지 않습니다.
-따라서, 컴포넌트로부터 접근할 수는 있지만 실제로 읽지 않는 observables는 다시 렌더링 되지 않습니다.
+따라서, 컴포넌트로부터 접근할 수는 있지만 실제로 읽지 않는 observable은 다시 렌더링 되지 않습니다.
 
-이러한 로직은 MobX 어플리케이션을 잘 최적화 시키며 과도한 렌더링을 방지하기 위해 추가 코드가 필요하지 않습니다.
+이러한 로직은 MobX 어플리케이션을 즉시 최적화 시키며 과도한 렌더링을 방지하기 위해 추가 코드를 작성할 필요가 없습니다.
 
-`observer`가 작동하려면 observables가 _어떻게_ 도착하는지는 중요하지 않고 읽히기만 하면 됩니다.
-observables를 깊게 읽는 것도 잘 작동하고, `todos[0].author.displayName`처럼 복잡한 표현도 잘 작동합니다.
+`observer`가 작동하려면 observable이 컴포넌트에 _어떻게_ 도착하는지는 중요하지 않고 읽히기만 하면 됩니다.
+observable을 깊게 읽는 것도 잘 작동하고, `todos[0].author.displayName`처럼 복잡한 표현도 잘 작동합니다.
 이러한 로직은 데이터 의존성을 명시적으로 선언하거나 미리 계산해야 하는 다른 프레임워크(selectors)에 비해 구독 메커니즘(mechanism)을 훨씬 더 정확하고 효율적으로 만듭니다.
 
-## 로컬 및 외부 상태
+## 로컬 및 외부 state
 
-상태를 구성하는 방법에는 큰 유연성이 있습니다. 왜냐하면 어떤 observables를 읽는지 또는 observables가 어디에서 유래했는지는 중요하지 않기 때문입니다.
-아래 예제는 `observer`로 감싸인 컴포넌트에서 외부 및 로컬 observable 상태를 사용하는 방법에 대해 다양한 패턴을 보여줍니다.
+state를 구성하는 방법에는 큰 유연성이 있습니다. 왜냐하면 어떤 observable을 읽는지 또는 observable이 어디에서 유래했는지는 중요하지 않기 때문입니다.
+아래 예제는 `observer`로 감싸인 컴포넌트에서 외부 및 로컬 observable state를 사용하는 방법에 대해 다양한 패턴을 보여줍니다.
 
-### `observer` 컴포넌트에서 외부 상태 사용하기
+### `observer` 컴포넌트에서 외부 state 사용하기
 
 <!--DOCUSAURUS_CODE_TABS-->
 <!--props 사용-->
 
-Observables는 props로 컴포넌트에 전달할 수 있습니다. (아래 예시 처럼)
+observable는 props로 컴포넌트에 전달할 수 있습니다. (아래 예시 처럼)
 
 ```javascript
 import { observer } from "mobx-react-lite"
@@ -90,7 +90,7 @@ ReactDOM.render(<TimerView timer={myTimer} />, document.body)
 <!--전역 변수 사용-->
 
 observable에 대한 참조를 얻는 _방법_은 중요하지 않으므로 
-외부 범위에서 직접 observables를 사용할 수 있습니다. (imports 포함)
+외부 범위에서 직접 observable을 사용할 수 있습니다. (imports 포함)
 
 ```javascript
 const myTimer = new Timer() // 위의 타이머 정의를 참고하세요.
@@ -101,11 +101,11 @@ const TimerView = observer(() => <span>Seconds passed: {myTimer.secondsPassed}</
 ReactDOM.render(<TimerView />, document.body)
 ```
 
-observables을 직접 사용하는 것은 잘 작동하지만 일반적으로 모듈 상태가 도입되기 때문에 이러한 패턴은 단위 테스트를 복잡하게 만들 수 있습니다. 그래서 전역 변수를 사용하는 대신 React Context를 사용하는 것이 좋습니다.
+observable을 직접 사용하는 것은 잘 작동하지만 일반적으로 모듈 state가 도입되기 때문에 이러한 패턴은 단위 테스트를 복잡하게 만들 수 있습니다. 그래서 전역 변수를 사용하는 대신 React Context를 사용하는 것이 좋습니다.
 
 <!--React context 사용-->
 
-[React Context](https://reactjs.org/docs/context.html)는 전체 하위 트리와 observables를 공유하는 훌륭한 메커니즘입니다.
+[React Context](https://reactjs.org/docs/context.html)는 전체 하위 트리와 observable을 공유하는 훌륭한 메커니즘입니다.
 
 ```javascript
 import {observer} from 'mobx-react-lite'
@@ -133,16 +133,16 @@ Provider의 값을 다른 값으로 바꾸지 않는 것이 좋습니다. MobX�
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-### `observer`컴포넌트에서 로컬 observable 상태 사용하기
+### `observer`컴포넌트에서 로컬 observable state 사용하기
 
-`observer`가 사용하는 observables은 어디에서나 올 수 있으므로 로컬 상태일 수도 있습니다. 
-다시 말해, 위에서 소개한 옵션과는 다른 로컬 상태를 사용할 수 있습니다. 
+`observer`가 사용하는 observable은 어디에서나 올 수 있으므로 로컬 state일 수도 있습니다. 
+다시 말해, 위에서 소개한 옵션과는 다른 로컬 state를 사용할 수 있습니다. 
 
 <!--DOCUSAURUS_CODE_TABS-->
 <!--observable 클래스와 `useState` 함께 쓰기-->
 
-로컬 observable 상태를 사용하는 가장 간단한 방법은 useState를 사용하여 observable 클래스에 대한 참조를 저장하는 것입니다.
-일반적으로 참조를 변경하고 싶지 않기 때문에 useState에서 반환된 업데이터 함수를 완전히 무시합니다.
+로컬 observable state를 사용하는 가장 간단한 방법은 useState를 사용하여 observable 클래스에 대한 참조를 저장하는 것입니다.
+일반적으로 참조를 변경하는 경우는 드물기 때문에 useState에서 반환된 업데이터 함수를 완전히 무시합니다.
 
 ```javascript
 import { observer } from "mobx-react-lite"
@@ -219,26 +219,26 @@ ReactDOM.render(<TimerView />, document.body)
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-### observable 상태가 로컬로 필요하지 않을 수 있습니다.
+### observable state가 로컬로 필요하지 않을 수 있습니다.
 
-이론적으로 React's Suspense 메커니즘의 일부 기능을 차단할 수 있으므로 일반적으로 로컬 컴포넌트 상태에 대해 MobX observables를 너무 빨리 의존하지 않는 것이 좋습니다.
-일반적으로 상태가 컴포넌트(하위항목 포함)간 공유되는 도메인 데이터를 캡처할 때 MobX observables를 사용하세요. ex) todo items, users, bookings 등등
+이론적으로 React's Suspense 메커니즘의 일부 기능을 차단할 수 있으므로 로컬 컴포넌트 state에 대해 MobX observable을 너무 빨리 의존하지 않는 것이 좋습니다.
+일반적으로 state가 컴포넌트(하위항목 포함)간 공유되는 도메인 데이터를 캡처할 때 MobX observable을 사용하세요. ex) todo items, users, bookings 등등
 
-로딩 상태, 선택 등과 같은 UI상태만 캡처하는 상태는 추후에 React suspense 기능을 활용할 수 있기 때문에 [`useState` hook](https://reactjs.org/docs/hooks-state.html)을 사용하는 것이 더 좋습니다.
+로딩 state, 선택 등과 같은 UI state만 캡쳐하는 state는 [`useState` hook](https://reactjs.org/docs/hooks-state.html)을 사용하는 것이 더 좋습니다. 그렇게 하면 추후에 React suspense 기능을 사용할 수 있게 됩니다.
 
-React 컴포넌트 안에서 observables를 사용하는 것은 깊거나(deep), computed 값이 있거나, 다른 `observer` 컴포넌트와 공유될 때 가치가 있습니다.
+React 컴포넌트 안에서 observable을 사용하는 것은 깊거나(deep), computed 값이 있거나, 다른 `observer` 컴포넌트와 공유될 때 가치가 있습니다.
 
-## 항상 `observer` 컴포넌트 안에서 observables를 읽습니다.
+## 항상 `observer` 컴포넌트 안에서 observable을 읽습니다.
 
 `observer`를 언제 사용해야 할지 궁금하시나요? 일반적으로 _observable 데이터를 읽는 모든 컴포넌트에 observer를 사용합니다_.
 
 `observer`는 감싸고 있는 컴포넌트만 개선하며, 감싸고 있는 컴포넌트를 호출하는 컴포넌트는 개선하지 않습니다. 따라서 일반적으로 모든 컴포넌트는 observer에 의해 감싸져야 하며, 모든 컴포넌트를 observer로 감싸는 행동은 비효율적이지 않기 때문에 걱정하실 필요가 없습니다. `observer` 컴포넌트가 많을수록 업데이트의 세밀성이 더 높아져 렌더링 효율성이 높아집니다.
 ### Tip: 가능한 한 늦게 객체에서 값을 가져옵니다.
 
-`observer`는 가능한 한 오랫동안 개체 참조를 전달하고 DOM과 low-level 컴포넌트로 렌더링 될 예정인 observer 기반 컴포넌트 내부의 속성만 읽을 때 가장 잘 동작합니다.
+`observer`는 가능한 한 오랫동안 객체 참조를 전달할 때, 그리고 DOM과 low-level 컴포넌트로 렌더링 될 예정인 observer 기반 컴포넌트 내부의 속성만 읽을 때 가장 잘 동작합니다.
 즉, `observer`는 객체에서 값을 '역참조'한다는 사실에 반응합니다.
 
-아래의 예시에서 `TimerView` 컴포넌트는 `.secondsPassed`가 `observer`컴포넌트 내부에서 읽는 것이 아니라 외부에서 읽혀 추적되지 _않기_ 때문에 향후 변경사항에 반응하지 **않습니다**.
+상단의 예시에서 `TimerView` 컴포넌트는 `.secondsPassed`가 `observer`컴포넌트 내부에서 읽는 것이 아니라 외부에서 읽혀 추적되지 _않기_ 때문에 향후 변경사항에 반응하지 **않습니다**.
 
 ```javascript
 const TimerView = observer(({ secondsPassed }) => <span>Seconds passed: {secondsPassed}</span>)
@@ -246,19 +246,19 @@ const TimerView = observer(({ secondsPassed }) => <span>Seconds passed: {seconds
 React.render(<TimerView secondsPassed={myTimer.secondsPassed} />, document.body)
 ```
 
-이러한 방법은 memoization을 더 잘 활용하기 위해 초기에 역참조하고 원시적인 값(primitives)을 전달하는 것이 좋은 관행인 react-redux와는 다른 사고 방식입니다. 
-자세한 사항은 [Understanding reactivity](understanding-reactivity.md)를 확인해주세요.
+이러한 방법은 react-redux와는 다른 사고 방식입니다. react-redux에서는 메모이제이션을 더 잘 활용하기 위해 초기에 역참조하고 원시적인 값(primitives)을 전달하는 것이 더 좋은 관행입니다.
+자세한 사항은 [반응성 이해하기](understanding-reactivity.md)를 확인해주세요.
 
-### `observer`가 아닌 컴포넌트에 observables를 전달하지 마세요.
+### `observer`가 아닌 컴포넌트에 observable을 전달하지 마세요.
 
 `observer`로 감싸진 컴포넌트는 컴포넌트 _자체_ 렌더링 중에 사용되는 observable만 구독합니다.
-따라서 observable objects / arrays / maps이 자식 컴포넌트에 전달되면 자식 컴포넌트들도 `observer`로 감싸줘야 합니다. 
+따라서 observable objects·arrays·maps이 자식 컴포넌트에 전달되면 자식 컴포넌트들도 `observer`로 감싸줘야 합니다. 
 위의 내용은 모든 콜백 요소 기반 컴포넌트들도 해당합니다.
 
-`observer`가 아닌 컴포넌트에 observables를 전달하려는 경우엔 전달하기 전에 observable을 [일반 Javascript 값 또는 구조로 변환](observable-state.md#converting-observables-back-to-vanilla-javascript-collections) 해야합니다.
+`observer`가 아닌 컴포넌트에 observable을 전달하려는 경우엔 전달하기 전에 observable을 [일반 Javascript 값 또는 구조로 변환](observable-state.md#converting-observables-back-to-vanilla-javascript-collections) 해야합니다.
 
 위의 내용을 자세히 설명하기 위해
-observable `todo` 객체, `TodoView` 컴포넌트 (observer), 열(column)과 값(value) 매핑을 사용하지만, 관찰자는 아닌 가상의 `GridRow` 컴포넌트를 예로 들어보겠습니다.
+observable `todo` 객체, `TodoView` 컴포넌트 (observer), 열(column)과 값(value) 매핑을 사용하지만, observer가 아닌 가상의 `GridRow` 컴포넌트를 예로 들어보겠습니다.
 
 ```javascript
 class Todo {
@@ -281,7 +281,7 @@ const TodoView = observer(({ todo }: { todo: Todo }) =>
        done: todo.done
    }} />
 
-   // 올바른 예시: `toJS`를 사용하는 것도 좋지만, 일반적으로 명시적으로 사용하는 것이 더 좋습니다.
+   // 올바른 예시: `toJS`를 사용하는 것도 좋지만, 일반적으로는 명시적으로 사용하는 것이 더 좋습니다.
    return <GridRow data={toJS(todo)} />
 )
 ```
@@ -305,14 +305,14 @@ const TodoView = observer(({ todo }: { todo: Todo }) => {
 ## Tips
 
 <details id="static-rendering"><summary>Server Side Rendering (SSR)<a href="#static-rendering" class="tip-anchor"></a></summary>
-서버 사이드 렌더링 컨텍스트에서 `observer`가 사용되는 경우: `observer`가 사용된 observables를 구독하는 것을 막고 GC문제가 발생하지 않도록 하기위해 `enableStaticRendering(true)`를 호출해야 합니다.
+서버 사이드 렌더링 컨텍스트에서 `observer`가 사용되는 경우: `observer`가 사용된 observable을 구독하는 것을 막고 GC문제가 발생하지 않도록 하기위해 `enableStaticRendering(true)`를 호출해야 합니다.
 </details>
 
 <details id="react-vs-lite"><summary>**Note:** mobx-react vs. mobx-react-lite<a href="#react-vs-lite" class="tip-anchor"></a></summary>
 해당 문서에서는 기본적으로 `mobx-react-lite`를 사용했습니다.
 [mobx-react](https://github.com/mobxjs/mobx-react/)는 더 거대하며 `mobx-react-lite`를 안에서 사용합니다.
-mobx-react는 기존 프로그램으로 구축하지 않고 처음부터 개발하는 소프트웨어에서 필요하지 않은 몇가지 기능을 더 제공합니다.
-mobx-react가 제공하는 추가 제공사항은 다음과 같습니다.
+mobx-react는 그린필드 프로젝트(greenfield project)에서는 필요하지 않은 몇 가지 기능을 더 제공합니다.
+mobx-react가 제공하는 추가 기능은 다음과 같습니다.
 
 1. React 클래스 컴포넌트를 지원합니다.
 1. `Provider` 그리고 `inject`를 제공합니다. React.createContext가 더 이상 필요하지 않습니다.
@@ -325,13 +325,13 @@ mobx-react가 제공하는 추가 제공사항은 다음과 같습니다.
 
 <details id="observer-vs-memo"><summary>**Note:** `observer` 또는 `React.memo`?<a href="#observer-vs-memo" class="tip-anchor"></a></summary>
 `observer`는 자동적으로 `memo`를 적용하므로 `observer` 컴포넌트는 `memo`로 감쌀 필요가 없습니다.
- props 안에 아무리 깊게 있어도 `observer`가 찾을 수 있기 때문에 `memo`는 observer 컴포넌트에 안전하게 적용될 수 있습니다.
+ props 안에 아무리 깊게 있어도 관련만 있다면 `observer`가 찾을 수 있기 때문에 `memo`는 observer 컴포넌트에 안전하게 적용될 수 있습니다.
 </details>
 
 <details id="class-comp"><summary>**Tip:** 클래스 기반 리액트 컴포넌트를 위한 `observer` 사용방법<a href="#class-comp" class="tip-anchor"></a>
 </summary>
 위에서 언급했듯 클래스 기반 컴포넌트는 `mobx-react-lite`가 아닌 `mobx-react`를 통해서만 지원됩니다.
-간단히 말해서 다음과 같이 `observer`에서 함수 컴포넌트를 감싼것 처럼 클래스 기반 컴포넌트를 감쌀 수 있습니다.
+간단히 말해서 `observer`로 함수 컴포넌트를 감싸는 것처럼 클래스 기반 컴포넌트도 감쌀 수 있습니다.
 
 ```javascript
 import React from "React"
@@ -411,8 +411,8 @@ DevTools에 no display name이 보일 것입니다.
 </details>
 
 <details id="computed-props"><summary>{🚀} **Tip:** props로부터 computed 파생<a href="#computed-props" class="tip-anchor"></a></summary>
-로컬 observables의 computed 값이 컴포넌트가 받는 props에 따라 달라질 수 있습니다.
-하지만 리액트 컴포넌트가 받는 props는 observable이 아니므로 props에 대한 변경 사항은 computed 값에 반영되지 않습니다. 최신 데이터에서 computed 값을 적절하게 추출하기 위해서는 로컬 observable 상태를 수동으로 업데이트 해야합니다.
+로컬 observable의 computed 값이 컴포넌트가 받는 props에 따라 달라질 수 있습니다.
+하지만 리액트 컴포넌트가 받는 props는 observable이 아니므로 props에 대한 변경 사항은 computed 값에 반영되지 않습니다. 최신 데이터에서 computed 값을 적절하게 추출하기 위해서는 로컬 observable state를 수동으로 업데이트 해야합니다.
 
 ```javascript
 import { observer, useLocalObservable } from "mobx-react-lite"
@@ -455,7 +455,7 @@ ReactDOM.render(<TimerView />, document.body)
 
 </details>
 
-<details id="useeffect"><summary>{🚀} **Tip:** useEffect 와 observables<a href="#useeffect" class="tip-anchor"></a></summary>
+<details id="useeffect"><summary>{🚀} **Tip:** useEffect 와 observable<a href="#useeffect" class="tip-anchor"></a></summary>
 
 `useEffect`는 리액트 컴포넌트의 라이프 사이클에서 발생해야하는 부수효과(side effects)를 설정하는데 사용할 수 있습니다.
 `useEffect`를 사용하려면 의존성을 지정해야합니다.
@@ -498,13 +498,13 @@ ReactDOM.render(<TimerView />, document.body)
 ```
 
 effect함수에서 `autorun`에 의해 생성된 disposer를 반환한다는 점에 유의하세요.
-해당 내용은 컴포넌트가 사라질 때 `autorun`이 정리되기 때문에 중요합니다!
+컴포넌트가 사라질 때 `autorun`이 정리되기 때문에 중요합니다!
 
-observable의 아닌 값이 autorun을 다시 실행해야 하는 경우를 제외하고 의존성 배열은 비워 둘 수 있고, 다시 실행 해야하는 경우에는 의존성 배열을 추가해야합니다.
+observable로 지정되지 않은 값이 autorun을 다시 실행해야 하는 경우를 제외하면 의존성 배열을 비워 둘 수 있고, 다시 실행 해야하는 경우에는 의존성 배열을 추가해야합니다.
 linter를 만족스럽게 만들기 위해 타이머(위의 예시처럼)를 의존성으로 정의할 수 있습니다.
 참조가 실제로 변경되지 않기 때문에 안전하고 더 이상 영향을 미치지 않습니다.
 
-어떤 observables가 효과(effect)를 트리거 해야하는지 명시적으로 정의하려면 다른 패턴들은 유지하고 `autorun` 대신 `reaction`을 사용하세요.
+어떤 observable이 효과(effect)를 트리거 해야하는지 명시적으로 정의하려면 다른 패턴들은 유지하고 `autorun` 대신 `reaction`을 사용하세요.
 
 </details>
 
@@ -518,8 +518,8 @@ linter를 만족스럽게 만들기 위해 타이머(위의 예시처럼)를 의
 
 1. `observer`를 잊지 않았는지 확인하세요.
 1. 반응하려는 대상이 실제로 observable인지 확인해보세요. 런타임에 확인할 경우 [`isObservable`](api.md#isobservable), [`isObservableProp`](api.md#isobservableprop)와 같은 유틸리티를 사용해보세요.
-1. 경고 또는 에러가 있는지 브라우저의 콘솔 로그를 확인해보세요.
-1. 일반적으로 추적이 어떻게 작동하는지 확인해보세요. [Understanding reactivity](understanding-reactivity.md)를 참고하세요.
+1. 브라우저의 콘솔 로그에 경고 또는 에러가 있는지 확인해보세요.
+1. 일반적으로 추적이 어떻게 작동하는지 확인해보세요. [반응성 이해하기](understanding-reactivity.md)를 참고하세요.
 1. 위에서 설명하고 있는 잘못된 예시를 확인해보세요.
-1. MobX를 [구성](configuration.md#linting-options)하여 잘못된 메커니즘 사용에 대해 경고하고 콘솔 로그를 확인해보세요.
+1. 잘못된 메커니즘 사용에 대해 경고하고 콘솔 로그를 확인할 수 있도록 MobX를 [구성하세요](configuration.md#linting-options).
 1. [trace](analyzing-reactivity.md)를 사용하여 올바른 구독을 하고 있는지 확인하거나 [spy](analyzing-reactivity.md#spy), [mobx-logger](https://github.com/winterbe/mobx-logger) 패키지를 사용하여 MobX가 일반적으로 무엇을 하는지 확인해보세요.
