@@ -136,13 +136,13 @@ Provider의 값을 다른 값으로 바꾸지 않는 것이 좋습니다. MobX�
 ### `observer`컴포넌트에서 로컬 observable state 사용하기
 
 `observer`가 사용하는 observable은 어디에서나 올 수 있으므로 로컬 state일 수도 있습니다. 
-다시 말해, 위에서 소개한 옵션과는 다른 로컬 state를 사용할 수 있습니다. 
+다시 말해, 위에서 소개드린 옵션과는 다른 옵션도 사용할 수 있습니다.
 
 <!--DOCUSAURUS_CODE_TABS-->
 <!--observable 클래스와 `useState` 함께 쓰기-->
 
-로컬 observable state를 사용하는 가장 간단한 방법은 useState를 사용하여 observable 클래스에 대한 참조를 저장하는 것입니다.
-일반적으로 참조를 변경하는 경우는 드물기 때문에 useState에서 반환된 업데이터 함수를 완전히 무시합니다.
+로컬 observable state를 사용하는 가장 간단한 방법은 `useState`를 사용하여 observable 클래스에 대한 참조를 저장하는 것입니다.
+일반적으로 참조를 변경하는 경우는 드물기 때문에 `useState`에서 반환된 업데이터 함수를 완전히 무시합니다.
 
 ```javascript
 import { observer } from "mobx-react-lite"
@@ -222,7 +222,7 @@ ReactDOM.render(<TimerView />, document.body)
 ### observable state가 로컬로 필요하지 않을 수 있습니다.
 
 이론적으로 React's Suspense 메커니즘의 일부 기능을 차단할 수 있으므로 로컬 컴포넌트 state에 대해 MobX observable을 너무 빨리 의존하지 않는 것이 좋습니다.
-일반적으로 state가 컴포넌트(하위항목 포함)간 공유되는 도메인 데이터를 캡처할 때 MobX observable을 사용하세요. ex) todo items, users, bookings 등등
+일반적으로 state가 컴포넌트(하위항목 포함)간 공유되는 도메인 데이터를 캡쳐할 때 MobX observable을 사용하세요. ex) todo items, users, bookings 등등
 
 로딩 state, 선택 등과 같은 UI state만 캡쳐하는 state는 [`useState` hook](https://reactjs.org/docs/hooks-state.html)을 사용하는 것이 더 좋습니다. 그렇게 하면 추후에 React suspense 기능을 사용할 수 있게 됩니다.
 
@@ -521,5 +521,5 @@ linter를 만족스럽게 만들기 위해 타이머(위의 예시처럼)를 의
 1. 브라우저의 콘솔 로그에 경고 또는 에러가 있는지 확인해보세요.
 1. 일반적으로 추적이 어떻게 작동하는지 확인해보세요. [반응성 이해하기](understanding-reactivity.md)를 참고하세요.
 1. 위에서 설명하고 있는 잘못된 예시를 확인해보세요.
-1. 잘못된 메커니즘 사용에 대해 경고하고 콘솔 로그를 확인할 수 있도록 MobX를 [구성하세요](configuration.md#linting-options).
+1. 잘못된 메커니즘 사용에 대해 경고하고 콘솔 로그를 확인할 수 있도록 MobX를 [설정하세요](configuration.md#linting-options).
 1. [trace](analyzing-reactivity.md)를 사용하여 올바른 구독을 하고 있는지 확인하거나 [spy](analyzing-reactivity.md#spy), [mobx-logger](https://github.com/winterbe/mobx-logger) 패키지를 사용하여 MobX가 일반적으로 무엇을 하는지 확인해보세요.
