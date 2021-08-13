@@ -8,7 +8,7 @@ hide_title: true
 
 # 서브클래싱
 
-서브클래싱은 몇 가지 [제한](#limitations)이 있습니다. 특히 **프로토타입의 action·flow·computed**만 오버라이드할 수 있으며 _[필드 선언](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Classes#field_declarations)_은 오버라이드 할 수 없습니다. 서브클래스에서 오버라이드 된 메서드와 getter에 `override` 주석을 사용합니다. 아래 예를 살펴보세요. 일을 단순하게 유지하고 상속보다 구성(composition)을 선호하세요.
+서브클래싱은 몇 가지 [제한](#limitations)이 있습니다. 특히 **프로토타입의 action·flow·computed**만 오버라이드할 수 있으며 _[필드 선언](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Classes#field_declarations)_은 오버라이드 할 수 없습니다. 서브클래스에서 오버라이드 된 메서드와 getter에 `override` 주석을 사용합니다. 아래 예를 살펴보세요. 일을 단순하게 유지하고 상속보다 구성(composition)을 선호하도록 하세요.
 
 ```javascript
 import { makeObservable, observable, computed, action } from "mobx"
@@ -21,7 +21,7 @@ class Parent {
     // 주석이 달리지 않은 인스턴스 필드는 오버라이드 할 수 있습니다.
     overridableArrowAction = action(() => {})
 
-    // 주석이 달린 메서드와·getter는 오버라이드 할 수 있습니다.
+    // 주석이 달린 메서드와 getter는 오버라이드 할 수 있습니다.
     action() {}
     actionBound() {}
     get computed() {}
@@ -79,7 +79,7 @@ class Child extends Parent {
 ## 제한 사항
 
 1. **프로토타입**에 정의된 `action`, `computed`, `flow`, `action.bound`만 서브클래스에서 **오버라이드**할 수 있습니다.
-1. 필드는 `override`를 제외하고 서브클래스에서 다시 주석을 달 수 없습니다.
+1. 필드는 서브클래스에서 다시 주석을 달 수 없습니다. `override`는 예외적으로 가능합니다.
 1. `makeAutoObservable`은 서브클래싱을 지원하지 않습니다.
 1. 내장 확장(`ObservableMap`, `ObservableArray` 등)은 지원하지 않습니다.
 1. 서브클래스에서 `makeObservable`에 다른 옵션을 제공할 수 없습니다.
