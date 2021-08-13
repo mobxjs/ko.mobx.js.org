@@ -48,7 +48,7 @@ let message = new Message("Foo", { name: "Michel" }, ["Joe", "Sara"])
 
 위 코드는 다음과 같이 표현될 수 있습니다. 녹색 상자는 _observable_ 속성을 나타냅니다. _값_ 자체는 observable이 아닙니다!
 
-![MobX reacts to changing references](assets/observed-refs.png)(⭐️ 이거 그림에서 author이랑 likes 화살표가 쪼끔씩 밀려있는데 원작자님한테 말해줘야될까..?ㅋㅋㅋ)
+![MobX reacts to changing references](assets/observed-refs.png)
 
 MobX가 기본적으로 하는 일은 함수에서 사용하는 _화살표_를 기록하는 것입니다. 이후에는 이러한 _화살표_ 중 하나가 변경될 때(다른 항목을 참조하기 시작할 때)마다 재실행합니다.
 
@@ -77,7 +77,7 @@ const disposer = autorun(() => {
     trace()
 })
 // 출력 값:
-// [mobx.trace] 'Autorun@2' tracing enabled (⭐️ 이부분 영어로 로그되는거같아서 번역 안하고 원문 그대로 남겨뒀삼!)
+// [mobx.trace] 'Autorun@2' tracing enabled
 
 message.updateTitle("Hello")
 // 출력 값:
@@ -105,7 +105,7 @@ autorun(() => {
 message = new Message("Bar", { name: "Martijn" }, ["Felicia", "Marcus"])
 ```
 
-위 코드는 반응하지 **않습니다**. `message`가 변경되었지만 `message`는 observable 변수가 아니라 observable을 참조하는(⭐️로부터 참조되는?) 변수일 뿐이며 변수(참조) 자체는 observable이 아니기 때문입니다.
+위 코드는 반응하지 **않습니다**. `message`가 변경되었지만 `message`는 observable 변수가 아니라 observable을 참조하는 변수일 뿐이며 변수(참조) 자체는 observable이 아니기 때문입니다.
 
 #### 옳지 않은 예: 추적된 함수 외부에서의 역참조
 
@@ -114,7 +114,7 @@ let title = message.title
 autorun(() => {
     console.log(title)
 })
-message.updateMessage("Bar") //(⭐️ 이거 함수 이름 updateTitle 아닌가??)
+message.updateTitle("Bar")
 ```
 
 위 코드는 반응하지 **않습니다**. `message.title`은 `autorun` 밖에서 역참조되었으며, 역참조하는 순간에 `message.title`의 값(문자열 `"Foo"`)만을 담고 있기 때문입니다.
@@ -165,14 +165,15 @@ autorun(() => {
     console.log(message)
 })
 
-// 재실행되지 않습니다.
+// 다시 트리거 되지 않습니다.
 message.updateTitle("Hello world")
 ```
 
 위의 예에서 업데이트된 message title은 autorun 내에서 사용되지 않기 때문에 출력되지 않습니다.
 autorun은 observable이 아닌 변수 `message`에만 의존합니다. 다르게 말하면, MobX는 `autorun`에서 `title`이 사용되지 않았다고 인식합니다.
 
-웹브라우저 디버깅 도구에서 위와 같이 사용하면 결국 `title`의 업데이트된 값을 발견할 수 있겠지만 이는 오해의 소지가 있습니다. autorun은 처음 호출될 때 모든 ㅇㅇ가 한 번 실행된 이후에 실행합니다.(⭐️ 이거 뭔말인지 모르겠삼ㅠㅠ) 이 문제는 `console.log`가 비동기 함수이고 객체가 나중에만 포맷되기 때문에 발생합니다.(⭐️ 여기도 이해가 잘 안대,,) 즉, 디버깅 툴바에서 title을 따라가면 업데이트된 값을 찾을 수 있습니다. 그러나 `autorun`은 업데이트를 추적하지 않습니다.
+웹브라우저 디버깅 도구에서 위와 같이 사용하면 결국 `title`의 업데이트된 값을 발견할 수 있겠지만 이는 오해의 소지가 있습니다. 
+autorun은 처음 호출될 때 한 번 실행됩니다. `title`의 업데이트 된 값을 발견할 수 있는 문제는 `console.log`가 비동기 함수이고 객체가 나중에 포맷되기 때문에 발생합니다. 즉, 디버깅 툴바에서 title을 따라가면 업데이트된 값을 찾을 수 있습니다. 그러나 `autorun`은 업데이트를 추적하지 않습니다.
 
 위 작업을 수행하는 방법은 불변 데이터(immutable data) 또는 방어적 복사본(defensive copy)을 항상 `console.log`에 전달하는 것입니다. 따라서 다음 방법들은 모두 `message.title`의 변경사항에 반응합니다.
 
@@ -207,7 +208,7 @@ message.likes.push("Jennifer")
 이 방법은 배열의 _어떠한_ 변화에도 반응합니다.
 배열은 observable 객체와 map처럼 인덱스∙속성별로 추적되는 것이 아니라 전체로서 추적됩니다.
 
-#### 옳지 않은 예: 추적된 함수의 범위 밖 매핑 정의공간(indices)에 액세스하기
+#### 옳지 않은 예: 추적된 함수의 범위를 벗어난 인덱스에 액세스하기
 
 ```javascript
 autorun(() => {
@@ -216,10 +217,9 @@ autorun(() => {
 message.likes.push("Jennifer")
 ```
 
-배열이 count를 속성 액세스로 색인하기 때문에 위의 샘플 데이터는 반응합니다.(⭐️index가 동사로 쓰인거 맞아..?) 그러나 **오직** 제공된 `index가 length보다 작은(index < length)` 경우에만 해당됩니다.
-MobX는 아직 존재하지 않는 배열 매핑 정의공간(indices)을 추적하지 않습니다.
+배열 인덱스는 속성 액세스로 계산되기 때문에 위의 샘플 데이터와 반응합니다. 그러나 **오직** 제공된 `index가 length보다 작은(index < length)` 경우에만 해당됩니다.
+MobX는 아직 존재하지 않는 배열 인덱스를 추적하지 않습니다.
 따라서 배열 인덱스를 기반으로 액세스하는 경우 항상 `.length`를 확인하세요.
-(⭐️ indice 뜻은 https://racoonlotty.tistory.com/entry/Elasticsearch-Index-vs-Indices 요기 참고했는데 함 확인 부탁행,,)
 
 #### 옳은 예: 추적된 함수의 배열 함수에 액세스하기
 
@@ -253,9 +253,9 @@ message.likes.push("Jennifer")
 ```
 
 위 코드는 예상대로 반응하지 **않습니다**. 단순히 `likes` 배열 자체가 `autorun`에서 사용되지 않고 배열에 대한 참조만 사용되고 있기 때문입니다.
-반대로 `messages.likes = ["Jennifer"]`는 감지됩니다(⭐️ 잘 반응할 것입니다?). 해당 문은 배열을 수정하는 것이 아니라 `likes` 속성 자체를 수정하기 때문입니다.
+반대로 `messages.likes = ["Jennifer"]`는 잘 반응할 것입니다. 해당 문은 배열을 수정하는 것이 아니라 `likes` 속성 자체를 수정하기 때문입니다.
 
-#### 옳은 예: 아직 존재하지 않는 map 항목(⭐️entry, 엔트리?) 사용하기
+#### 옳은 예: 아직 존재하지 않는 map 엔트리 사용하기
 
 ```javascript
 const twitterUrls = observable.map({
@@ -271,9 +271,9 @@ runInAction(() => {
 })
 ```
 
-위 코드는 반응할 **것입니다**. observable map은 존재하지 않을 수 있는 항목을 관찰하도록 도와줍니다.
-처음에는 `undefined`이 출력됩니다.
-`twitterUrls.has("Sara")`를 사용하면 항목의 존재 여부를 먼저 확인할 수 있습니다.
+위 코드는 반응할 **것입니다**. observable map은 존재하지 않을 수 있는 엔트리를 관찰하도록 도와줍니다.
+처음에는 `undefined`가 출력됩니다.
+`twitterUrls.has("Sara")`를 사용하면 엔트리의 존재 여부를 먼저 확인할 수 있습니다.
 따라서 동적 키 수집에 대한 프록시 지원이 없는 환경에서는 항상 observable map을 사용하세요. 프록시 지원이 있는 경우 observable map도 사용할 수 있지만 plain 객체를 사용할 수도 있습니다.
 
 #### MobX는 비동기적으로 액세스된 데이터를 추적하지 않습니다
@@ -329,7 +329,7 @@ _프록시를 지원하지 않는 환경_
 
 위 코드는 반응하지 **않습니다**. MobX는 observable 속성만 추적할 수 있으며 'age'는 위에서 observable 속성으로 정의되지 않았습니다.
 
-그러나 MobX에 의해 노출된(⭐️ MobX에서 지원하는?) `get` 및 `set` 메서드를 사용하면 다음과 같은 작업을 수행할 수 있습니다.
+그러나 MobX에서 지원하는 `get` 및 `set` 메서드를 사용하면 다음과 같은 작업을 수행할 수 있습니다.
 
 ```javascript
 import { get, set } from "mobx"
