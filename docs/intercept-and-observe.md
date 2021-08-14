@@ -8,37 +8,32 @@ hide_title: true
 
 # Intercept & Observe {🚀}
 
-_⚠️ **Warning**: intercept and observe are low level utilities, and should not be needed in practice. Use some form of [reaction](reactions.md) instead, as `observe` doesn't respect transactions and doesn't support deep observing of changes. Using these utilities is an anti-pattern. If you intend to get access to the old and new value using `observe`, use [`reaction`](reactions.md#reaction) instead. ⚠️_
+_⚠️ **경고**: intercept와 observe는 낮은 수준의 유틸리티이므로 실제로는 필요하지 않습니다. `observe`는 트랜잭션을 존중하지 않고 변경사항에 대한 깊은 관찰(observing)을 지원하지 않으므로 `observe` 대신 [reaction](reactions.md) 방식을 사용하세요. 이러한 유틸리티를 사용하는 것은 안티 패턴입니다. 이전 값과 새 값에 액세스하려면 `observe` 대신 [`reaction`](reactions.md#reaction)을 사용하세요.⚠️_
 
-`observe` and `intercept` can be used to monitor the changes of a single observable, but they **_don't_** track nested observables.
+`observe`와 `intercept`는 단일 observable의 변경을 모니터링하는 데 사용할 수 있지만 중첩(nested) observable을 추적하지는 **않습니다**.
 
--   `intercept` can be used to detect and modify mutations before they are applied to the observable (validating, normalizing or cancelling).
--   `observe` allows you to intercept changes after they have been made.
+-   `intercept`는 mutation을 observable(검증, 정규화 또는 취소)에 적용하기 전에 감지하고 수정하는 데 사용할 수 있습니다.
+-   `observe`는 변경사항이 만들어진 후 이를 intercept 할 수 있도록 해줍니다.
 
 ## Intercept
 
-Usage: `intercept(target, propertyName?, interceptor)`
+사용 방법: `intercept(target, propertyName?, interceptor)`
 
-_Please avoid this API. It basically provides a bit of aspect-oriented programming, creating flows that are really hard to debug. Instead, do things like data validation **before** updating any state, rather than during._
+_이 API는 가능한 사용하지 마세요. 기본적으로 약간의 관점 지향 프로그래밍(aspect-oriented programming)을 제공하여 디버깅하기 어려운 흐름을 만듭니다. 대신 state를 업데이트하는 동안이 아닌 업데이트하기 **전에** 데이터 유효성 검사와 같은 작업을 수행합니다._
 
--   `target`: the observable to guard.
--   `propertyName`: optional parameter to specify a specific property to intercept. Note that `intercept(user.name, interceptor)` is fundamentally different from `intercept(user, "name", interceptor)`. The first tries to add an interceptor to the _current_ `value` inside `user.name`, which might not be an observable at all. The latter intercepts changes to the `name` _property_ of `user`.
--   `interceptor`: callback that is invoked for _each_ change that is made to the observable. Receives a single change object describing the mutation.
+-   `target`: 지키려는(⭐️유지하려는?) observable.
+-   `propertyName`: intercept 할 특정 속성을 지정하는 선택적 파라미터입니다. `intercept(user.name, interceptor)`는 `intercept(user, "name", interceptor)`와 근본적으로 다릅니다. 전자는 `user.name` 내부의 _현재_ `value`에 interceptor를 추가하려고 시도하며, 해당 값은 절대 observable이 아닙니다. 후자는 `user`의 `name` _속성_에 대한 변경 사항을 intercept 합니다.
+-   `interceptor`: observable에 발생하는 _각각의_ 변경 사항에 대해 호출되는 콜백입니다. mutation을 설명하는 단일 변경 객체를 받습니다.
 
-The `intercept` should tell MobX what needs to happen with the current change.
-Therefore it should do one of the following things:
+`intercept`는 MobX에게 현재 변경사항과 관련하여 필요한 사항을 알려야 합니다. 
+따라서 다음 중 하나를 수행해야 합니다.
 
-1. Return the received `change` object as-is from the function, in which case the mutation will be applied.
-2. Modify the `change` object and return it, for example to normalize the data. Not all fields are modifiable, see below.
-3. Return `null`, this indicates that the change can be ignored and shouldn't be applied. This is a powerful concept with which you can for example make your objects temporarily immutable.
-4. Throw an exception, if for example some invariant isn't met.
+1. 함수에서 받은 `change` 객체를 그대로 반환합니다. 이 경우 mutation이 적용됩니다.
+2. `change` 객체를 수정하고 반환합니다(예: 데이터 정규화). 일부 필드는 수정할 수 없습니다. 아래를 참고하세요.
+3. `null`을 반환합니다. 이는 변경사항이 무시될 수 있으며 해당 변경 사항을 적용해서는 안 된다는 것을 나타냅니다. 이것은 예를 들면 객체를 일시적으로 불변(immutable) 하게 만드는 것과 같이 강력한 개념입니다.
+4. 예외를 throw 합니다. 예를 들어 일부 무공변성(invariant)이 충족되지 않는 경우에 해당합니다.
 
-The function returns a `disposer` function that can be used to cancel the interceptor when invoked.
-It is possible to register multiple interceptors to the same observable.
-They will be chained in registration order.
-If one of the interceptors returns `null` or throws an exception, the other interceptors won't be evaluated anymore.
-It is also possible to register an interceptor both on a parent object and on an individual property.
-In that case the parent object interceptors are run before the property interceptors.
+이 함수는 호출될 때 interceptor를 취소하는 데 사용할 수 있는 `disposer` 함수를 반환합니다. 여러 개의 interceptor를 동일한 observable에 등록할 수 있습니다. 해당 interceptor들은 등록 순서대로 체이닝(⭐️chain 말하는건데 그냥 묶여진다고 쓸까?) 됩니다. interceptor 중 하나가 `null`을 반환하거나 예외를 throw 하면 다른 interceptor는 더 이상 평가되지 않습니다. 상위 객체와 개별 속성 모두에 interceptor를 등록할 수도 있습니다. 이 경우 상위 객체 interceptor가 속성 interceptor다 먼저 실행됩니다.
 
 ```javascript
 const theme = observable({
@@ -47,20 +42,20 @@ const theme = observable({
 
 const disposer = intercept(theme, "backgroundColor", change => {
     if (!change.newValue) {
-        // Ignore attempts to unset the background color.
+        // background color 설정을 해제하려는 시도를 무시합니다.
         return null
     }
     if (change.newValue.length === 6) {
-        // Correct missing '#' prefix.
+        // 누락된 '#'를 붙입니다.
         change.newValue = "#" + change.newValue
         return change
     }
     if (change.newValue.length === 7) {
-        // This must be a properly formatted color code!
+        // 올바른 형식의 색상 코드여야 합니다!
         return change
     }
     if (change.newValue.length > 10) {
-        // Stop intercepting future changes.
+        // 이후의 변경사항에 대한 intercept를 중단합니다.
         disposer()
     }
     throw new Error("This doesn't look like a color at all: " + change.newValue)
@@ -69,23 +64,21 @@ const disposer = intercept(theme, "backgroundColor", change => {
 
 ## Observe
 
-Usage: `observe(target, propertyName?, listener, invokeImmediately?)`
+사용 방법: `observe(target, propertyName?, listener, invokeImmediately?)`
 
-_See above notice, please avoid this API and use [`reaction`](reactions.md#reaction) instead._
+_상단의 경고를 참고하시기 바랍니다. 이 API 대신 [`reaction`](reactions.md#reaction)을 사용하세요._
 
--   `target`: the observable to observe.
--   `propertyName`: optional parameter to specify a specific property to observe. Note that `observe(user.name, listener)` is fundamentally different from `observe(user, "name", listener)`. The first observes the _current_ `value` inside `user.name`, which might not be an observable at all. The latter observes the `name` _property_ of `user`.
--   `listener`: callback that will be invoked for _each_ change that is made to the observable. Receives a single change object describing the mutation, except for boxed observables, which will invoke the `listener` with two parameters: `newValue, oldValue`.
--   `invokeImmediately`: _false_ by default. Set it to _true_ if you want `observe` to invoke the `listener` directly with the state of the observable, instead of waiting for the first change. Not supported (yet) by all kinds of observables.
+-   `target`: 관찰하려는 observable.
+-   `propertyName`: 관찰할 특정 속성을 지정하는 선택적 파라미터입니다. `observe(user.name, listener)`는 `observe(user, "name", listener)`와 근본적으로 다릅니다. 전자는 `user.name` 내의 _현재_ `value`을 관찰하며 해당 값은 절대  observable이 아닙니다. 후자는 `user`의 `name` _속성_을 관찰합니다.
+-   `listener`: observable에 발생하는 _각각의_ 변경 사항에 대해 호출되는 콜백입니다. mutation을 설명하는 단일 변경 객체를 받으며, boxed observable은 제외합니다. boxed observable은 `newValue, oldValue` 두 가지 파라미터를 받는 `listener`를 호출합니다.
+-   `invokeImmediately`: 기본적으로 _false_입니다. `observe`이 첫 번째 변경사항을 기다리는 대신 observable의 state로 직접 `listener`를 호출하도록 하려면 이 값을 _true_로 설정합니다. 일부 타입의 observable에서는 아직 지원되지 않습니다.
 
-The function returns a `disposer` function that can be used to cancel the observer.
-Note that `transaction` does not affect the working of the `observe` method(s).
-This means that even inside a transaction `observe` will fire its listeners for each mutation.
-Hence [`autorun`](reactions.md#autorun) is usually a more powerful and declarative alternative to `observe`.
+이 함수는 observer를 취소하는 데 사용할 수 있는 `disposer` 함수를 반환합니다. `트랜잭션`은 `observe` 메서드의 작동에 영향을 주지 않습니다. 
+이는 트랜잭션 안에서도 `observe`가 각 mutation에 대한 listener를 실행(⭐️fire, 해고?발사?) 한다는 것을 의미합니다. 따라서 [`autorun`](reactions.md#autorun)이 일반적으로 `observe`보다 더 강력하고 선언적인 대안입니다.
 
-_`observe` reacts to **mutations** when they are being made, while reactions like `autorun` or `reaction` react to **new values** when they become available. In many cases the latter is sufficient._
+_`observe`는 **mutation**이 만들어질 때 반응하는 반면 `autorun`이나 `reaction`과 같은 reaction은 **새로운 값**이 활성화될 때 해당 값에 반응합니다. 대부분의 경우 후자만으로 충분합니다._
 
-Example:
+예시:
 
 ```javascript
 import { observable, observe } from "mobx"
@@ -95,60 +88,60 @@ const person = observable({
     lastName: "Luther"
 })
 
-// Observe all fields.
+// 모든 필드를 관찰합니다.
 const disposer = observe(person, change => {
     console.log(change.type, change.name, "from", change.oldValue, "to", change.object[change.name])
 })
 
 person.firstName = "Martin"
-// Prints: 'update firstName from Maarten to Martin'
+// 출력 값: 'update firstName from Maarten to Martin'
 
-// Ignore any future updates.
+// 이후에 발생하는 모든 업데이트를 무시합니다.
 disposer()
 
-// Observe a single field.
+// 단일 필드를 관찰합니다.
 const disposer2 = observe(person, "lastName", change => {
     console.log("LastName changed to ", change.newValue)
 })
 ```
 
-Related blog: [Object.observe is dead. Long live mobx.observe](https://medium.com/@mweststrate/object-observe-is-dead-long-live-mobservable-observe-ad96930140c5)
+관련 포스트: [Object.observe is dead. Long live mobx.observe](https://medium.com/@mweststrate/object-observe-is-dead-long-live-mobservable-observe-ad96930140c5)
 
-## Event overview
+## 이벤트 오버뷰
 
-The callbacks of `intercept` and `observe` will receive an event object which has at least the following properties:
+`intercept`와 `observe`의 콜백은 적어도 다음 속성을 가진 이벤트 객체를 받습니다.
 
--   `object`: the observable triggering the event.
--   `debugObjectName`: the name of the observable triggering the event (for debugging).
--   `observableKind`: the type of the observable (value, set, array, object, map, computed).
--   `type` (string): the type of the current event.
+-   `object`: 이벤트를 트리거하는 observable
+-   `debugObjectName`: (디버깅을 위해) 이벤트를 트리거하는 observable의 이름
+-   `observableKind`: observable 타입(value, set, array, object, map, computed)
+-   `type` (문자열): 현재 이벤트의 타입
 
-These are the additional fields that are available per type:
+타입별로 사용할 수 있는 추가 필드입니다.
 
-| Observable type              | Event type | Property     | Description                                                                                       | Available during intercept | Can be modified by intercept |
+| Observable 타입              | 이벤트 타입 | 속성     | 설명                                                                                       | intercept하는 동안 사용가능 여부 | intercept로부터 수정 가능 여부 |
 | ---------------------------- | ---------- | ------------ | ------------------------------------------------------------------------------------------------- | -------------------------- | ---------------------------- |
-| Object                       | add        | name         | Name of the property being added.                                                                 | √                          |                              |
-|                              |            | newValue     | The new value being assigned.                                                                     | √                          | √                            |
-|                              | update\*   | name         | Name of the property being updated.                                                               | √                          |                              |
-|                              |            | newValue     | The new value being assigned.                                                                     | √                          | √                            |
-|                              |            | oldValue     | The value that is replaced.                                                                       |                            |                              |
-| Array                        | splice     | index        | Starting index of the splice. Splices are also fired by `push`, `unshift`, `replace`, etc.        | √                          |                              |
-|                              |            | removedCount | Amount of items being removed.                                                                    | √                          | √                            |
-|                              |            | added        | Array with items being added.                                                                     | √                          | √                            |
-|                              |            | removed      | Array with items that were removed.                                                               |                            |                              |
-|                              |            | addedCount   | Amount of items that were added.                                                                  |                            |                              |
-|                              | update     | index        | Index of the single entry being updated.                                                          | √                          |                              |
-|                              |            | newValue     | The newValue that is / will be assigned.                                                          | √                          | √                            |
-|                              |            | oldValue     | The old value that was replaced.                                                                  |                            |                              |
-| Map                          | add        | name         | The name of the entry that was added.                                                             | √                          |                              |
-|                              |            | newValue     | The new value that is being assigned.                                                             | √                          | √                            |
-|                              | update     | name         | The name of the entry being updated.                                                              | √                          |                              |
-|                              |            | newValue     | The new value that is being assigned.                                                             | √                          | √                            |
-|                              |            | oldValue     | The value that has been replaced.                                                                 |                            |                              |
-|                              | delete     | name         | The name of the entry being removed.                                                              | √                          |                              |
-|                              |            | oldValue     | The value of the entry that was removed.                                                          |                            |                              |
-| Boxed & computed observables | create     | newValue     | The value that was assigned during creation. Only available as `spy` event for boxed observables. |                            |                              |
-|                              | update     | newValue     | The new value being assigned.                                                                     | √                          | √                            |
-|                              |            | oldValue     | The previous value of the observable.                                                             |                            |                              |
+| Object                       | add        | name         | 추가할 속성의 이름                                                                 | √                          |                              |
+|                              |            | newValue     | 할당할 새로운 값                                                                     | √                          | √                            |
+|                              | update\*   | name         | 업데이트 할 속성의 이름                                                               | √                          |                              |
+|                              |            | newValue     | 할당할 새로운 값                                                                     | √                          | √                            |
+|                              |            | oldValue     | 대체된 값                                                                       |                            |                              |
+| Array                        | splice     | index        | splice의 시작 인덱스. splice는 `push`, `unshift`, `replace` 등에 의해서도 실행됩니다.        | √                          |                              |
+|                              |            | removedCount | 삭제할 요소의 갯수                                                                    | √                          | √                            |
+|                              |            | added        | 추가할 요소가 있는 배열                                                                     | √                          | √                            |
+|                              |            | removed      | 삭제된 요소가 있는 배열                                                               |                            |                              |
+|                              |            | addedCount   | 추가된 요소의 갯수                                                                  |                            |                              |
+|                              | update     | index        | 업데이트할 단일 엔트리의 인덱스                                                          | √                          |                              |
+|                              |            | newValue     | 할당되었거나 할당할 새로운 값                                                          | √                          | √                            |
+|                              |            | oldValue     | 대체된 이전 값                                                                  |                            |                              |
+| Map                          | add        | name         | 추가된 엔트리의 이름                                                             | √                          |                              |
+|                              |            | newValue     | 할당할 새로운 값                                                             | √                          | √                            |
+|                              | update     | name         | 업데이트할 엔트리의 이름                                                              | √                          |                              |
+|                              |            | newValue     | 할당할 새로운 값                                                             | √                          | √                            |
+|                              |            | oldValue     | 대체된 값                                                                 |                            |                              |
+|                              | delete     | name         | 삭제된 엔트리의 이름                                                              | √                          |                              |
+|                              |            | oldValue     | 삭제된 엔트리의 값                                                          |                            |                              |
+| Boxed & computed observables | create     | newValue     | 생성될 때 할당된 값. boxed observable에서는 `spy` 이벤트로서만 가능합니다. |                            |                              |
+|                              | update     | newValue     | 할당할 새로운 값                                                                     | √                          | √                            |
+|                              |            | oldValue     | observable의 이전 값                                                             |                            |                              |
 
-**Note:** object `update` events won't fire for updated computed values (as those aren't mutations). But it is possible to observe them by explicitly subscribing to the specific property using `observe(object, 'computedPropertyName', listener)`.
+**참고:** 객체 `update` 이벤트는 업데이트된 computed 값에 대해 실행되지 않습니다(해당 computed 값은 mutation이 아니므로). 그러나 `observe(object, 'computedPropertyName', listener)`를 사용하여 특정 속성을 명시적으로 구독하면 이러한 computed 값을 관찰할 수 있습니다.
