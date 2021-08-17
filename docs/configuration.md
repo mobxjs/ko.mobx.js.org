@@ -1,23 +1,23 @@
 ---
-title: Configuration
-sidebar_label: Configuration {🚀}
+title: 환경설정
+sidebar_label: 환경설정 {🚀}
 hide_title: true
 ---
 
 <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEBD4KQ7&placement=mobxjsorg" id="_carbonads_js"></script>
 
-# Configuration {🚀}
+# 환경설정 {🚀}
 
-MobX has several configurations depending on how you prefer to use it, which JavaScript engines you want to target, and whether you want MobX to hint at best practices.
-Most configuration options can be set by using the `configure` method.
+MobX는 사용 방법, 대상으로 지정할 Javascript 엔진 및 Mobx 모범 사례에 대한 암시의 필요성에 따라 몇 가지 환경설정을 제공합니다.
+대부분의 환경설정 옵션은 `configure` 메서드를 사용하여 설정할 수 있습니다.
 
-## Proxy support
+## 프록시(Proxy) 지원
 
-By default, MobX uses proxies to make arrays and plain objects observable. Proxies provide the best performance and most consistent behavior across environments.
-However, if you are targetting an environment that doesn't support proxies, proxy support has to be disabled.
-Most notably this is the case when targetting Internet Explorer or React Native without using the Hermes engine.
+기본적으로 MobX는 프록시를 사용하여 배열과 plain 객체를 observable로 만듭니다. 프록시는 환경 절반에 걸쳐 최고의 성능과 일관된 동작을 제공합니다.
+하지만 프록시를 지원하지 않는 환경을 대상으로 하는 경우엔 프록시 지원을 사용하지 않도록 설정해야 합니다.
+특히 Hermes 엔진을 사용하지 않고 Internet Explorer 또는 React Native를 대상으로 하는 경우엔, 프록시 지원을 사용하지 않도록 설정해야 합니다.
 
-Proxy support can be disabled by using `configure`:
+`configure`을 사용하여 프록시 지원을 사용하지 않도록 설정할 수 있습니다.
 
 ```typescript
 import { configure } from "mobx"
@@ -27,31 +27,31 @@ configure({
 })
 ```
 
-Accepted values for the `useProxies` configuration are:
+`useProxies` 환경설정에 설정할 수 있는 값은 다음과 같습니다.
 
--   `"always"` (**default**): MobX expects to run only in environments with [`Proxy` support](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) and it will error if such an environment is not available.
--   `"never"`: Proxies are not used and MobX falls back on non-proxy alternatives. This is compatible with all ES5 environments, but causes various [limitations](#limitations-without-proxy-support).
--   `"ifavailable"` (experimental): Proxies are used if they are available, and otherwise MobX falls back to non-proxy alternatives. The benefit of this mode is that MobX will try to warn if APIs or language features that wouldn't work in ES5 environments are used, triggering errors when hitting an ES5 limitation running on a modern environment.
+-   `"always"` (**디폴트**): MobX는 [`프록시` 지원](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Proxy)이 되는 환경에서만 실행될 것이며 프록시 환경을 사용할 수 없는 경우 오류가 발생합니다.
+-   `"never"`: 프록시는 사용되지 않으며 MobX는 프록시가 아닌 대안으로 대체됩니다. 이는 모든 ES5 환경과 호환되지만 다양한 [제한](#limitations-without-proxy-support)이 있습니다.
+-   `"ifavailable"` (실험): 프록시를 사용할 수 있는 경우 프록시가 사용되고 그렇지 않은 경우 MobX는 프록시가 아닌 대안으로 대체됩니다. 해당 모드의 장점은 MobX가 ES5 환경에서 작동하지 않는 API 또는 언어 기능을 사용할 경우 경고를 시도하여 최신환경에서 실행되는 ES5 제한에 도달할 때 오류를 트리거한다는 것입니다.
 
-**Note:** before MobX 6, one had to pick either MobX 4 for older engines, or MobX 5 for new engines. However, MobX 6 supports both, although polyfills for certain APIs like Map will be required when targetting older JavaScript engines.
-Proxies cannot be polyfilled. Even though polyfills do exist, they don't support the full spec and are unsuitable for MobX. Don't use them.
+**참고:** MobX 6 이전에는 구형 엔진의 경우 MobX 4를 선택하고, 신형 엔진의 경우 MobX 5를 선택해야 했습니다. 하지만 MobX 6는 이전 Javascript 엔진을 대상으로 할 때 Map과 같은 특정 API에 대해 폴리필이 필요하지만 둘 다 지원합니다.
+프록시는 폴리필할 수 없습니다. 폴리필은 존재하더라도 전체 사양을 지원하지 않으며, MobX에 적합하지 않습니다. 폴리필을 사용하지 마세요.
 
-### Limitations without Proxy support
+### 프록시 지원이 없을 때 생기는 제한 사항
 
-1.  Observable arrays are not real arrays, so they won't pass the `Array.isArray()` check. The practical consequence is that you often need to `.slice()` the array first (to get a shallow copy of the real array) before passing it to third party libraries. For example, concatenating observable arrays doesn't work as expected, so `.slice()` them first.
-2.  Adding or deleting properties of existing observable plain objects after creation is not automatically picked up. If you intend to use objects as index based lookup maps, in other words, as dynamic collections of things, use observable Maps instead.
+1.  observable 배열은 실제 배열이 아니므로 `Array.isArray()` 검사를 통과하지 않습니다. 실질적인 결과는 배열을 다른 라이브러리에 전달하기 전에 먼저 배열을 `.slice()`(실제 배열의 얕은 복사본을 얻기 위해) 해야 하는 경우가 많습니다. 예를 들어, observable 배열을 연결하는(concatenating) 것은 작동하지 않으므로 먼저 `.slice()`를 하세요.
+2.  observable plain 객체 생성 후에 속성을 추가하거나 삭제하는 작업은 자동으로 감지되지 않습니다. 객체를 인덱스 기반 룩업 맵, 즉 동적 사물 컬렉션으로 사용하려면 observable map을 대신 사용하세요.
 
-It is possible to dynamically add properties to objects, and detect their additions, even when Proxies aren't enabled.
-This can be achieved by using the [Collection utilities {🚀}](collection-utilities.md). Make sure that (new) properties are set using the `set` utility, and that the objects are iterated using one of the `values` / `keys` or `entries` utilities, rather than the built-in JavaScript mechanisms.
-But, since this is really easy to forget, we instead recommend using observable Maps if possible.
+프록시가 활성화되지 않은 경우에도 객체에 속성을 동적으로 추가하고 추가 속성을 감지할 수 있습니다.
+이러한 기능은 [컬렉션 유틸리티 {🚀}](collection-utilities.md)를 사용하여 수행할 수 있습니다. (새)속성이 `set` 유틸리티를 사용하여 설정되어야 하고, 객체가 내장 Javascript 메커니즘이 아닌 `values`·`keys` 또는 `entries` 유틸리티 중 하나를 사용하여 반복되어야 합니다.
+하지만, 이러한 점은 정말 잊기 쉽기 때문에 observable map을 사용하는 것이 좋습니다.
 
-## Decorator support
+## 데코레이터 지원
 
-For enabling experimental decorator support check out the [Enabling decorators {🚀}](enabling-decorators.md) section.
+실험적인 데코레이터 기능을 활성화하려면 [데코레이터 활성화 {🚀}](enabling-decorators.md) 섹션을 확인하세요.
 
-## Linting options
+## Linting 옵션
 
-To help you adopt the patterns advocated by MobX, a strict separation between actions, state and derivations, MobX can _"lint"_ your coding patterns at runtime by hinting at smells. To make sure MobX is as strict as possible, adopt the following settings and read on for their explanations:
+MobX가 주장하는 패턴인 action, state, derivation 방식을 엄격하게 구분하여 채택할 수 있도록, MobX는 조사하여 런타임에 "_lint_"할 수 있습니다. MobX가 최대한 엄격해지도록 다음 설정을 적용하고 해당 설명을 계속 읽어 보세요.
 
 ```typescript
 import { configure } from "mobx"
@@ -65,35 +65,35 @@ configure({
 })
 ```
 
-At some point you will discover that this level of strictness can be pretty annoying.
-It is fine to disable these rules to gain productivity once you are sure you (and your colleagues) grokked the mental model of MobX.
+어느 순간엔가 이 정도의 엄격함이 꽤 성가실 수 있다는 것을 알게 될수도 있습니다.
+여러분과 여러분의 동료들이 MobX의 멘탈 모델을 이해했다고 확신하면 생산성을 높이기 위해 이러한 규칙을 비활성화해도 좋습니다.
 
-Also, occassionally you will have a case where you have to supress the warnings triggered by these rules (for example by wrapping in `runInAction`).
-That is fine, there are good exceptions to these recommendations.
-Don't be fundamentalistic about them.
+또한 이러한 규칙에 의해 트리거된 경고를 억제해야 하는 경우(예: `runInAction`으로 래핑)도 있습니다.
+괜찮습니다. 이러한 권장 사항에는 좋은 예외가 있습니다.
+트리거된 경고에 대해 근본주의적으로 굴지 않아도 됩니다.
 
 #### `enforceActions`
 
-The goal of _enforceActions_ is that you don't forget to wrap event handlers in [`action`](actions.md).
+_enforceActions_의 목표는 이벤트 핸들러를 [`action`](actions.md)으로 래핑하는 것을 잊지 않도록 하는 것입니다.
 
-Possible options:
+가능한 옵션:
 
--   `"observed"` (**default**): All state that is observed _somewhere_ needs to be changed through actions. This is the default, and the recommended strictness mode in non-trivial applications.
--   `"never"`: State can be changed from anywhere.
--   `"always"`: State always needs to be changed through actions, which in practice also includes creation.
+-   `"observed"` (**디폴트**): 관찰되는 모든 state는 action을 통해 변경되어야 합니다. 해당 사항은 디폴트로 설정되어 있으며, 중요한 애플리케이션에서 권장되는 엄격 모드입니다.
+-   `"never"`: state는 어디에서나 변경할 수 있습니다.
+-   `"always"`: state의 변경과 생성은 항상 action을 통해 변경해야 합니다.
 
-The benefit of `"observed"` is that it allows you to create observables outside of actions and modify them freely, as long as they aren't used anywhere yet.
+`"observed"`의 이점은 아직 아무 곳에서도 사용되지 않는 한 action 바깥에서 observable을 만들 수 있고, 자유롭게 수정 할 수 있다는 것입니다.
 
-Since state should in principle always be created from some event handlers, and event handlers should be wrapped, `"always"` captures this the best. But you probably don't want to use this mode in unit tests.
+state는 원칙적으로 항상 일부 이벤트 핸들러에서 생성되어야하고 이벤트 핸들러는 래핑되어야 하는데, `"always"`이 이러한 상태를 가장 잘 포착합니다. 그러나 단위 테스트에서는 해당 모드를 사용하고 싶지 않을 것입니다.
 
-In the rare case where you create observables lazily, for example in a computed property, you can wrap the creation ad-hoc in an action using `runInAction`.
+드물지만 computed 속성에서 observable을 느리게 생성하는 경우에는 `runInAction`을 사용하여 action에서 생성 애드혹(ad-hoc)을 래핑할 수 있습니다.
 
 #### `computedRequiresReaction: boolean`
 
-Forbids the direct access of any unobserved computed value from outside an action or reaction.
-This guarantees you aren't using computed values in a way where MobX won't cache them. **Default: `false`**.
+action 또는 reaction 외부에서 관찰되지 않은 computed 값에 대해 직접 액세스 하는 것을 금지합니다.
+따라서 MobX가 값을 캐시하지 않는 방식으로 computed 값을 사용하지 않는 것을 보장합니다. **디폴트: `false`**.
 
-In the following example, MobX won't cache the computed value in the first code block, but will cache the result in the second and third block:
+다음 예에서 MobX는 computed 값을 첫 번째 코드 블록에 캐시하지 않고 결과를 두 번째 및 세 번째 블록에 캐시합니다.
 
 ```javascript
 class Clock {
@@ -111,20 +111,20 @@ class Clock {
 
 const clock = new Clock()
 {
-    // This would compute twice, but is warned against by this flag.
+    // 이것은 두 번 계산되지만 이 플래그에 의해 경고됩니다.
     console.log(clock.milliseconds)
     console.log(clock.milliseconds)
 }
 {
     runInAction(() => {
-        // Will compute only once.
+        // 한 번만 계산합니다.
         console.log(clock.milliseconds)
         console.log(clock.milliseconds)
     })
 }
 {
     autorun(() => {
-        // Will compute only once.
+        // 한 번만 계산합니다.
         console.log(clock.milliseconds)
         console.log(clock.milliseconds)
     })
@@ -133,20 +133,20 @@ const clock = new Clock()
 
 #### `observableRequiresReaction: boolean`
 
-Warns about any unobserved observable access.
-Use this if you want to check whether you are using observables without a "MobX context".
-This is a great way to find any missing `observer` wrappers, for example in React components. But it will find missing actions as well. **Default: `false`**
+관찰되지 않은 observable 액세스에 대해 경고합니다.
+"MobX 컨텍스트" 없이 observable을 사용하고 있는지 확인하려면 `observableRequiresReaction`을 사용하세요.
+이는 React 컴포넌트에서 누락된 `observer` 래퍼를 찾는 좋은 방법입니다. 그뿐만 아니라 누락된 action도 찾을 수 있습니다. **디폴트: `false`**
 
 ```javascript
 configure({ observableRequiresReaction: true })
 ```
 
-**Note:** using propTypes on components that are wrapped with `observer` might trigger false positives for this rule.
+**참고:** `observer`로 래핑된 컴포넌트에서 propType을 사용하면 이 규칙에 대해 false positive가 트리거될 수 있습니다.
 
 #### `reactionRequiresObservable: boolean`
 
-Warns when a reaction (e.g. `autorun`) is created without accessing any observables.
-Use this to check whether you are unnecessarily wrapping React components with `observer`, wrapping functions with `action`, or find cases where you simply forgot to make some data structures or properties observable. **Default: `false`**
+reaction(예: `autorun`)이 observable에 액세스하지 않고 생성되면 경고합니다.
+이렇게 하면 불필요하게 React 컴포넌트를 `observer`로 래핑하고 있거나 함수를 `action`으로 래핑하고 있는지, 또는 일부 데이터 구조나 속성을 observable로 설정하지 않았는지 찾아낼 수 있습니다. **디폴트: `false`**
 
 ```javascript
 configure({ reactionRequiresObservable: true })
@@ -154,11 +154,11 @@ configure({ reactionRequiresObservable: true })
 
 #### `disableErrorBoundaries: boolean`
 
-By default, MobX will catch and re-throw exceptions happening in your code to make sure that a reaction in one exception does not prevent the scheduled execution of other, possibly unrelated, reactions. This means exceptions are not propagated back to the original causing code and therefore you won't be able to catch them using try/catch.
+기본적으로 MobX는 코드에서 발생하는 예외를 catch하고 다시 throw하여 하나의 예외적인 reaction이 다른 reaction의 예약된 실행을 방해하지 않도록 합니다. 즉, 예외가 발생했던 코드로 다시 전파되지 않으므로 try·catch를 사용하여 예외를 catch 할 수 없습니다.
 
-By disabling error boundaries, exceptions can escape derivations. This might ease debugging, but might leave MobX and by extension your application in an unrecoverable broken state. **Default: `false`**.
+error boundaries를 비활성화하면 예외가 derivation을 벗어날 수 있습니다. 이렇게 하면 디버깅이 쉬울 수 있지만, MobX 및 확장으로 인해 응용 프로그램이 복구할 수 없는 손상된 상태가 될 수 있습니다. **디폴트: `false`**.
 
-This option is great for unit tests, but remember to call `_resetGlobalState` after each test, for example by using `afterEach` in jest, for example:
+이 옵션은 단위테스트에 적합하지만, 각 테스트 후에 `_resetGlobalState`를 호출해야 합니다. jest에서는 `afterEach`를 사용합니다.
 
 ```js
 import { _resetGlobalState, observable, autorun, configure } from "mobx"
@@ -182,22 +182,22 @@ afterEach(() => {
 
 #### `safeDescriptors: boolean`
 
-MobX makes some fields **non-configurable** or **non-writable** to prevent you from doing things that are not supported or would most likely break your code. However this can also prevent **spying/mocking/stubbing** in your tests.
-`configure({ safeDescriptors: false })` disables this safety measure, making everything **configurable** and **writable**.
-Note it doesn't affect existing observables, only the ones created after it's been configured.
-<span style="color:red">**Use with caution**</span> and only when needed - do not turn this off globally for all tests, otherwise you risk false positives (passing tests with broken code). **Default: `true`**
+MobX는 일부 필드를 **환경 설정할 수 없거**나 **쓸 수 없도록** 만들어서, 지원되지 않거나 코드를 손상할 가능성이 가장 큰 작업을 수행하지 못하도록 합니다. 그러나 이러한 설정은 테스트에서 **spying·mocking·stubbing**을 예방할 수도 있습니다.
+`configure({ safeDescriptors: false })`를 사용하면 안전 조치가 비활성화되어 모든 항목에 대해 **환경설정** 및 **쓸 수** 있습니다.
+기존 observable에는 영향을 주지 않으며, 환경설정이 완료된 후에 생성된 observable에만 영향을 줍니다.
+필요할 때만 <span style="color:red">**주의해서 사용하세요**</span>. - 모든 테스트에 대해 해당 기능을 전역적으로 끄지 마세요. 그렇지 않으면, 오탐(코드가 깨진 테스트 통과)의 위험이 있습니다. **디폴트: `true`**
 
 ```javascript
 configure({ safeDescriptors: false })
 ```
 
-## Further configuration options
+## 추가 환경설정 옵션
 
 #### `isolateGlobalState: boolean`
 
-Isolates the global state of MobX when there are multiple instances of MobX active in the same environment. This is useful when you have an encapsulated library that is using MobX, living in the same page as the app that is using MobX. The reactivity inside the library will remain self-contained when you call `configure({ isolateGlobalState: true })` from it.
+동일한 환경에서 MobX 인스턴스가 여러 개 활성 상태인 경우 MobX의 전역 state를 격리합니다. 이러한 설정은 MobX를 사용하는 캡슐화된 라이브러리가 있고 MobX를 사용하는 앱과 동일한 페이지가 있을 때 유용합니다. 라이브러리에서 `configure({ isolateGlobalState: true })`을 호출하면 라이브러리 내부의 반응성이 자동으로 유지됩니다.
 
-Without this option, if multiple MobX instances are active, their internal state will be shared. The benefit is that observables from both instances work together, the downside is that the MobX versions have to match. **Default: `false`**
+해당 옵션이 없고 여러 MobX 인스턴스가 활성 상태인 경우 내부 state는 공유됩니다. 이러한 경우 두 인스턴스의 observable을 함께 사용할 수 있다는 장점이 있으며, MobX 버전이 일치해야 한다는 단점이 있습니다. **디폴트: `false`**
 
 ```javascript
 configure({ isolateGlobalState: true })
@@ -205,9 +205,9 @@ configure({ isolateGlobalState: true })
 
 #### `reactionScheduler: (f: () => void) => void`
 
-Sets a new function that executes all MobX reactions.
-By default `reactionScheduler` just runs the `f` reaction without any other behavior.
-This can be useful for basic debugging, or slowing down reactions to visualize application updates. **Default: `f => f()`**
+모든 MobX reaction을 실행하는 새 함수를 설정합니다.
+기본적으로 `reactionScheduler`는 다른 동작 없이 `f` reaction만 실행합니다.
+이 기능은 기본 디버깅을 수행하거나 애플리케이션 업데이트를 시각화하는 reaction 속도를 늦출 때 유용합니다. **디폴트: `f => f()`**
 
 ```javascript
 configure({
