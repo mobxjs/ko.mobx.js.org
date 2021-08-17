@@ -1,31 +1,30 @@
 ---
-title: Understanding reactivity
-sidebar_label: Understanding reactivity
+title: 반응성 이해하기
+sidebar_label: 반응성 이해하기
 hide_title: true
 ---
 
 <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEBD4KQ7&placement=mobxjsorg" id="_carbonads_js"></script>
 
-# Understanding reactivity
+# 반응성 이해하기
 
-MobX usually reacts to exactly the things you expect it to, which means that in 90% of your use cases MobX should "just work".
-However, at some point you will encounter a case where it does not do what you expected.
-At that point it is invaluable to understand how MobX determines what to react to.
+MobX는 일반적으로 사용자가 기대하는 사항에 정확히 반응합니다. 즉, 사용 사례의 90% 정도는 MobX가 "바로 작동"해야 합니다.
+그러나 어느 순간 예상했던 대로 되지 않는 경우가 발생할 수 있습니다. 그 시점에서 MobX가 무엇에 반응할지를 어떻게 결정하는지 이해하는 것이 중요합니다.
 
-> MobX reacts to any _existing_ **observable** _property_ that is read during the execution of a tracked function.
+> MobX는 추적된 함수의 실행 과정에서 읽히는 _기존의_ **observable** _속성_에 반응합니다.
 
--   _"reading"_ is dereferencing an object's property, which can be done through "dotting into" it (eg. `user.name`) or using the bracket notation (eg. `user['name']`, `todos[3]`).
--   _"tracked functions"_ are the expression of `computed`, the _rendering_ of an `observer` React function component, the `render()` method of an `observer` based React class component, and the functions that are passed as the first param to `autorun`, `reaction` and `when`.
--   _"during"_ means that only those observables that are read while the function is executing are tracked. It doesn't matter whether these values are used directly or indirectly by the tracked function. But things that have been 'spawned' from the function won't be tracked (e.g. `setTimeout`, `promise.then`, `await` etc).
+-   _"읽는다"_란 점 표기법(예 : `user.name`) 또는 괄호 표기법(예 : `user['name']`, `todos[3]`)을 통해 객체 속성을 역참조하는 것입니다.
+-   _"추적된 함수"_란 `computed`, `observer`인 React 함수 컴포넌트의 _렌더링_, React 클래스 컴포넌트 기반 `observer`에서의 `render()` 메서드 및 `autorun`, `reaction`, `when`의 첫 번째 파라미터로 전달되는 함수를 말합니다.
+-   _"과정에서"_란 함수가 실행되는 동안 읽히는 observable만이 추적됨을 의미합니다. 해당 값이 추적된 함수에 의해 직접적으로 사용되는지 간접적으로 사용되는지는 중요하지 않습니다. 그러나 함수에서 '스폰(spawn)'된 항목은 추적되지 않습니다.(예 : `setTimeout`, `promise.then`, `await` 등)
 
-In other words, MobX will not react to:
+다르게 말하면, MobX는 다음과 같은 항목에는 반응하지 않습니다.
 
--   Values that are obtained from observables, but outside a tracked function
--   Observables that are read in an asynchronously invoked code block
+-   observable로부터 얻어졌지만 추적된 함수 외부에 있는 값
+-   비동기적으로 호출된 코드 블록에서 읽어진 observable
 
-## MobX tracks property access, not values
+## MobX는 값이 아닌 속성 액세스를 추적합니다
 
-To elaborate on the above rules with an example, suppose that you have the following observable instance:
+위의 규칙을 예제로 자세히 설명하기 위해 다음과 같은 observable 인스턴스가 있다고 가정합니다.
 
 ```javascript
 class Message {
@@ -47,17 +46,17 @@ class Message {
 let message = new Message("Foo", { name: "Michel" }, ["Joe", "Sara"])
 ```
 
-In memory this looks as follows. The green boxes indicate _observable_ properties. Note that the _values_ themselves are not observable!
+위 코드는 다음과 같이 표현될 수 있습니다. 녹색 상자는 _observable_ 속성을 나타냅니다. _값_ 자체는 observable이 아닙니다!
 
 ![MobX reacts to changing references](assets/observed-refs.png)
 
-What MobX basically does is recording which _arrows_ you use in your function. After that, it will re-run whenever one of these _arrows_ changes; when they start to refer to something else.
+MobX가 기본적으로 하는 일은 함수에서 사용하는 _화살표_를 기록하는 것입니다. 이후에는 이러한 _화살표_ 중 하나가 변경될 때(다른 항목을 참조하기 시작할 때)마다 재실행합니다.
 
-## Examples
+## 예시
 
-Let's show that with a bunch of examples (based on the `message` variable defined above):
+위에서 정의한 `message` 변수를 기반으로 여러 가지 예제를 통해 확인해봅시다.
 
-#### Correct: dereference inside the tracked function
+#### 옳은 예: 추적된 함수 내에서의 역참조
 
 ```javascript
 autorun(() => {
@@ -66,9 +65,9 @@ autorun(() => {
 message.updateTitle("Bar")
 ```
 
-This will react as expected. The `.title` property was dereferenced by the autorun, and changed afterwards, so this change is detected.
+위 코드는 예상대로 반응합니다. `.title` 속성은 autorun에서 역참조된 후 변경되었으므로 해당 변경 내용이 감지됩니다.
 
-You can verify what MobX will track by calling [`trace()`](analyzing-reactivity.md) inside the tracked function. In the case of the above function it outputs the following:
+추적된 함수 내에서 [`trace()`](analyzing-reactivity.md)를 호출하면 MobX가 무엇을 추적하는지 확인할 수 있습니다. 위 함수의 경우 다음을 출력합니다.
 
 ```javascript
 import { trace } from "mobx"
@@ -77,27 +76,27 @@ const disposer = autorun(() => {
     console.log(message.title)
     trace()
 })
-// Outputs:
+// 출력 값:
 // [mobx.trace] 'Autorun@2' tracing enabled
 
 message.updateTitle("Hello")
-// Outputs:
+// 출력 값:
 // [mobx.trace] 'Autorun@2' is invalidated due to a change in: 'Message@1.title'
 Hello
 ```
 
-It is also possible to get the internal dependency (or observer) tree by using `getDependencyTree`:
+`getDependencyTree`를 사용하여 내부 종속성(또는 observer) 트리를 가져올 수도 있습니다.
 
 ```javascript
 import { getDependencyTree } from "mobx"
 
-// Prints the dependency tree of the reaction coupled to the disposer.
+// disposer에 복제된 reaction의 종속성 트리(dependency tree)를 출력합니다.
 console.log(getDependencyTree(disposer))
-// Outputs:
+// 출력 값:
 // { name: 'Autorun@2', dependencies: [ { name: 'Message@1.title' } ] }
 ```
 
-#### Incorrect: changing a non-observable reference
+#### 옳지 않은 예: observable 속성이 아닌 참조의 변경
 
 ```javascript
 autorun(() => {
@@ -106,21 +105,22 @@ autorun(() => {
 message = new Message("Bar", { name: "Martijn" }, ["Felicia", "Marcus"])
 ```
 
-This will **not** react. `message` was changed, but `message` is not an observable, just a variable which _refers to_ an observable, but the variable (reference) itself is not observable.
+위 코드는 반응하지 **않습니다**. `message`가 변경되었지만 `message`는 observable 변수가 아니라 observable을 참조하는 변수일 뿐이며 변수(참조) 자체는 observable이 아니기 때문입니다.
 
-#### Incorrect: dereference outside of a tracked function
+#### 옳지 않은 예: 추적된 함수 외부에서의 역참조
 
 ```javascript
 let title = message.title
 autorun(() => {
     console.log(title)
 })
-message.updateMessage("Bar")
+message.updateTitle("Bar")
 ```
 
-This will **not** react. `message.title` was dereferenced outside of `autorun`, and just contains the value of `message.title` at the moment of dereferencing (the string `"Foo"`). `title` is not an observable so `autorun` will never react.
+위 코드는 반응하지 **않습니다**. `message.title`은 `autorun` 밖에서 역참조되었으며, 역참조하는 순간에 `message.title`의 값(문자열 `"Foo"`)만을 담고 있기 때문입니다.
+`title`은 observable이 아니므로 `autorun`에서 절대 반응하지 않습니다.
 
-#### Correct: dereference inside the tracked function
+#### 옳은 예: 추적된 함수 내에서의 역참조
 
 ```javascript
 autorun(() => {
@@ -135,12 +135,11 @@ runInAction(() => {
 })
 ```
 
-This reacts to both changes. Both `author` and `author.name` are dotted into, allowing MobX to track these references.
+위 코드는 두 가지 변화에 모두 반응합니다. 점 표기법으로 `author`와 `author.name`에 모두 접근했으므로 MobX가 해당 참조를 추적할 수 있습니다.
 
-Note that we had to use `runInAction` here to be allowed to make changes outside
-of an `action`.
+또한 `action` 외부에서의 변경을 허용하기 위해 `runInAction`을 사용했습니다.
 
-#### Incorrect: store a local reference to an observable object without tracking
+#### 옳지 않은 예: 추적 없이 observable 객체에 로컬 참조 저장하기
 
 ```javascript
 const author = message.author
@@ -156,47 +155,47 @@ runInAction(() => {
 })
 ```
 
-The first change will be picked up, `message.author` and `author` are the same object, and the `.name` property is dereferenced in the autorun.
-However, the second change is **not** picked up, because the `message.author` relation is not tracked by the `autorun`. Autorun is still using the "old" `author`.
+`message.author`와 `author`가 동일한 객체이고 `.name` 속성은 autorun에서 역참조되었기 때문에 첫 번째 변경사항은 감지됩니다.
+하지만 `autorun`에서 `message.author` 관계를 추적하지 않으므로 두 번째 변경사항은 감지되지 **않습니다**. autorun은 여전히 "이전의" `author`를 사용하고 있습니다.
 
-#### Common pitfall: console.log
+#### 흔한 함정: console.log
 
 ```javascript
 autorun(() => {
     console.log(message)
 })
 
-// Won't trigger a re-run.
+// 다시 트리거 되지 않습니다.
 message.updateTitle("Hello world")
 ```
 
-In the above example, the updated message title won't be printed, because it is not used inside the autorun.
-The autorun only depends on `message`, which is not an observable, but a variable. In other words, as far as MobX is concerned, `title` is not used in the `autorun`.
+위의 예에서 업데이트된 message title은 autorun 내에서 사용되지 않기 때문에 출력되지 않습니다.
+autorun은 observable이 아닌 변수 `message`에만 의존합니다. 다르게 말하면, MobX는 `autorun`에서 `title`이 사용되지 않았다고 인식합니다.
 
-If you use this in a web browser debugging tool, you may be able to find the
-updated value of `title` after all, but this is misleading -- autorun run after all has run once when it was first called. This happens because `console.log` is an asynchronous function and the object is only formatted later in time. This means that if you follow the title in the debugging toolbar, you can find the updated value. But the `autorun` does not track any updates.
+웹브라우저 디버깅 도구에서 위와 같이 사용하면 결국 `title`의 업데이트된 값을 발견할 수 있겠지만 이는 오해의 소지가 있습니다. 
+autorun은 처음 호출될 때 한 번 실행됩니다. `title`의 업데이트 된 값을 발견할 수 있는 문제는 `console.log`가 비동기 함수이고 객체가 나중에 포맷되기 때문에 발생합니다. 즉, 디버깅 툴바에서 title을 따라가면 업데이트된 값을 찾을 수 있습니다. 그러나 `autorun`은 업데이트를 추적하지 않습니다.
 
-The way to make this work is to make sure to always pass immutable data or defensive copies to `console.log`. So the following solutions all react to changes in `message.title`:
+위 작업을 수행하는 방법은 불변 데이터(immutable data) 또는 방어적 복사본(defensive copy)을 항상 `console.log`에 전달하는 것입니다. 따라서 다음 방법들은 모두 `message.title`의 변경사항에 반응합니다.
 
 ```javascript
 autorun(() => {
-    console.log(message.title) // Clearly, the `.title` observable is used.
+    console.log(message.title) // `.title` observable이 명확히 사용되었습니다.
 })
 
 autorun(() => {
-    console.log(mobx.toJS(message)) // toJS creates a deep clone, and thus will read the message.
+    console.log(mobx.toJS(message)) // toJS가 깊은(deep) 클론을 생성하기 때문에 message를 읽을 수 있습니다.
 })
 
 autorun(() => {
-    console.log({ ...message }) // Creates a shallow clone, also using `.title` in the process.
+    console.log({ ...message }) // 프로세스의 `.title`을 사용하여 얕은(shallow) 클론을 생성합니다.
 })
 
 autorun(() => {
-    console.log(JSON.stringify(message)) // Also reads the entire structure.
+    console.log(JSON.stringify(message)) // 전체 구조를 읽습니다.
 })
 ```
 
-#### Correct: access array properties in tracked function
+#### 옳은 예: 추적된 함수의 배열 속성에 액세스하기
 
 ```javascript
 autorun(() => {
@@ -205,11 +204,11 @@ autorun(() => {
 message.likes.push("Jennifer")
 ```
 
-This will react as expected. `.length` counts towards a property.
-Note that this will react to _any_ change in the array.
-Arrays are not tracked per index / property (like observable objects and maps), but as a whole.
+위 코드는 예상대로 반응합니다. `.length`는 속성의 요소를 카운트합니다.
+이 방법은 배열의 _어떠한_ 변화에도 반응합니다.
+배열은 observable 객체와 map처럼 인덱스∙속성별로 추적되는 것이 아니라 전체로서 추적됩니다.
 
-#### Incorrect: access out-of-bounds indices in tracked function
+#### 옳지 않은 예: 추적된 함수의 범위를 벗어난 인덱스에 액세스하기
 
 ```javascript
 autorun(() => {
@@ -218,11 +217,11 @@ autorun(() => {
 message.likes.push("Jennifer")
 ```
 
-This will react with the above sample data because array indexes count as property access. But **only** if the provided `index < length`.
-MobX does not track not-yet-existing array indices.
-So always guard your array index based access with a `.length` check.
+배열 인덱스는 속성 액세스로 계산되기 때문에 위의 샘플 데이터와 반응합니다. 그러나 **오직** 제공된 `index가 length보다 작은(index < length)` 경우에만 해당됩니다.
+MobX는 아직 존재하지 않는 배열 인덱스를 추적하지 않습니다.
+따라서 배열 인덱스를 기반으로 액세스하는 경우 항상 `.length`를 확인하세요.
 
-#### Correct: access array functions in tracked function
+#### 옳은 예: 추적된 함수의 배열 함수에 액세스하기
 
 ```javascript
 autorun(() => {
@@ -231,7 +230,7 @@ autorun(() => {
 message.likes.push("Jennifer")
 ```
 
-This will react as expected. All array functions that do not mutate the array are tracked automatically.
+위 코드는 예상대로 반응합니다. 배열을 변경하지 않는 모든 배열 함수는 자동으로 추적됩니다.
 
 ---
 
@@ -242,9 +241,9 @@ autorun(() => {
 message.likes[2] = "Jennifer"
 ```
 
-This will react as expected. All array index assignments are detected, but only if `index <= length`.
+위 코드는 예상대로 반응합니다. `index <= length`인 경우에만 모든 배열 인덱스 할당이 감지됩니다.
 
-#### Incorrect: "use" an observable but without accessing any of its properties
+#### 옳지 않은 예: observable의 어떠한 속성에도 액세스하지 않고 "사용"하기
 
 ```javascript
 autorun(() => {
@@ -253,10 +252,10 @@ autorun(() => {
 message.likes.push("Jennifer")
 ```
 
-This will **not** react. Simply because the `likes` array itself is not being used by the `autorun`, only the reference to the array.
-So in contrast, `messages.likes = ["Jennifer"]` would be picked up; that statement does not modify the array, but the `likes` property itself.
+위 코드는 예상대로 반응하지 **않습니다**. 단순히 `likes` 배열 자체가 `autorun`에서 사용되지 않고 배열에 대한 참조만 사용되고 있기 때문입니다.
+반대로 `messages.likes = ["Jennifer"]`는 잘 반응할 것입니다. 해당 문은 배열을 수정하는 것이 아니라 `likes` 속성 자체를 수정하기 때문입니다.
 
-#### Correct: using not yet existing map entries
+#### 옳은 예: 아직 존재하지 않는 map 엔트리 사용하기
 
 ```javascript
 const twitterUrls = observable.map({
@@ -272,13 +271,12 @@ runInAction(() => {
 })
 ```
 
-This **will** react. Observable maps support observing entries that may not exist.
-Note that this will initially print `undefined`.
-You can check for the existence of an entry first by using `twitterUrls.has("Sara")`.
-So in an environment without Proxy support for dynamically keyed collections always use observable maps. If you do have Proxy support you can use observable maps as well,
-but you also have the option to use plain objects.
+위 코드는 반응할 **것입니다**. observable map은 존재하지 않을 수 있는 엔트리를 관찰하도록 도와줍니다.
+처음에는 `undefined`가 출력됩니다.
+`twitterUrls.has("Sara")`를 사용하면 엔트리의 존재 여부를 먼저 확인할 수 있습니다.
+따라서 동적 키 수집에 대한 프록시 지원이 없는 환경에서는 항상 observable map을 사용하세요. 프록시 지원이 있는 경우 observable map도 사용할 수 있지만 plain 객체를 사용할 수도 있습니다.
 
-#### MobX does not track asynchronously accessed data
+#### MobX는 비동기적으로 액세스된 데이터를 추적하지 않습니다
 
 ```javascript
 function upperCaseAuthorName(author) {
@@ -294,7 +292,7 @@ runInAction(() => {
 })
 ```
 
-This will react. Even though `author.name` is not dereferenced by the function passed to `autorun` itself, MobX will still track the dereferencing that happens in `upperCaseAuthorName`, because it happens _during_ the execution of the autorun.
+위 코드는 반응합니다. `author.name`이 `autorun`에 전달된 함수에서 자체적으로 역참조되지는 않았지만, MobX는 `upperCaseAuthorName`에서 발생하는 역참조를 추적할 것입니다. 해당 역참조는 autorun이 실행되는 _동안_ 발생하기 때문입니다.
 
 ---
 
@@ -308,11 +306,11 @@ runInAction(() => {
 })
 ```
 
-This will **not** react because during the execution of the `autorun` no observables were accessed, only during the `setTimeout`, which is an asynchronous function.
+위 코드는 반응하지 **않습니다**. `autorun` 실행 중에는 어떠한 observable도 액세스 되지 않으며, 비동기 함수인 `setTimeout`을 실행하는 동안에만 액세스 되기 때문입니다.
 
-Check out the [Asynchronous actions](actions.md#asynchronous-actions) section as well.
+[비동기 action](actions.md#asynchronous-actions) 섹션을 함께 확인해보세요.
 
-#### Using non-observable object properties
+#### observable이 아닌 객체 속성 사용하기
 
 ```javascript
 autorun(() => {
@@ -324,14 +322,14 @@ runInAction(() => {
 })
 ```
 
-This **will** react if you run React in an environment that supports Proxy.
-Note that this is only done for objects created with `observable` or `observable.object`. New properties on class instances will not be made observable automatically.
+위 코드는 프록시를 지원하는 환경에서 React를 실행하는 경우 **반응합니다**.
+이 작업은 `observable` 또는 `observable.object`로 생성된 객체에 대해서만 수행됩니다. 클래스 인스턴스의 새 속성은 자동으로 observable이 되지 않습니다.
 
-_Environments without Proxy support_
+_프록시를 지원하지 않는 환경_
 
-This will **not** react. MobX can only track observable properties, and 'age' has not been defined as observable property above.
+위 코드는 반응하지 **않습니다**. MobX는 observable 속성만 추적할 수 있으며 'age'는 위에서 observable 속성으로 정의되지 않았습니다.
 
-However, it is possible to use the `get` and `set` methods as exposed by MobX to work around this:
+그러나 MobX에서 지원하는 `get` 및 `set` 메서드를 사용하면 다음과 같은 작업을 수행할 수 있습니다.
 
 ```javascript
 import { get, set } from "mobx"
@@ -342,7 +340,7 @@ autorun(() => {
 set(message.author, "age", 10)
 ```
 
-#### [Without Proxy support] Incorrect: using not yet existing observable object properties
+#### [프록시 지원이 없을 때] 옳지 않은 예: 아직 존재하지 않는 observable 객체 속성 사용하기
 
 ```javascript
 autorun(() => {
@@ -353,16 +351,14 @@ extendObservable(message.author, {
 })
 ```
 
-This will **not** react. MobX will not react to observable properties that did not exist when tracking started.
-If the two statements are swapped, or if any other observable causes the `autorun` to re-run, the `autorun` will start tracking the `age` as well.
+위 코드는 반응하지 **않습니다**. MobX는 추적이 시작될 때 존재하지 않았던 observable 속성에 반응하지 않습니다.
+두 문장이 바뀌거나 다른 observable로 인해 `autorun`이 재실행되면 `autorun`에서 `age`를 추적하기 시작합니다.
 
-#### [Without Proxy support] Correct: using MobX utilities to read / write to objects
+#### [프록시 지원이 없을 때] 옳은 예: MobX 유틸리티를 사용해서 객체를 읽거나(read) 쓰기(write)
 
-If you are in an environment without proxy support and still want to use observable
-objects as a dynamic collection, you can handle them using the MobX `get` and `set`
-API.
+프록시 지원이 없는 환경에서 observable 객체를 동적 컬렉션(dynamic collection)으로 사용하려면 MobX의 `get` 및 `set` API를 사용하세요.
 
-The following will react as well:
+다음 코드도 반응합니다.
 
 ```javascript
 import { get, set, observable } from "mobx"
@@ -380,8 +376,8 @@ runInAction(() => {
 })
 ```
 
-Check out the [Collection utilities API](api.md#collection-utilities-) for more details.
+더 자세한 내용은 [Collection utilities API](api.md#collection-utilities-)에서 확인하세요.
 
-#### TL;DR
+#### 요약
 
-> MobX reacts to any _existing_ **observable** _property_ that is read during the execution of a tracked function.
+> MobX는 추적된 함수의 실행 과정에서 읽히는 _기존의_ **observable** _속성_에 반응합니다.
