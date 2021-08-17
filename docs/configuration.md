@@ -39,10 +39,10 @@ configure({
 ### 프록시 지원이 없을 때 생기는 제한 사항
 
 1.  observable 배열은 실제 배열이 아니므로 `Array.isArray()` 검사를 통과하지 않습니다. 실질적인 결과는 배열을 다른 라이브러리에 전달하기 전에 먼저 배열을 `.slice()`(실제 배열의 얕은 복사본을 얻기 위해) 해야 하는 경우가 많습니다. 예를 들어, observable 배열을 연결하는(concatenating) 것은 작동하지 않으므로 먼저 `.slice()`를 하세요.
-2.  observable plain 객체 생성 후에 속성을 추가하거나 삭제하는 작업은 자동으로 선택되지 않습니다. 객체를 인덱스 기반 룩업 맵, 즉 동적 사물 컬렉션으로 사용하려면 observable map을 대신 사용하세요.
+2.  observable plain 객체 생성 후에 속성을 추가하거나 삭제하는 작업은 자동으로 감지되지 않습니다. 객체를 인덱스 기반 룩업 맵, 즉 동적 사물 컬렉션으로 사용하려면 observable map을 대신 사용하세요.
 
 프록시가 활성화되지 않은 경우에도 객체에 속성을 동적으로 추가하고 추가 속성을 감지할 수 있습니다.
-이러한 기능은 [컬렉션 유틸리티 {🚀}](collection-utilities.md) 사용하여 수행할 수 있습니다. (새)속성이 `set` 유틸리티를 사용하여 설정되고, 객체가 내장 Javascript 메커니즘이 아닌 `values`·`keys` 또는 `entries` 유틸리티 중 하나를 사용하여 객체를 반복해야 합니다.
+이러한 기능은 [컬렉션 유틸리티 {🚀}](collection-utilities.md)를 사용하여 수행할 수 있습니다. (새)속성이 `set` 유틸리티를 사용하여 설정되어야 하고, 객체가 내장 Javascript 메커니즘이 아닌 `values`·`keys` 또는 `entries` 유틸리티 중 하나를 사용하여 반복되어야 합니다.
 하지만, 이러한 점은 정말 잊기 쉽기 때문에 observable map을 사용하는 것이 좋습니다.
 
 ## 데코레이터 지원
@@ -68,7 +68,7 @@ configure({
 어느 순간엔가 이 정도의 엄격함이 꽤 성가실 수 있다는 것을 알게 될수도 있습니다.
 여러분과 여러분의 동료들이 MobX의 멘탈 모델을 이해했다고 확신하면 생산성을 높이기 위해 이러한 규칙을 비활성화해도 좋습니다.
 
-또한 이러한 규칙에 의해 트리거된 경고(예: `runInAction`으로 래핑)를 억제해야 하는 경우도 있습니다.
+또한 이러한 규칙에 의해 트리거된 경고를 억제해야 하는 경우(예: `runInAction`으로 래핑)도 있습니다.
 괜찮습니다. 이러한 권장 사항에는 좋은 예외가 있습니다.
 트리거된 경고에 대해 근본주의적으로 굴지 않아도 됩니다.
 
@@ -78,7 +78,7 @@ _enforceActions_의 목표는 이벤트 핸들러를 [`action`](actions.md)으�
 
 가능한 옵션:
 
--   `"observed"` (**디폴트**): 관찰되는 모든 state는 action을 통해 변경되어야 합니다.
+-   `"observed"` (**디폴트**): 관찰되는 모든 state는 action을 통해 변경되어야 합니다. 해당 사항은 디폴트로 설정되어 있으며, 중요한 애플리케이션에서 권장되는 엄격 모드입니다.
 -   `"never"`: state는 어디에서나 변경할 수 있습니다.
 -   `"always"`: state의 변경과 생성은 항상 action을 통해 변경해야 합니다.
 
@@ -86,7 +86,7 @@ _enforceActions_의 목표는 이벤트 핸들러를 [`action`](actions.md)으�
 
 state는 원칙적으로 항상 일부 이벤트 핸들러에서 생성되어야하고 이벤트 핸들러는 래핑되어야 하는데, `"always"`이 이러한 상태를 가장 잘 포착합니다. 그러나 단위 테스트에서는 해당 모드를 사용하고 싶지 않을 것입니다.
 
-드물지만 computed 속성에서 observable을 느리게 생성하는 경우에는 `runInAction`을 사용하여 임시 생성을 래핑할 수 있습니다.
+드물지만 computed 속성에서 observable을 느리게 생성하는 경우에는 `runInAction`을 사용하여 action에서 생성 애드혹(ad-hoc)을 래핑할 수 있습니다.
 
 #### `computedRequiresReaction: boolean`
 
@@ -135,7 +135,7 @@ const clock = new Clock()
 
 관찰되지 않은 observable 액세스에 대해 경고합니다.
 "MobX 컨텍스트" 없이 observable을 사용하고 있는지 확인하려면 `observableRequiresReaction`을 사용하세요.
-이렇게 하면 React 컴포넌트에서 누락된 `observer` 래퍼를 찾는 좋은 방법입니다. 그뿐만 아니라 누락된 action도 찾을 수 있습니다. **디폴트: `false`**
+이는 React 컴포넌트에서 누락된 `observer` 래퍼를 찾는 좋은 방법입니다. 그뿐만 아니라 누락된 action도 찾을 수 있습니다. **디폴트: `false`**
 
 ```javascript
 configure({ observableRequiresReaction: true })
@@ -146,7 +146,7 @@ configure({ observableRequiresReaction: true })
 #### `reactionRequiresObservable: boolean`
 
 reaction(예: `autorun`)이 observable에 액세스하지 않고 생성되면 경고합니다.
-이렇게 하면 불필요한 React 컴포넌트를 불필요하게 `observer`나 `action`으로 래핑하고 있는지, 일부 데이터 구조나 속성을 observable로 하지 않은 경우를 찾을 수 있습니다. **디폴트: `false`**
+이렇게 하면 불필요하게 React 컴포넌트를 `observer`로 래핑하고 있거나 함수를 `action`으로 래핑하고 있는지, 또는 일부 데이터 구조나 속성을 observable로 설정하지 않았는지 찾아낼 수 있습니다. **디폴트: `false`**
 
 ```javascript
 configure({ reactionRequiresObservable: true })
@@ -197,7 +197,7 @@ configure({ safeDescriptors: false })
 
 동일한 환경에서 MobX 인스턴스가 여러 개 활성 상태인 경우 MobX의 전역 state를 격리합니다. 이러한 설정은 MobX를 사용하는 캡슐화된 라이브러리가 있고 MobX를 사용하는 앱과 동일한 페이지가 있을 때 유용합니다. 라이브러리에서 `configure({ isolateGlobalState: true })`을 호출하면 라이브러리 내부의 반응성이 자동으로 유지됩니다.
 
-해당 옵션이 없고 여러 MobX 인스턴스가 활성 상태인 경우 내부 state는 공유됩니다. 이러한 경우 두 인스턴스에서 모두 관찰할 수 있는 장점이 있으며, MobX 버전이 일치해야 한다는 단점이 있습니다. **디폴트: `false`**
+해당 옵션이 없고 여러 MobX 인스턴스가 활성 상태인 경우 내부 state는 공유됩니다. 이러한 경우 두 인스턴스의 observable을 함께 사용할 수 있다는 장점이 있으며, MobX 버전이 일치해야 한다는 단점이 있습니다. **디폴트: `false`**
 
 ```javascript
 configure({ isolateGlobalState: true })
