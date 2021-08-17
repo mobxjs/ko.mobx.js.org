@@ -11,7 +11,7 @@ hide_title: true
 동일한 일반 API를 사용하여 observable arrays, objects, Maps를 조작할 수 있습니다.
 이러한 API는 완전히 반응적입니다. 즉, [Proxy 지원 없이도](configuration.md#limitations-without-proxy-support) `set`을 사용하여 새로운 속성을 추가하고 `values`나 `keys`를 사용하여 observable arrays, objects, Maps를 반복하면 MobX에 의해 감지될 수 있습니다.
 
-`values`, `keys`, `entries`의 또 다른 장점은 이터레이터(iterator) 대신 배열을 반환하여 결과에 대해 즉시 `.map(fn)`을 호출할 수 있습니다.
+`values`, `keys`, `entries`의 또 다른 장점은 이터레이터(iterator) 대신 배열을 반환하여 결과에 대해 즉시 `.map(fn)`을 호출할 수 있다는 것입니다.
 
 이런 장점들이 있지만, 일반적인 프로젝트에서는 이러한 API를 사용할 이유가 거의 없습니다.
 
