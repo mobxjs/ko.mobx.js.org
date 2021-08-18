@@ -45,7 +45,7 @@ class TodoList {
 ```
 
 MobX 6 이전에는 생성자에서 `makeObservable(this)` 호출이 요구되지 않았지만 6버전 이후로는 다릅니다. 해당 호출을 통해 데코레이터 구현이 더 간단해지고 호환성이 높아졌기 때문입니다.
-이는 MobX가 데코레이터 정보에 따라 인스턴스를 observable로 설정하도록 지시합니다. 데코레이터는 `makeObservable`의 두 번째 인수를 대신합니다.(⭐️이게 뭔말이지.. 두번째 인수가 어디를 말하는거야?)
+이는 MobX가 데코레이터 정보에 따라 인스턴스를 observable로 설정하도록 지시합니다. 데코레이터는 `makeObservable`의 두 번째 인수를 대신합니다.
 
 우리는 이러한 형태로 계속해서 데코레이터를 지원할 계획입니다.
 기존의 MobX 4/5 코드베이스는 [code-mod](https://www.npmjs.com/package/mobx-undecorate))를 통해 `makeObservable` 호출을 사용하도록 마이그레이션 할 수 있습니다.
@@ -74,7 +74,7 @@ MobX를 사용하는 새로운 코드베이스는 언어의 공식 파트가 될
 
 ### Babel 7
 
-`npm i --save-dev @babel/plugin-proposal-class-properties @babel/plugin-proposal-decorators`로 데코레이터 지원 프로그램(⭐️프로그램이라고 해도 되나?)을 설치한 후 `.babelrc` 파일에서 활성화하세요.(반드시 순서를 지켜주세요.)
+`npm i --save-dev @babel/plugin-proposal-class-properties @babel/plugin-proposal-decorators`로 데코레이터 지원 패키지를 설치한 후 `.babelrc` 파일에서 활성화하세요.(반드시 순서를 지켜주세요.)
 
 ```javascript
 {
@@ -92,11 +92,11 @@ MobX를 사용하는 새로운 코드베이스는 언어의 공식 파트가 될
 
 ## 경고: 데코레이터 구문의 한계
 
-_데코레이터 구문의 현재 트랜스파일러 구현은 상당히 제한적이며 정확히 동일하게 동작하지 않습니다. 또한 2단계 프로포절(proposal)이 모든 트랜스파일러에 의해 시행되기 전까지는 많은 구성 패턴들이 데코레이터와 함께 사용 불가합니다. 이러한 이유로 MobX의 현재 데코레이터 구문 지원은 지원되는 기능이 모든 환경에서 일관되게 동작하는 범위로 설정되어 있습니다._(⭐️ 프로포절은 https://ahnheejong.name/articles/ecmascript-tc39/ 여기 참고했삼!!)
+_데코레이터 구문의 현재 트랜스파일러 구현은 상당히 제한적이며 정확히 동일하게 동작하지 않습니다. 또한 2단계 프로포절(proposal)이 모든 트랜스파일러에 의해 시행되기 전까지는 많은 구성 패턴들이 데코레이터와 함께 사용 불가합니다. 이러한 이유로 MobX의 현재 데코레이터 구문 지원은 지원되는 기능이 모든 환경에서 일관되게 동작하는 범위로 설정되어 있습니다._
 
 다음 패턴은 MobX에서 공식적으로 지원되지 않습니다.
 
--   상속 트리에서 decorate 된 클래스 구성원을 다시 정의하기
--   정적 클래스 구성원 decorate 하기
+-   상속 트리에서 decorate 된 클래스 멤버를 다시 정의하기
+-   static 클래스 멤버 decorate 하기
 -   MobX에서 제공하는 데코레이터와 다른 데코레이터 결합하기
 -   HMR(Hot Module Reloading)∙React-hot-loader는 예상대로 작동하지 않을 수 있습니다.
