@@ -51,7 +51,7 @@ function Person(firstName, lastName) {
 const person = new Person("Michel", "Weststrate")
 ```
 
-인스턴스화 후 기존 객체에 `extendObservable`을 사용하여 observable 필드를 추가할 수 있지만, observable 속성을 추가하는 것 자체가 관찰할 수 있다는 것은 아닙니다.
+인스턴스화 후 기존 객체에 `extendObservable`을 사용하여 observable 필드를 추가할 수 있지만, 이 방식으로 observable 속성을 추가하는 것 자체가 관찰할 수 있다는 것은 아닙니다.
 
 ### `observable`
 
@@ -152,7 +152,7 @@ cityName.set("Amsterdam")
 // 출력: 'Amsterdam'
 ```
 
-box안에 있는 값이 자동으로 observable로 바뀌면 안 되는 경우 `{ deep: false }` 옵션을 사용하여 box를 얕은(shallowly) observable로 만드십시오.
+box안에 있는 값이 자동으로 observable로 바뀌면 안 되는 경우 `{ deep: false }` 옵션을 사용하여 box를 얕은 observable로 만드십시오.
 
 ---
 
@@ -218,7 +218,7 @@ observable이 변경될 때 함수 기반 또는 클래스 기반 리액트 컴�
 
 [**사용 방법**](react-integration.md#using-local-observable-state-in-observer-components): `useLocalObservable(() => source, annotations?)`
 
-`makeObservable`을 사용하여 새로운 observable 객체를 생성하고, 컴포넌트의 전체 수명주기 동안 해당 객체를 컴포넌트에 유지합니다(유지 단어가 좀.. 애매!!).
+`makeObservable`을 사용하여 새로운 observable 객체를 생성하고, 컴포넌트의 전체 라이프사이클 동안 해당 객체를 컴포넌트에 해당 사항을 적용합니다.
 
 ---
 
@@ -272,13 +272,13 @@ observable API에 적용되기 전에 변경 사항을 가로챕니다. 가로�
 
 {🚀} [**사용 방법**](lazy-observables.md): `onBecomeObserved(observable, property?, listener: () => void)`
 
-무언가가 관찰되었을 때를 위한 Hook입니다.
+무언가 observed로 전환될 때를 위한 Hook입니다.
 
 ### `onBecomeUnobserved`
 
 {🚀} [**사용 방법**](lazy-observables.md): `onBecomeUnobserved(observable, property?, listener: () => void)`
 
-무언가가 관찰되지 않을 때를 위한 Hook입니다.
+무언가를 observerd로 설정하지 않을 때를 위한 Hook입니다.
 
 ### `toJS`
 
@@ -428,7 +428,7 @@ computed 속성인지 확인합니다.
 
 {🚀} [**사용 방법**](analyzing-reactivity.md): `trace()`, `trace(true)` _(디버거 입장)_ 또는 `trace(object, propertyName, enterDebugger?)`
 
-observer, reaction 또는 computed 값 내부에서 사용해야 합니다. 값이 무효가 되었을 때 기록하거나, _true_로 호출된 경우 디버거 중단점을 설정합니다.
+observer, reaction 또는 computed 값 내부에서 사용해야 합니다. 값이 무효가 되었을 때 로그를 남기거나, _true_로 호출된 경우 디버거 중단점을 설정합니다.
 
 ### `spy`
 
@@ -467,7 +467,7 @@ _드문 경우지만 MobX 자체를 확장하려고 할 때 사용할 수 있습
 자체 observable 데이터 구조를 만들어 MobX에 연결합니다. 모든 observable 데이터 타입에서 내부적으로 사용됩니다. Atom은 MobX에 알리는 두 가지 _report_ 메서드를 제공합니다.
 
 -   `reportObserved()`: atom이 관찰되었고, 현재 derivation의 종속성 트리의 일부로 간주하여야 합니다.
--   `reportChanged()`: atom이 변경되었으며, atom에 의한 모든 derivation은 무효가 거되어야 합니다.
+-   `reportChanged()`: atom이 변경되었으며, atom에 의한 모든 derivation은 무효가 되어야 합니다.
 
 ### `getAtom`
 
@@ -510,7 +510,7 @@ transaction(() => {
 
 _Untracked는 로우 레벨 API입니다. untracked 대신에 [`reaction`](#reaction), [`action`](#action) 또는 [`runInAction`](#runinaction)을 사용하는 것을 추천합니다._
 
-observer를 설정하지 않고 코드를 실행합니다. `transaction`과 마찬가지로 `untracked`는 action에 의해 자동으로 적용되므로, 일반적으로 `untracked`를 직접 사용하는 것보다는 action을  않은 `action`을 사용하는 것이 더 적합합니다.
+observer를 설정하지 않고 코드를 실행합니다. `transaction`과 마찬가지로 `untracked`는 action에 의해 자동으로 적용되므로, 일반적으로 `untracked`를 직접 사용하는 것보다는 `action`을 사용하는 것이 더 적합합니다.
 
 ```javascript
 const person = observable({
