@@ -218,7 +218,7 @@ observable이 변경될 때 함수 기반 또는 클래스 기반 리액트 컴�
 
 [**사용 방법**](react-integration.md#using-local-observable-state-in-observer-components): `useLocalObservable(() => source, annotations?)`
 
-`makeObservable`을 사용하여 새로운 observable 객체를 생성하고, 컴포넌트의 전체 라이프사이클 동안 해당 객체를 컴포넌트에 해당 사항을 적용합니다.
+`makeObservable`을 통해 새로운 observable 객체를 생성하며, 생성된 객체는 컴포넌트의 전체 라이프사이클 동안 observable로 유지됩니다.
 
 ---
 
