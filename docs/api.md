@@ -6,42 +6,42 @@ hide_title: true
 
 <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CEBD4KQ7&placement=mobxjsorg" id="_carbonads_js"></script>
 
-# MobX API Reference
+# MobX API 참조
 
-Functions marked with {🚀} are considered advanced, and should typically not be needed.
-Consider downloading our handy cheat sheet that explains all important APIs on a single page:
+{🚀}으로 표시된 함수는 고급 기능이므로 일반적인 상황에서는 필요하지 않습니다.
+중요한 API를 한 페이지에 설명하는 cheat sheet를 다운로드해 보세요.
 
-<div class="cheat"><a href="https://gum.co/fSocU"><button title="Download the MobX 6 cheat sheet and sponsor the project">Download the MobX 6 cheat sheet</button></a></div>
+<div class="cheat"><a href="https://gum.co/fSocU"><button title="Download the MobX 6 cheat sheet and sponsor the project">MobX 6 cheat sheet 다운로드하기</button></a></div>
 
-## Core APIs
+## 핵심 API
 
-_These are the most important MobX APIs._
+_가장 중요한 MobX API입니다._
 
-> Understanding [`observable`](#observable), [`computed`](#computed), [`reaction`](#reaction) and [`action`](#action) is enough to master and use MobX in your applications!
+> [`observable`](#observable), [`computed`](#computed), [`reaction`](#reaction) and [`action`](#action)을 이해하는 것만으로도 MobX를 마스터하고 애플리케이션에 사용할 수 있습니다!
 
-## Creating observables
+## observable 만들기
 
-_Making things observable._
+_observable을 만드는 방법_
 
 ### `makeObservable`
 
-[**Usage**](observable-state.md#makeobservable): `makeObservable(target, annotations?, options?)`
+[**사용 방법**](observable-state.md#makeobservable): `makeObservable(target, annotations?, options?)`
 
-Properties, entire objects, arrays, Maps and Sets can all be made observable.
+속성, 전체 객체, 배열, Map, Set 모두 observable로 만들 수 있습니다.
 
 ### `makeAutoObservable`
 
-[**Usage**](observable-state.md#makeautoobservable): `makeAutoObservable(target, overrides?, options?)`
+[**사용 방법**](observable-state.md#makeautoobservable): `makeAutoObservable(target, overrides?, options?)`
 
-Automatically make properties, objects, arrays, Maps and Sets observable.
+속성, 객체, 배열, Map, Set을 자동으로 observable로 만듭니다.
 
 ### `extendObservable`
 
-{🚀} Usage: `extendObservable(target, properties, overrides?, options?)`
+{🚀} 사용 방법: `extendObservable(target, properties, overrides?, options?)`
 
-Can be used to introduce new properties on the `target` object and make them observable immediately. Basically a shorthand for `Object.assign(target, properties); makeAutoObservable(target, overrides, options);`. However, existing properties on `target` won't be touched.
+`target` 객체에 새 속성을 도입하여 즉시 observable로 만들 수 있습니다. 기본적으로 `Object.assign(target, properties); makeAutoObservable(target, overrides, options);`의 약어입니다. 하지만 `target`의 기존 속성은 건드리지 않습니다.
 
-Old-fashioned constructor functions can nicely leverage `extendObservable`:
+구식 생성자 함수는 `extendObservable`을 적절하게 활용할 수 있습니다.
 
 ```javascript
 function Person(firstName, lastName) {
@@ -51,92 +51,92 @@ function Person(firstName, lastName) {
 const person = new Person("Michel", "Weststrate")
 ```
 
-It is possible to use `extendObservable` to add observable fields to an existing object after instantiation, but be careful that adding an observable property this way is in itself not a fact that can be observed.
+인스턴스화 후 기존 객체에 `extendObservable`을 사용하여 observable 필드를 추가할 수 있지만, 이 방식으로 observable 속성을 추가하는 것 자체가 관찰할 수 있다는 것은 아닙니다.
 
 ### `observable`
 
-[**Usage**](observable-state.md#observable): `observable(source, overrides?, options?)` or `observable` _(annotation)_
+[**사용 방법**](observable-state.md#observable): `observable(source, overrides?, options?)` or `observable` _(주석)_
 
-Clones an object and makes it observable. Source can be a plain object, array, Map or Set. By default, `observable` is applied recursively. If one of the encountered values is an object or array, that value will be passed through `observable` as well.
+객체를 복사하여 observable로 만듭니다. source는 plain 객체, 배열, Map, Set이 될 수 있습니다. 기본적으로 `observable`은 재귀적으로 적용됩니다. 발견된 값 중 하나가 객체 또는 배열인 경우 해당 값도 `observable`을 통해 전달됩니다.
 
 ### `observable.object`
 
-{🚀} [**Usage**](observable-state.md#observable): `observable.object(source, overrides?, options?)`
+{🚀} [**사용 방법**](observable-state.md#observable): `observable.object(source, overrides?, options?)`
 
-Alias for `observable(source, overrides?, options?)`. Creates a clone of the provided object and makes all of its properties observable.
+`observable(source, overrides?, options?)`에 대한 별칭입니다. 제공된 객체의 복제본을 만들고 모든 속성을 observable로 만듭니다.
 
 ### `observable.array`
 
-{🚀} Usage: `observable.array(initialValues?, options?)`
+{🚀} 사용 방법: `observable.array(initialValues?, options?)`
 
-Creates a new observable array based on the provided `initialValues`.
-To convert observable arrays back to plain arrays, use the `.slice()` method, or check out [toJS](#tojs) to convert them recursively.
-Besides all the language built-in array functions, the following goodies are available on observable arrays as well:
+제공된 `initialValues`를 기반으로 새 observable 배열을 만듭니다.
+observable 배열을 plain 배열로 다시 변환하려면, `.slice()` 메서드를 이용하거나 [toJS](#tojs)를 통해 재귀적으로 변환합니다.
+기본 제공되는 배열 함수 외에도, 다음과 같은 기능을 observable 배열에서 사용할 수 있습니다.
 
--   `clear()` removes all current entries from the array.
--   `replace(newItems)` replaces all existing entries in the array with new ones.
--   `remove(value)` removes a single item by value from the array and returns `true` if the item was found and removed.
+-   `clear()`는 배열에서 현재 엔트리를 모두 제거합니다.
+-   `replace(newItems)`는 배열의 모든 기존 엔트리를 새 엔트리로 바꿉니다.
+-   `remove(value)`는 배열에서 value와 일치하는 단일 항목을 제거하고 항목이 발견되어 제거된 경우 `true`를 반환합니다.
 
-If the values in the array should not be turned into observables automatically, use the `{ deep: false }` option to make the array shallowly observable.
+배열의 값이 자동으로 observable로 바뀌면 안 되는 경우 `{ deep: false }` 옵션을 사용하여 배열을 얕은 observable로 만듭니다.
 
 ### `observable.map`
 
-{🚀} Usage: `observable.map(initialMap?, options?)`
+{🚀} 사용 방법: `observable.map(initialMap?, options?)`
 
-Creates a new observable [ES6 Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) based on the provided `initialMap`.
-They are very useful if you don't want to react just to the change of a specific entry, but also to their addition and removal.
-Creating observable Maps is the recommended approach for creating dynamically keyed collections if you don't have [enabled Proxies](configuration.md#proxy-support).
+제공된 `initialMap`을 기반으로 새 observable [ES6 Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)을 생성합니다.
+특정 엔트리의 변경뿐만 아니라 추가 및 제거에도 반응하기를 원하는 경우 매우 유용합니다.
+[Proxy 활성화](configuration.md#proxy-support)를 하지 않은 경우 observable Map을 만드는 것이 동적 키 컬렉션을 만드는데 권장되는 방법입니다.
 
-Besides all the language built-in Map functions, the following goodies are available on observable Maps as well:
+내장된 Map 함수 외에도, observable Map에서 다음과 같은 기능을 사용할 수 있습니다.
 
--   `toJSON()` returns a shallow plain object representation of this Map (use [toJS](#tojs) for a deep copy).
--   `merge(values)` copies all entries from the provided `values` (plain object, array of entries or a string-keyed ES6 Map) into this Map.
--   `replace(values)` replaces the entire contents of this Map with the provided `values`.
+-   `toJSON()`은 Map의 얕은 plain 객체 표현을 반환합니다. (깊은 복사를 원한다면 [toJS](#tojs)를 사용하세요.)
+-   `merge(values)`는 제공된 `values`(plain 객체, 엔트리의 배열, string-keyed ES6 Map)의 모든 엔트리를 Map으로 복사합니다.
+-   `replace(values)`는 Map의 전체 내용을 제공된 `values`로 바꿉니다.
 
-If the values in the Map should not be turned into observables automatically, use the `{ deep: false }` option to make the Map shallowly observable.
+Map의 값이 자동으로 observable로 바뀌면 안 되는 경우 `{ deep: false }` 옵션을 사용하여 Map을 얕은 observable로 만듭니다.
 
 ### `observable.set`
 
-{🚀} Usage: `observable.set(initialSet?, options?)`
+{🚀} 사용 방법: `observable.set(initialSet?, options?)`
 
-Creates a new observable [ES6 Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) based on the provided `initialSet`. Use it whenever you want to create a dynamic set where the addition and removal of values needs to be observed, but where values can appear only once in the entire collection.
+제공된 `initialSet`을 기반으로 새 observable [ES6 Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)을 만듭니다. 값의 추가 및 제거를 관찰해야 하지만, 전체 컬렉션에서 값이 한 번만 나타날 수 있는 동적 set을 만들고 싶을 때마다 사용합니다.
 
-If the values in the Set should not be turned into observables automatically, use the `{ deep: false }` option to make the Set shallowly observable.
+Set의 값이 자동으로 observable로 바뀌면 안 되는 경우 `{ deep: false }` 옵션을 사용하여 Set을 얕은 observable로 만듭니다.
 
 ### `observable.ref`
 
-[**Usage**](observable-state.md#available-annotations): `observable.ref` _(annotation)_
+[**사용 방법**](observable-state.md#available-annotations): `observable.ref` _(주석)_
 
-Like the `observable` annotation, but only reassignments will be tracked. The assigned values themselves won't be made observable automatically. For example, use this if you intend to store immutable data in an observable field.
+`observable` 주석과 비슷하지만, 재할당만 추적합니다. 할당된 값 자체는 자동으로 observable이 되지 않습니다. 예를 들어 observable 필드에 변경할 수 없는 데이터를 저장하려는 경우에 사용하세요.
 
 ### `observable.shallow`
 
-[**Usage**](observable-state.md#available-annotations): `observable.shallow` _(annotation)_
+[**사용 방법**](observable-state.md#available-annotations): `observable.shallow` _(주석)_
 
-Like the `observable.ref` annotation, but for collections. Any collection assigned will be made observable, but the contents of the collection itself won't become observable.
+ `observable.ref` 주석과 비슷하지만, 컬렉션에 사용됩니다. 할당된 모든 컬렉션은 observable이 되지만, 컬렉션 자체의 내용은 observable이 되지 않습니다.
 
 ### `observable.struct`
 
-{🚀} [**Usage**](observable-state.md#available-annotations): `observable.struct` _(annotation)_
+{🚀} [**사용 방법**](observable-state.md#available-annotations): `observable.struct` _(주석)_
 
-Like the `observable` annotation, except that any assigned value that is structurally equal to the current value will be ignored.
+구조적으로 현재 값과 동일한 모든 할당된 값을 무시한다는 점을 제외하고 `observable` 주석과 같습니다.
 
 ### `observable.deep`
 
-{🚀} [**Usage**](observable-state.md#available-annotations): `observable.deep` _(annotation)_
+{🚀} [**사용 방법**](observable-state.md#available-annotations): `observable.deep` _(주석)_
 
-Alias for the [`observable`](#observable) annotation.
+[`observable`](#observable) 주석의 별칭입니다.
 
 ### `observable.box`
 
-{🚀} Usage: `observable.box(value, options?)`
+{🚀} 사용 방법: `observable.box(value, options?)`
 
-All primitive values in JavaScript are immutable and hence per definition not observable.
-Usually that is fine, as MobX can just make the _property_ that contains the value observable.
-In rare cases, it can be convenient to have an observable _primitive_ that is not owned by an object.
-For such cases, it is possible to create an observable _box_ that manages such a _primitive_.
+JavaScript의 모든 primitive 값은 변경할 수 없으므로 각각의 정의는 observable이 아닙니다.
+일반적으로 MobX는 값이 포함된 _속성_을 관찰할 수 있게 하기 때문에 괜찮습니다.
+드문 경우지만, 객체가 소유하지 않는 observable _primitive_를 갖는 것이 편리할 수 있습니다.
+이러한 경우 _primitive_를 관리하는 observable _box_를 생성하는 것이 가능합니다.
 
-`observable.box(value)` accepts any value and stores it inside a box. The current value can be accessed through `.get()` and updated using `.set(newValue)`.
+`observable.box(value)`는 모든 값을 허용하고 box안에 저장합니다. 현재 값은 `.get()`을 통해 액세스할 수 있으며, `.set(newValue)`을 사용하여 업데이트 할 수도 있습니다.
 
 ```javascript
 import { observable, autorun } from "mobx"
@@ -146,148 +146,147 @@ const cityName = observable.box("Vienna")
 autorun(() => {
     console.log(cityName.get())
 })
-// Prints: 'Vienna'
+// 출력: 'Vienna'
 
 cityName.set("Amsterdam")
-// Prints: 'Amsterdam'
+// 출력: 'Amsterdam'
 ```
 
-If the values in the box should not be turned into observables automatically, use the `{ deep: false }` option to make the box shallowly observable.
+box안에 있는 값이 자동으로 observable로 바뀌면 안 되는 경우 `{ deep: false }` 옵션을 사용하여 box를 얕은 observable로 만드십시오.
 
 ---
 
 ## Actions
 
-_An action is any piece of code that modifies the state._
+_action은 state를 수정하는 코드입니다._
 
 ### `action`
 
-[**Usage**](actions.md): `action(fn)` or `action` _(annotation)_
+[**사용 방법**](actions.md): `action(fn)` or `action` _(주석)_
 
-Use on functions that intend to modify the state.
+state를 수정하는 함수에 사용합니다.
 
 ### `runInAction`
 
-{🚀} [**Usage**](actions.md#runinaction): `runInAction(fn)`
+{🚀} [**사용 방법**](actions.md#runinaction): `runInAction(fn)`
 
-Create a one-time action that is immediately invoked.
+즉시 호출되는 일회성 action을 만듭니다.
 
 ### `flow`
 
-[**Usage**](actions.md#using-flow-instead-of-async--await-): `flow(fn)` or `flow` _(annotation)_
+[**사용 방법**](actions.md#using-flow-instead-of-async--await-): `flow(fn)` or `flow` _(주석)_
 
-MobX friendly replacement for `async` / `await` that supports cancellation.
+`async`·`await`에 대해 MobX 친화적으로 바꾼 대체제이며 취소 기능도 제공합니다.
 
 ### `flowResult`
 
-[**Usage**](actions.md#using-flow-instead-of-async--await-): `flowResult(flowFunctionResult)`
+[**사용 방법**](actions.md#using-flow-instead-of-async--await-): `flowResult(flowFunctionResult)`
 
-For TypeScript users only. Utility that casts the output of the generator to a promise.
-This is just a type-wise correction for the promise wrapping done by `flow`. At runtime it directly returns the inputted value.
-
+TypeScript에서 사용되며, 제너레이터의 결과를 promise로 변환해주는 유틸리티입니다.
+해당 유틸리티는 `flow`에 의해 수행된 promise 래핑을 타입에 맞게 수정한 것에 불과합니다. 런타임에 입력된 값을 직접 반환합니다.
 ---
 
 ## Computeds
 
-_Computed values can be used to derive information from other observables._
+_computed 값을 사용하여 다른 observable에서 정보를 얻을 수 있습니다._
 
 ### `computed`
 
-[**Usage**](computeds.md): `computed(fn, options?)` or `computed(options?)` _(annotation)_
+[**사용 방법**](computeds.md): `computed(fn, options?)` or `computed(options?)` _(주석)_
 
-Creates an observable value that is derived from other observables, but won't be recomputed unless one of the underlying observables changes.
+다른 observable에서 파생된 observable 값을 생성하지만, 하위에 포함된 observable 중 하나라도 변경이 없을 때는 다시 계산되지 않습니다.
 
 ---
 
-## React integration
+## React 통합
 
-_From the `mobx-react` / `mobx-react-lite` packages._
+_`mobx-react`·`mobx-react-lite` 패키지로부터 사용할 수 있습니다._
 
 ### `observer`
 
-[**Usage**](react-integration.md): `observer(component)`
+[**사용 방법**](react-integration.md): `observer(component)`
 
-A higher order component you can use to make a functional or class based React component re-render when observables change.
+observable이 변경될 때 함수 기반 또는 클래스 기반 리액트 컴포넌트를 재렌더링 하는 데 사용할 수 있는 고차 컴포넌트(Hoc) 입니다.
 
 ### `Observer`
 
-[**Usage**](react-integration.md#callback-components-might-require-observer): `<Observer>{() => rendering}</Observer>`
+[**사용 방법**](react-integration.md#callback-components-might-require-observer): `<Observer>{() => rendering}</Observer>`
 
-Renders the given render function, and automatically re-renders it once one of the observables used in the render function changes.
+지정된 렌더 함수를 렌더링하고, 렌더 함수에 사용된 observable 중 하나가 변경되면 자동으로 재렌더링됩니다.
 
 ### `useLocalObservable`
 
-[**Usage**](react-integration.md#using-local-observable-state-in-observer-components): `useLocalObservable(() => source, annotations?)`
+[**사용 방법**](react-integration.md#using-local-observable-state-in-observer-components): `useLocalObservable(() => source, annotations?)`
 
-Creates a new observable object using `makeObservable`, and keeps it around in the component for the entire life-cycle of the component.
+`makeObservable`을 통해 새로운 observable 객체를 생성하며, 생성된 객체는 컴포넌트의 전체 라이프사이클 동안 observable로 유지됩니다.
 
 ---
 
 ## Reactions
 
-_The goal of reactions is to model side effects that happen automatically._
+_reaction의 목표는 자동으로 발생하는 부수 효과를 모델링 하는 것입니다._
 
 ### `autorun`
 
-[**Usage**](reactions.md#autorun): `autorun(() => effect, options?)`
+[**사용 방법**](reactions.md#autorun): `autorun(() => effect, options?)`
 
-Reruns a function every time anything it observes changes.
+변경 사항을 관찰할 때마다 함수를 다시 실행합니다.
 
 ### `reaction`
 
-[**Usage**](reactions.md#reaction): `reaction(() => data, data => effect, options?)`
+[**사용 방법**](reactions.md#reaction): `reaction(() => data, data => effect, options?)`
 
-Reruns a side effect when any selected data changes.
+선택한 data가 변경될 때 부수 효과를 다시 실행합니다.
 
 ### `when`
 
-[**Usage**](reactions.md#when): `when(() => condition, () => effect, options?)` or `await when(() => condition, options?)`
+[**사용 방법**](reactions.md#when): `when(() => condition, () => effect, options?)` or `await when(() => condition, options?)`
 
-Executes a side effect once when a observable condition becomes true.
+observable condition이 true가 될 때 부수 효과를 한 번 실행합니다.
 
 ---
 
-## Utilities
+## 유틸리티
 
-_Utilities that might make working with observable objects or computed values more convenient. Less trivial utilities can also be found in the [mobx-utils](https://github.com/mobxjs/mobx-utils) package._
+_observable 객체 또는 computed 값으로 작업하는 것을 더 편리하게 만들어주는 유틸리티입니다. 더 작은 유틸리티는 [mobx-utils](https://github.com/mobxjs/mobx-utils) 패키지에서 찾을 수 있습니다._
 
 ### `onReactionError`
 
-{🚀} Usage: `onReactionError(handler: (error: any, derivation) => void)`
+{🚀} 사용 방법: `onReactionError(handler: (error: any, derivation) => void)`
 
-Attaches a global error listener, which is invoked for every error that is thrown from a _reaction_. This can be used for monitoring or test purposes.
+_reaction_에서 발생하는 모든 오류에 대해 호출되는 전역 오류 리스너를 연결합니다. 모니터링 또는 테스트 용도로 사용할 수 있습니다.
 
 ### `intercept`
 
-{🚀} [**Usage**](intercept-and-observe.md#intercept): `intercept(propertyName|array|object|Set|Map, listener)`
+{🚀} [**사용 방법**](intercept-and-observe.md#intercept): `intercept(propertyName|array|object|Set|Map, listener)`
 
-Intercepts changes before they are applied to an observable API. Returns a disposer function that stops the interception.
+observable API에 적용되기 전에 변경 사항을 가로챕니다. 가로채기를 중지하는 disposer 함수를 반환합니다.
 
 ### `observe`
 
-{🚀} [**Usage**](intercept-and-observe.md#observe): `observe(propertyName|array|object|Set|Map, listener)`
+{🚀} [**사용 방법**](intercept-and-observe.md#observe): `observe(propertyName|array|object|Set|Map, listener)`
 
-Low-level API that can be used to observe a single observable value. Returns a disposer function that stops the interception.
+단일 observable 값을 관찰하는데 사용할 수 있는 로우 레벨 API입니다. 가로채기를 중지하는 disposer 함수를 반환합니다.
 
 ### `onBecomeObserved`
 
-{🚀} [**Usage**](lazy-observables.md): `onBecomeObserved(observable, property?, listener: () => void)`
+{🚀} [**사용 방법**](lazy-observables.md): `onBecomeObserved(observable, property?, listener: () => void)`
 
-Hook for when something becomes observed.
+무언가 observed로 전환될 때를 위한 Hook입니다.
 
 ### `onBecomeUnobserved`
 
-{🚀} [**Usage**](lazy-observables.md): `onBecomeUnobserved(observable, property?, listener: () => void)`
+{🚀} [**사용 방법**](lazy-observables.md): `onBecomeUnobserved(observable, property?, listener: () => void)`
 
-Hook for when something stops being observed.
+무언가를 observerd로 설정하지 않을 때를 위한 Hook입니다.
 
 ### `toJS`
 
-[**Usage**](observable-state.md#converting-observables-back-to-vanilla-javascript-collections): `toJS(value)`
+[**사용 방법**](observable-state.md#converting-observables-back-to-vanilla-javascript-collections): `toJS(value)`
 
-Recursively converts an observable object to a JavaScript _structure_. Supports observable arrays, objects, Maps and primitives.
-Computed values and other non-enumerable properties won't be part of the result.
-For more complex (de)serialization scenarios, it is recommended to give classes a (computed) `toJSON` method, or use a serialization library like [serializr](https://github.com/mobxjs/serializr).
+재귀적으로 observable 객체를 JavaScript _구조_로 변환합니다. observable 배열, 객체, Map 그리고 primitive를 지원합니다.
+computed 값 및 non-enumerable 속성은 결과에 포함되지 않습니다.
+더 복잡한 (역)직렬화 시나리오의 경우 클래스에 `toJSON` 메서드를 제공하거나 [serializr](https://github.com/mobxjs/serializr)와 같은 직렬화 라이브러리를 사용하는 것이 좋습니다.
 
 ```javascript
 const obj = mobx.observable({
@@ -302,190 +301,190 @@ console.log(mobx.isObservableObject(clone)) // false
 
 ---
 
-## Configuration
+## 환경설정
 
-_Fine-tuning your MobX instance._
+_MobX 인스턴스를 미세 조정합니다._
 
 ### `configure`
 
-[**Usage**](configuration.md): sets global behavior settings on the active MobX instance.
-Use it to change how MobX behaves as a whole.
+[**사용 방법**](configuration.md): 활성 MobX 인스턴스에 대한 전역 동작 설정을 지정합니다.
+MobX의 전체적인 동작 방식 변경에 사용합니다.
 
 ---
 
-## Collection utilities {🚀}
+## Collection 유틸리티 {🚀}
 
-_They enable manipulating observable arrays, objects and Maps with the same generic API. This can be useful in [environments without `Proxy` support](configuration.md#limitations-without-proxy-support), but is otherwise typically not needed._
+_동일한 일반 API를 사용하여 observable 배열, 객체 그리고 Map을 조작할 수 있습니다. 이 기능은 일반적으로 필요하지는 않지만, [Proxy가 지원되지 않는 환경](configuration.md#limitations-without-proxy-support)에서는 유용할 수 있습니다._
 
 ### `values`
 
-{🚀} [**Usage**](collection-utilities.md): `values(array|object|Set|Map)`
+{🚀} [**사용 방법**](collection-utilities.md): `values(array|object|Set|Map)`
 
-Returns all values in the collection as an array.
+컬렉션의 모든 값을 배열로 반환합니다.
 
 ### `keys`
 
-{🚀} [**Usage**](collection-utilities.md): `keys(array|object|Set|Map)`
+{🚀} [**사용 방법**](collection-utilities.md): `keys(array|object|Set|Map)`
 
-Returns all keys / indices in the collection as an array.
+컬렉션의 모든 key와 index를 배열로 반환합니다.
 
 ### `entries`
 
-{🚀} [**Usage**](collection-utilities.md): `entries(array|object|Set|Map)`
+{🚀} [**사용 방법**](collection-utilities.md): `entries(array|object|Set|Map)`
 
-Returns a `[key, value]` pair of every entry in the collection as an array.
+컬렉션에 있는 모든 항목의 `[key, value]` 쌍을 배열로 반환합니다.
 
 ### `set`
 
-{🚀} [**Usage**](collection-utilities.md): `set(array|object|Map, key, value)`
+{🚀} [**사용 방법**](collection-utilities.md): `set(array|object|Map, key, value)`
 
-Updates the collection.
+컬렉션을 업데이트합니다.
 
 ### `remove`
 
-{🚀} [**Usage**](collection-utilities.md): `remove(array|object|Map, key)`
+{🚀} [**사용 방법**](collection-utilities.md): `remove(array|object|Map, key)`
 
-Removes item from the collection.
+컬렉션에서 항목을 제거합니다.
 
 ### `has`
 
-{🚀} [**Usage**](collection-utilities.md): `has(array|object|Map, key)`
+{🚀} [**사용 방법**](collection-utilities.md): `has(array|object|Map, key)`
 
-Checks for membership in the collection.
+컬렉션에 해당 멤버가 있는지 체크합니다.
 
 ### `get`
 
-{🚀} [**Usage**](collection-utilities.md): `get(array|object|Map, key)`
+{🚀} [**사용 방법**](collection-utilities.md): `get(array|object|Map, key)`
 
-Gets value from the collection with key.
+키를 사용하여 컬렉션에서 값을 가져옵니다.
 
 ---
 
-## Introspection utilities {🚀}
+## Introspection 유틸리티 {🚀}
 
-_Utilities that might come in handy if you want to inspect the internal state of MobX, or want to build cool tools on top of MobX._
+_MobX의 내부 state를 검사하거나 MobX 위에 멋진 도구를 구축하려는 경우에 유용하게 사용할 수 있는 유틸리티입니다._
 
 ### `isObservable`
 
-{🚀} Usage: `isObservable(array|object|Set|Map)`
+{🚀} 사용 방법: `isObservable(array|object|Set|Map)`
 
-Is the object / collection made observable by MobX?
+MobX에 의해 만들어진 객체 또는 컬렉션인지 확인합니다.
 
 ### `isObservableProp`
 
-{🚀} Usage: `isObservableProp(object, propertyName)`
+{🚀} 사용 방법: `isObservableProp(object, propertyName)`
 
-Is the property observable?
+해당 속성이 observable인지 확인합니다.
 
 ### `isObservableArray`
 
-{🚀} Usage: `isObservableArray(array)`
+{🚀} 사용 방법: `isObservableArray(array)`
 
-Is the value an observable array?
+값이 observable 배열인지 확인합니다.
 
 ### `isObservableObject`
 
-{🚀} Usage: `isObservableObject(object)`
+{🚀} 사용 방법: `isObservableObject(object)`
 
-Is the value an observable object?
+값이 observable 객체인지 확인합니다.
 
 ### `isObservableSet`
 
-{🚀} Usage: `isObservableSet(set)`
+{🚀} 사용 방법: `isObservableSet(set)`
 
-Is the value an observable Set?
+값이 observable Set인지 확인합니다.
 
 ### `isObservableMap`
 
-{🚀} Usage: `isObservableMap(map)`
+{🚀} 사용 방법: `isObservableMap(map)`
 
-Is the value an observable Map?
+값이 observable Map인지 확인합니다.
 
 ### `isBoxedObservable`
 
-{🚀} Usage: `isBoxedObservable(value)`
+{🚀} 사용 방법: `isBoxedObservable(value)`
 
-Is the value an observable box, created using `observable.box`?
+값이 `observable.box`를 사용하여 만든 observable.box인지 확인합니다.
 
 ### `isAction`
 
-{🚀} Usage: `isAction(func)`
+{🚀} 사용 방법: `isAction(func)`
 
-Is the function marked as an `action`?
+함수가 `action`으로 표시되어 있는지 확인합니다.
 
 ### `isComputed`
 
-{🚀} Usage: `isComputed(boxedComputed)`
+{🚀} 사용 방법: `isComputed(boxedComputed)`
 
-Is this a boxed computed value, created using `computed(() => expr)`?
+`computed(() => expr)`을 사용하여 만든 box computed 값인지 확인합니다.
 
 ### `isComputedProp`
 
-{🚀} Usage: `isComputedProp(object, propertyName)`
+{🚀} 사용 방법: `isComputedProp(object, propertyName)`
 
-Is this a computed property?
+computed 속성인지 확인합니다.
 
 ### `trace`
 
-{🚀} [**Usage**](analyzing-reactivity.md): `trace()`, `trace(true)` _(enter debugger)_ or `trace(object, propertyName, enterDebugger?)`
+{🚀} [**사용 방법**](analyzing-reactivity.md): `trace()`, `trace(true)` _(디버거 입장)_ 또는 `trace(object, propertyName, enterDebugger?)`
 
-Should be used inside an observer, reaction or computed value. Logs when the value is invalidated, or sets the debugger breakpoint if called with _true_.
+observer, reaction 또는 computed 값 내부에서 사용해야 합니다. 값이 무효가 되었을 때 로그를 남기거나, _true_로 호출된 경우 디버거 중단점을 설정합니다.
 
 ### `spy`
 
-{🚀} [**Usage**](analyzing-reactivity.md#spy): `spy(eventListener)`
+{🚀} [**사용 방법**](analyzing-reactivity.md#spy): `spy(eventListener)`
 
-Registers a global spy listener that listens to all events that happen in MobX.
+MobX에서 발생하는 모든 이벤트를 수신하는 전역 스파이 리스너를 등록합니다.
 
 ### `getDebugName`
 
-{🚀} [**Usage**](analyzing-reactivity.md#getdebugname): `getDebugName(reaction|array|Set|Map)` or `getDebugName(object|Map, propertyName)`
+{🚀} [**사용 방법**](analyzing-reactivity.md#getdebugname): `getDebugName(reaction|array|Set|Map)` 또는 `getDebugName(object|Map, propertyName)`
 
-Returns the (generated) friendly debug name for an observable or reaction.
+observable 또는 reaction에 대해 (생성된) 친숙한 디버그 이름을 반환합니다.
 
 ### `getDependencyTree`
 
-{🚀} [**Usage**](analyzing-reactivity.md#getdependencytree): `getDependencyTree(object, computedPropertyName)`
+{🚀} [**사용 방법**](analyzing-reactivity.md#getdependencytree): `getDependencyTree(object, computedPropertyName)`
 
-Returns a tree structure with all observables the given reaction / computation currently depends upon.
+주어진 reaction·computation이 현재 의존하고 있는 모든 observable 트리 구조를 반환합니다.
 
 ### `getObserverTree`
 
-{🚀} [**Usage**](analyzing-reactivity.md#getobservertree): `getObserverTree(array|Set|Map)` or `getObserverTree(object|Map, propertyName)`
+{🚀} [**사용 방법**](analyzing-reactivity.md#getobservertree): `getObserverTree(array|Set|Map)` 또는 `getObserverTree(object|Map, propertyName)`
 
-Returns a tree structure with all reactions / computations that are observing the given observable.
+주어진 observable을 관찰하는 모든 reaction·computation을 포함하는 트리 구조를 반환합니다.
 
 ---
 
-## Extending MobX {🚀}
+## MobX 확장 {🚀}
 
-_In the rare case you want to extend MobX itself._
+_드문 경우지만 MobX 자체를 확장하려고 할 때 사용할 수 있습니다._
 
 ### `createAtom`
 
-{🚀} [**Usage**](custom-observables.md): `createAtom(name, onBecomeObserved?, onBecomeUnobserved?)`
+{🚀} [**사용 방법**](custom-observables.md): `createAtom(name, onBecomeObserved?, onBecomeUnobserved?)`
 
-Creates your own observable data structure and hooks it up to MobX. Used internally by all observable data types. Atom exposes two _report_ methods to notify MobX with when:
+자체 observable 데이터 구조를 만들어 MobX에 연결합니다. 모든 observable 데이터 타입에서 내부적으로 사용됩니다. Atom은 MobX에 알리는 두 가지 _report_ 메서드를 제공합니다.
 
--   `reportObserved()`: the atom has become observed, and should be considered part of the dependency tree of the current derivation.
--   `reportChanged()`: the atom has changed, and all derivations depending on it should be invalidated.
+-   `reportObserved()`: atom이 관찰되었고, 현재 derivation의 종속성 트리의 일부로 간주하여야 합니다.
+-   `reportChanged()`: atom이 변경되었으며, atom에 의한 모든 derivation은 무효가 되어야 합니다.
 
 ### `getAtom`
 
-{🚀} [**Usage**](analyzing-reactivity.md#getatom): `getAtom(thing, property?)`
+{🚀} [**사용 방법**](analyzing-reactivity.md#getatom): `getAtom(thing, property?)`
 
-Returns the backing atom.
+backing atom을 반환합니다.
 
 ### `transaction`
 
-{🚀} Usage: `transaction(worker: () => any)`
+{🚀} 사용 방법: `transaction(worker: () => any)`
 
-_Transaction is a low-level API. It is recommended to use [`action`](#action) or [`runInAction`](#runinaction) instead._
+_트랜잭션은 로우 레벨 API입니다. 트랜잭션 대신에 [`action`](#action) 또는 [`runInAction`](#runinaction)을 사용하는 것을 추천합니다._
 
-Used to batch a bunch of updates without notifying any observers until the end of the transaction. Like [`untracked`](#untracked), it is automatically applied by `action`, so usually it makes more sense to use actions than to use `transaction` directly.
+트랜잭션이 끝날 때까지 observer에게 알리지 않고 업데이트 일괄 처리를 하는 데 사용됩니다. [`untracked`](#untracked)와 마찬가지로 `action`에 의해 자동으로 적용되므로, `transaction`을 직접 사용하는 것보다 action을 사용하는 것이 더 좋습니다.
 
-It takes a single, parameterless `worker` function as an argument, and returns any value that was returned by it.
-Note that `transaction` runs completely synchronously and can be nested. Only after completing the outermost `transaction`, the pending reactions will be run.
+매개변수가 없는 단일 `worker` 함수를 인수로 사용하고 이 함수에 의해 반환된 값을 반환합니다.
+`transaction`은 완전히 동기적으로 실행되며 중첩될 수 있습니다. 가장 바깥쪽 `transaction`이 완료된 후에 보류 중인 reaction이 실행됩니다.
 
 ```javascript
 import { observable, transaction, autorun } from "mobx"
@@ -493,7 +492,7 @@ import { observable, transaction, autorun } from "mobx"
 const numbers = observable([])
 
 autorun(() => console.log(numbers.length, "numbers!"))
-// Prints: '0 numbers!'
+// 출력: '0 numbers!'
 
 transaction(() => {
     transaction(() => {
@@ -502,16 +501,16 @@ transaction(() => {
     })
     numbers.push(3)
 })
-// Prints: '3 numbers!'
+// 출력: '3 numbers!'
 ```
 
 ### `untracked`
 
-{🚀} Usage: `untracked(worker: () => any)`
+{🚀} 사용 방법: `untracked(worker: () => any)`
 
-_Untracked is a low-level API. It is recommended to use [`reaction`](#reaction), [`action`](#action) or [`runInAction`](#runinaction) instead._
+_Untracked는 로우 레벨 API입니다. untracked 대신에 [`reaction`](#reaction), [`action`](#action) 또는 [`runInAction`](#runinaction)을 사용하는 것을 추천합니다._
 
-Runs a piece of code without establishing observers. Like `transaction`, `untracked` is automatically applied by `action`, so usually it makes more sense to use actions than to use `untracked` directly.
+observer를 설정하지 않고 코드를 실행합니다. `transaction`과 마찬가지로 `untracked`는 action에 의해 자동으로 적용되므로, 일반적으로 `untracked`를 직접 사용하는 것보다는 `action`을 사용하는 것이 더 적합합니다.
 
 ```javascript
 const person = observable({
@@ -523,16 +522,16 @@ autorun(() => {
     console.log(
         person.lastName,
         ",",
-        // This untracked block will return the person's
-        // firstName without establishing a dependency.
+        // untracked 블록은 종속성을 설정하지 않고
+        // person의 firstName을 반환합니다.
         untracked(() => person.firstName)
     )
 })
-// Prints: 'Weststrate, Michel'
+// 출력: 'Weststrate, Michel'
 
 person.firstName = "G.K."
-// Doesn't print!
+// 츌력되지 않습니다.
 
 person.lastName = "Chesterton"
-// Prints: 'Chesterton, G.K.'
+// 출력: 'Chesterton, G.K.'
 ```
