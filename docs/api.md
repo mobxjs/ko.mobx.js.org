@@ -182,8 +182,8 @@ state를 수정하는 함수에 사용합니다.
 
 [**사용 방법**](actions.md#using-flow-instead-of-async--await-): `flowResult(flowFunctionResult)`
 
-TypeScript에서 사용되며, 제너레이터의 결과를 promise로 변환해주는 유틸리티입니다.
-해당 유틸리티는 `flow`에 의해 수행된 promise 래핑을 타입에 맞게 수정한 것에 불과합니다. 런타임에 입력된 값을 직접 반환합니다.
+TypeScript에서 사용되며, 제너레이터의 결과를 프라미스로 변환해주는 유틸리티입니다.
+해당 유틸리티는 `flow`에 의해 수행된 프라미스 래핑을 타입에 맞게 수정한 것에 불과합니다. 런타임에 입력된 값을 직접 반환합니다.
 ---
 
 ## Computeds

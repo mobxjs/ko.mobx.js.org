@@ -252,12 +252,12 @@ class Child extends Parent {
 하지만 비동기 프로세스에서 observable을 업데이트하는 모든 단계는 `action`으로 표시되어야 합니다.
 위 API를 활용하면 아래와 같이 다양한 방법으로 action을 표시할 수 있습니다.
 
-예를 들어 promise를 처리할 때 state를 업데이트하는 핸들러는 아래와 같이 `action`을 사용하여 래핑하거나 action이 되어야 합니다.
+예를 들어 프라미스를 처리할 때 state를 업데이트하는 핸들러는 아래와 같이 `action`을 사용하여 래핑하거나 action이 되어야 합니다.
 
 <!--DOCUSAURUS_CODE_TABS-->
 <!--`action`으로 핸들러 감싸기-->
 
-promise 해결 핸들러는 인라인으로 처리되지만 원래 작업이 완료된 후에 실행되므로 `action`으로 래핑해야 합니다.
+프라미스 해결 핸들러는 인라인으로 처리되지만 원래 작업이 완료된 후에 실행되므로 `action`으로 래핑해야 합니다.
 
 ```javascript
 import { action, makeAutoObservable } from "mobx"
@@ -289,7 +289,7 @@ class Store {
 
 <!--별도의 action을 통한 업데이트 처리-->
 
-promise 핸들러가 클래스 필드라면 `makeAutoObservable`에 의해 action이 자동으로 래핑 됩니다.
+프라미스 핸들러가 클래스 필드라면 `makeAutoObservable`에 의해 action이 자동으로 래핑 됩니다.
 
 ```javascript
 import { makeAutoObservable } from "mobx"
@@ -401,8 +401,8 @@ const projects = await flowResult(store.fetchProjects())
 
 `flow` 래퍼는 MobX action을 더 쉽게 작업할 수 있게 `async`·`await` 대신 사용할 수 있는 옵션입니다.
 `flow`는 [generator function](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Generator)을 유일한 입력으로 사용합니다.
-generator 안에서 yield를 사용하여(`await somePromise` 대신 `yield somePromise`) promise를 연결할 수 있습니다.
-flow 매커니즘은 promise가 해결될 때 generator가 계속 진행되거나 throw되는지 확인합니다.
+generator 안에서 yield를 사용하여(`await somePromise` 대신 `yield somePromise`) 프라미스를 연결할 수 있습니다.
+flow 매커니즘은 프라미스가 해결될 때 generator가 계속 진행되거나 throw되는지 확인합니다.
 
 따라서 `flow`는 `async`·`await`과 달리 `action` 래핑이 필요하지 않습니다. 이는 다음과 같이 적용될 수 있습니다.
 
@@ -413,7 +413,7 @@ flow 매커니즘은 promise가 해결될 때 generator가 계속 진행되거�
 [`flow` + generator function](#asynchronous-actions) 예제에서 실제로 어떻게 사용하는지 확인해보세요.
 
 `flowResult` 함수는 TypeScript를 사용할 때만 필요합니다.
-메서드를 `flow`로 데코레이팅하기 때문에 반환된 generator는 promise로 래핑 됩니다.
+메서드를 `flow`로 데코레이팅하기 때문에 반환된 generator는 프라미스로 래핑 됩니다.
 그러나 TypeScript는 이러한 변환을 인식하지 못하기 때문에 `flowResult`를 사용하여 해당 변경을 인식할 수 있도록 해야 합니다.
 
 `makeAutoObservable`, `makeObservable`, `extendObservable`, `observable(object)` 등 observable 필드를 생성하는 api는 자동으로 generator를 flow로 유추합니다. `flow` 주석이 달린 멤버는 non-enumerable이 됩니다.
@@ -463,8 +463,8 @@ action과 유사하게 flow는 [`autoBind` 옵션](#auto-bind)을 사용하여 �
 ## flow 취소 {🚀}
 
 flow의 또 다른 장점은 취소할 수 있다는 것입니다.
-`flow`의 반환 값은 generator 함수에서 반환된 값을 해결(resolve)하는 promise입니다.
-반환된 promise는 실행 중인 generator를 취소할 수 있는 `cancel()` 메서드가 있습니다.
+`flow`의 반환 값은 generator 함수에서 반환된 값을 해결(resolve)하는 프라미스입니다.
+반환된 프라미스는 실행 중인 generator를 취소할 수 있는 `cancel()` 메서드가 있습니다.
 모든 `try`·`finally` 절은 계속 실행됩니다.
 
 ## 필수 action 비활성화 {🚀}
