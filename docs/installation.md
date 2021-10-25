@@ -33,6 +33,10 @@ React 바인딩에는 함수형 컴포넌트만 지원하는 `mobx-react-lite`�
         }
     }
     ```
+검증을 위해 소스 코드 가장 앞줄에 아래와 같은 코드를 입력하세요. (예 : index.js)
+```javascript
+if (!new class { x }().hasOwnProperty('x')) throw new Error('Transpiler is not configured correctly');
+```
 
 ## 오래된 Javascript 환경의 MobX
 
