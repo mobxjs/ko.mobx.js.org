@@ -418,7 +418,7 @@ DevTools에 no display name이 보일 것입니다.
 import { observer, useLocalObservable } from "mobx-react-lite"
 import { useEffect } from "react"
 
-const TimerView = observer(({ offset }) => {
+const TimerView = observer(({ offset = 0 }) => {
     const timer = useLocalObservable(() => ({
         offset, // The initial offset value
         secondsPassed: 0,

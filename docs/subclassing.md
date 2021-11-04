@@ -11,7 +11,7 @@ hide_title: true
 서브클래싱은 몇 가지 [제한](#limitations)이 있습니다. 특히 **프로토타입의 action·flow·computed**만 오버라이드할 수 있으며 _[필드 선언](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Classes#field_declarations)_은 오버라이드 할 수 없습니다. 서브클래스에서 오버라이드 된 메서드와 getter에 `override` 주석을 사용합니다. 아래 예를 살펴보세요. 일을 단순하게 유지하고 상속보다 구성(composition)을 선호하도록 하세요.
 
 ```javascript
-import { makeObservable, observable, computed, action } from "mobx"
+import { makeObservable, observable, computed, action, override } from "mobx"
 
 class Parent {
     // 주석이 달린 인스턴스 필드는 오버라이드 할 수 없습니다.
