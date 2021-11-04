@@ -40,9 +40,6 @@ MobX는 functional reactive programming을 투명하게 적용함으로써 상�
 
 ## 기여방법
 
-### 의사소통
-- <a href="https://join.slack.com/t/ko-mobx/shared_invite/zt-skky1w3m-UD2_sY9880STvmnyJzdt9Q">슬랙</a>을 통해 번역 관련 궁금한 점 또는 MobX 관련 다양한 이야기를 나눕니다.
-
 ### 가이드라인
 - 중복된 작업을 피하기 위해, 슬랙 채널(번역-진행사항)을 통해 작업 시작할 파일 명을 입력합니다. ex) actions.md
 - <a href="https://github.com/mobxjs/ko.mobx.js.org/wiki/%EB%B2%88%EC%97%AD-%EB%AA%A8%EB%B2%94-%EC%82%AC%EB%A1%80">번역 모범 사례</a>를 참고하여 번역을 진행합니다.
@@ -52,7 +49,6 @@ MobX는 functional reactive programming을 투명하게 적용함으로써 상�
 - 공백(스페이스), 큰따옴표("), 작은따옴표('), 대시(-), 백틱(`)을 비롯한 모든 특수문자는 수정하시면 안 됩니다. 자연어만 수정(알파벳을 한글로 수정)해주세요.
 
 ### Pull Request 규칙
-번역과 관련된 PR에는 번역 규칙을 준수하지 않은 경우 PR을 받지 않습니다.
 PR을 올릴 시 체크리스트를 꼭 확인해주세요.
 PR에는 이슈를 확인할 수 있게 의미 있는 제목을 기재해주세요.
 #### 예시
