@@ -20,7 +20,7 @@ React 바인딩에는 함수형 컴포넌트만 지원하는 `mobx-react-lite`�
 
 ## 클래스 속성에 대한 transpilation 설정
 
-⚠️ **경고:** Typescript 및 Babel과 함께 MobX를 사용할 때 클래스를 사용할 계획이라면, 클래스 필드에 TC-39 사양을 가진 transpilation을 사용하도록 구성을 업데이트 해야 합니다. 그렇지 않으면 클래스 필드가 초기화되기 전에 observable을 만들 수 없습니다.
+⚠️ **경고:** Typescript 또는 Babel과 함께 MobX를 사용할 때 클래스를 사용할 계획이라면, 클래스 필드에 TC-39 사양을 가진 transpilation을 사용하도록 구성을 업데이트 해야 합니다. 그렇지 않으면 클래스 필드가 초기화되기 전에 observable을 만들 수 없습니다.
 
 -   **TypeScript**: `"useDefineForClassFields": true`로 설정합니다.
 -   **Babel**: 7.12 버전 이상만 사용 가능하며, 아래와 같이 설정합니다.
@@ -55,6 +55,15 @@ configure({ useProxies: "never" }) // Or "ifavailable".
 이전에 MobX를 사용하거나 온라인 튜토리얼을 수강한 경험이 있다면, `@observable`과 같은 데코레이터가 있는 MobX를 보았을 것입니다.
 MobX 6에서는 표준 Javscript와의 최대 호환성을 위해 데코레이터에서 벗어나는 것을 기본으로 합니다.
 그래도 [활성화](enabling-decorators.md)하면 계속 사용할 수 있습니다.
+
+## Development vs Production
+
+`.[production|development].min.js`로 끝나는 사전 빌드 배포를 사용하지 않는다면, Mobx는 `process.env.NODE_ENV` 변수를 사용하여 환경을 감지합니다. production에서 `"production"`으로 설정되어 있는지 확인해보세요. 이러한 방식은 번들러([webpack](https://reactjs.org/docs/optimizing-performance.html#webpack)
+    [Rollup](https://reactjs.org/docs/optimizing-performance.html#rollup)
+    [Browserify](https://reactjs.org/docs/optimizing-performance.html#browserify)
+    [Brunch](https://reactjs.org/docs/optimizing-performance.html#brunch))에서 잘 작동할 것입니다.
+
+[`enforceAction`](https://mobx.js.org/configuration.html#enforceactions)과 같은 대부분의 안전 검사는 development 환경에서만 실행됩니다.
 
 ## 다른 프레임워크와 플랫폼에서 사용하는 MobX
 
