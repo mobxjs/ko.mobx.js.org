@@ -163,8 +163,8 @@ class Box {
 
     constructor() {
         makeObservable(this, {
-            x: observable,
-            y: observable,
+            width: observable,
+            height: observable,
             topRight: computed.struct
         })
     }
