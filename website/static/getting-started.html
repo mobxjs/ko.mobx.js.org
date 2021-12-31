@@ -45,8 +45,8 @@
               하지만 그러한 방법은 또다시 새로운 문제를 발생시킵니다. 데이터는 정규화되어야 하며 참조 무결성(referential integrity) 또한 보장할 수 없고, 데이터가 필요한 경우에 클래스와 같은 효과적인 개념을 사용하는 것이 불가능해집니다.
 						</p><p>
               MobX는 쉬운 state 관리를 위해 근본적인 문제를 해결했습니다. 바로 일관되지 않는 state가 애초에 생성되지 않도록 하는 것입니다.
-              전략은 간단합니다. 
-              
+              전략은 간단합니다.
+
 							<em>애플리케이션 내의 state에서 파생 가능한 모든 것이 파생되도록 합니다. 그것도 자동으로.</em>
 						</p>
 						<p>
@@ -214,14 +214,14 @@ observableTodoStore.todos[0].task = "grok MobX tutorial";
 
                         <p>
                           흥미롭지 않나요? <code>report</code>는 자동으로, 동기적으로 그리고 중간값 유출 없이 인쇄되었습니다.
-                          로그를 유심히 분석해보면 다섯 번째 줄은 로그가 찍히지 않은 것을 알 수 있습니다. 
+                          로그를 유심히 분석해보면 다섯 번째 줄은 로그가 찍히지 않은 것을 알 수 있습니다.
                           테스크의 이름을 변경함으로써 백업 데이터가 변경되었지만 <em>실질적으로</em> report가 변경되지는 않았기 때문입니다.
                           반면 인덱스 1번 todo의 이름은 report에서 활성화되어있었기 때문에 해당 이름을 변경하면 report가 업데이트됩니다.
                           이는 <code>autorun</code>이 <code>todos</code> 배열뿐만 아니라 todo 항목 내의 개별 속성까지 감지하고 있었음을 잘 설명해 줍니다.
                         </p>
                         <h3 id="reactive-reactjs-components">반응형 React 만들기</h3>
                         <p>좋습니다. 지금까지는 조금 우스운 반응형 report를 만들었습니다. 이제부터 똑같은 TodoStore에 반응형 유저 인터페이스를 입혀봅시다.
-                          React 컴포넌트들은 그 이름에도 불구하고 즉시 반응적이지는 않습니다. 
+                          React 컴포넌트들은 그 이름에도 불구하고 즉시 반응적이지는 않습니다.
                           <code>mobx-react-lite</code> 패키지의 <code>observer</code> HoC 래퍼는 기본적으로 React 컴포넌트를 <code>autorun</code>으로 감싸서 반응형으로 만듭니다.
                           자동으로 컴포넌트가 state와 일치하도록 유지하는 겁니다. 개념적으로 위에서 <code>report</code>로 했던 것과 다르지 않습니다.
                         </p>
@@ -293,8 +293,8 @@ ReactDOM.render(
                         <button onClick="runCode(['#code1', '#code3', '#code4', '#react1'])" class="btn-run">실행</button>
 
                         <p>
-                          하단은 어떠한 추가 bookkeeping 없이 데이터만 바꾸면 된다는 점을 설명해 줍니다. 
-                          MobX는 store에 있는 state를 기반으로 유저 인터페이스의 관련 부분들을 자동으로 파생시키고 업데이트합니다. 
+                          하단은 어떠한 추가 bookkeeping 없이 데이터만 바꾸면 된다는 점을 설명해 줍니다.
+                          MobX는 store에 있는 state를 기반으로 유저 인터페이스의 관련 부분들을 자동으로 파생시키고 업데이트합니다.
                         </p>
 
                         <textarea spellcheck="false" class="" id="play1" rows="8">
@@ -315,7 +315,7 @@ store.todos.push({ task: "Find a fine cheese", completed: true });
                             아마 MobX에서 참조가 어떻게 다뤄지는지 궁금할 것입니다.
                             내 state가 그래프를 형성할 수 있을까요?
                             이전 코드들에서 todo 속성에 있는 <code>assignee</code>를 발견했을 겁니다.
-                            거기에 사람을 포함하고 있는 또 다른 'store'(쉽게 말하자면 배열)를 적용하여 값을 부여하고, 테스크를 할당해봅시다. 
+                            거기에 사람을 포함하고 있는 또 다른 'store'(쉽게 말하자면 배열)를 적용하여 값을 부여하고, 테스크를 할당해봅시다.
                         </p>
                         <textarea spellcheck="false" class="" id="store2" rows="8">
 const peopleStore = observable([
@@ -458,7 +458,7 @@ setTimeout(action(() => {
     </script>
     <script type="text/javascript">
         try {
-          var pageTracker = _gat._getTracker("UA-65632006-1");
+          var pageTracker = _gat._getTracker("G-7SS2EVGDSM");
           pageTracker._trackPageview();
         } catch(err) {}
     </script>

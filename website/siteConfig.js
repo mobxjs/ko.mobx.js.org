@@ -110,7 +110,7 @@ myOtherFont: [
     ogImage: "img/undraw_online.svg",
     twitterImage: "img/undraw_tweetstorm.svg",
 
-    gaTrackingId: "UA-65632006-1",
+    gaTrackingId: "G-7SS2EVGDSM",
 
     // Show documentation's last contributor's name.
     // enableUpdateBy: true,
