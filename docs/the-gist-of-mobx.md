@@ -158,7 +158,7 @@ render(<TodoListView todoList={store} />, document.getElementById("root"))
 ```
 
 `observer`는 리액트 컴포넌트를 렌더링하는 데이터의 derivation으로 변환합니다.
-MobX를 사용하면 smart 컴포넌트나 dump 컴포넌트의 구분이 없습니다.
+MobX를 사용하면 smart 컴포넌트나 dumb 컴포넌트의 구분이 없습니다.
 모든 컴포넌트는 smart하게 렌더링 되지만, dumb하게 정의됩니다. MobX에서는 필요할 때마다 컴포넌트가 다시 렌더링 되며, 그 이상은 렌더링 되지 않습니다.
 
 따라서 위 예제의 `onClick` 핸들러는 `toggle` action을 사용할 때 적절한 `TodoView` 컴포넌트를 강제로 다시 렌더링하지만, `TodoListView` 컴포넌트는 완료되지 않은 작업의 수(unfinishedTodoCount)가 변경된 경우에만 다시 렌더링 됩니다.
